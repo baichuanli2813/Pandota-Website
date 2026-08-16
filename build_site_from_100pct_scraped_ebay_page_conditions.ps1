@@ -107,7 +107,8 @@ foreach ($it in $items) {
     $titleRaw = $it.Title
     $title = [System.Net.WebUtility]::HtmlEncode($titleRaw)
     $price = $it.Price
-    $numPrice = $it.NumPrice
+    $numPrice = ($price -replace '[^\d.]', '').Trim()
+    if (-not $numPrice) { $numPrice = "0" }
     $url = $it.Url
     $img = $it.Img
 
@@ -183,7 +184,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice">
+          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond">
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>

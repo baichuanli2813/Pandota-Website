@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchEbayLiveStats();
   syncLiveEbayInventory();
 
-  // 6. Setup Inventory Page Controls
-  setupInventoryPageControls();
-
-  // 7. Make all inventory cards visible immediately
+  // 6. Make all inventory cards visible initially
   makeAllCardsVisible();
+
+  // 7. Setup Inventory Page Controls
+  setupInventoryPageControls();
 
   // 8. Setup Hero Stock Viewing Window Carousel (Left/Right Arrows)
   setupHeroStockCarousel();
@@ -554,7 +554,7 @@ async function syncLiveEbayInventory() {
               <span><i class="fa-solid fa-sparkles"></i> New Listing</span>
               <span><i class="fa-solid fa-store"></i> Pandota Store</span>
             </div>
-            <a href="https://www.ebay.co.uk/itm/${$id}" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: 14px;">
+            <a href="https://www.ebay.co.uk/itm/${itemID}" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: 14px;">
               <span>View Listing on eBay</span>
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
@@ -562,7 +562,7 @@ async function syncLiveEbayInventory() {
         `;
 
         grid.insertBefore(newCard, grid.firstChild);
-        existingIds.add($id);
+        existingIds.add(itemID);
         newItemsCount++;
       }
     });
@@ -579,7 +579,7 @@ async function syncLiveEbayInventory() {
 function setupInventoryPageControls() {
   const searchInput = document.getElementById('inventorySearchInput');
   const sortSelect = document.getElementById('inventorySortSelect');
-  const grid = document.getElementById('fullInventoryGrid');
+  const grid = document.getElementById('inventoryGrid') || document.getElementById('fullInventoryGrid');
   const conditionPills = document.querySelectorAll('.condition-pill-btn');
 
   if (!grid) return;
@@ -590,7 +590,7 @@ function setupInventoryPageControls() {
     pill.addEventListener('click', () => {
       conditionPills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
-      activeConditionFilter = pill.getAttribute('data-condition');
+      activeConditionFilter = pill.getAttribute('data-condition') || 'all';
       filterCards();
     });
   });
@@ -602,75 +602,104 @@ function setupInventoryPageControls() {
     const totalCount = cards.length;
 
     cards.forEach(card => {
-      const title = card.querySelector('.inv-card-title').textContent.toLowerCase();
-      const featuresText = card.querySelector('.inv-card-features').textContent;
+      const title = (card.querySelector('.inv-card-title')?.textContent || '').toLowerCase();
+      const featuresText = card.querySelector('.inv-card-features')?.textContent || '';
+      const cardCond = card.getAttribute('data-condition') || '';
       
       const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.toLowerCase().includes(searchTerm);
       
       let matchesCondition = true;
       if (activeConditionFilter !== 'all') {
-        matchesCondition = featuresText.includes(activeConditionFilter);
+        if (activeConditionFilter === 'New') {
+          matchesCondition = cardCond === 'New' || featuresText.includes('New');
+        } else if (activeConditionFilter === 'Opened - never used') {
+          matchesCondition = cardCond === 'Opened - never used' || featuresText.includes('Open Box') || featuresText.includes('Opened');
+        } else if (activeConditionFilter === 'Used') {
+          matchesCondition = cardCond === 'Used' || featuresText.includes('Used') || featuresText.includes('Pre-owned');
+        } else if (activeConditionFilter === 'For parts or not working') {
+          matchesCondition = cardCond === 'For parts or not working' || featuresText.includes('For Parts') || featuresText.includes('Faulty');
+        } else {
+          matchesCondition = cardCond.toLowerCase().includes(activeConditionFilter.toLowerCase()) || featuresText.toLowerCase().includes(activeConditionFilter.toLowerCase());
+        }
       }
 
       if (matchesSearch && matchesCondition) {
         card.style.display = 'flex';
         card.style.opacity = '1';
+        card.classList.add('is-visible');
         visibleCount++;
       } else {
         card.style.display = 'none';
+        card.classList.remove('is-visible');
       }
     });
 
-    // Keep header count fixed to total active listings
+    // Update count in header and subtext
     const headerCountSpan = document.getElementById('inventoryHeaderCount');
     if (headerCountSpan) {
       headerCountSpan.textContent = totalCount;
     }
 
-    // Dynamic filtered subtext line directly below search bar
+    const visibleCountSpan = document.getElementById('visibleCount');
+    if (visibleCountSpan) {
+      visibleCountSpan.textContent = visibleCount;
+    }
+
     const filteredResultsEl = document.getElementById('filteredResultsCount');
     if (filteredResultsEl) {
       if (activeConditionFilter !== 'all' || searchTerm) {
         filteredResultsEl.innerHTML = `<i class="fa-solid fa-filter"></i> Showing <strong>${visibleCount}</strong> of <strong>${totalCount}</strong> active listings`;
       } else {
-        filteredResultsEl.innerHTML = `<i class="fa-solid fa-list-check"></i> Showing all <strong>${totalCount}</strong> active listings`;
+        filteredResultsEl.innerHTML = `Showing <span id="visibleCount" style="font-weight: 700; color: var(--text-main);">${totalCount}</span> of ${totalCount} items in stock`;
       }
     }
   }
 
-  if (searchInput) {
-    // Read ?q=Query parameter from URL if redirected from index.html search
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialQuery = urlParams.get('q');
-    if (initialQuery) {
-      searchInput.value = initialQuery;
-      filterCards();
+  function getCardPrice(card) {
+    const attr = card.getAttribute('data-price');
+    if (attr && !isNaN(parseFloat(attr)) && parseFloat(attr) > 0) {
+      return parseFloat(attr);
     }
-
-    searchInput.addEventListener('input', filterCards);
+    const priceEl = card.querySelector('.inv-card-price');
+    if (priceEl) {
+      const parsed = parseFloat(priceEl.textContent.replace(/[^\d.]/g, ''));
+      if (!isNaN(parsed)) return parsed;
+    }
+    return 0;
   }
 
   function applySorting(mode) {
     const cardsArray = Array.from(grid.querySelectorAll('.inventory-card'));
 
-    if (mode === 'price-asc') {
-      cardsArray.sort((a, b) => parseFloat(a.getAttribute('data-price') || 0) - parseFloat(b.getAttribute('data-price') || 0));
-    } else if (mode === 'price-desc') {
-      cardsArray.sort((a, b) => parseFloat(b.getAttribute('data-price') || 0) - parseFloat(a.getAttribute('data-price') || 0));
-    }
+    cardsArray.sort((a, b) => {
+      const pA = getCardPrice(a);
+      const pB = getCardPrice(b);
+      return mode === 'price-asc' ? (pA - pB) : (pB - pA);
+    });
 
     cardsArray.forEach(card => grid.appendChild(card));
   }
 
-  if (sortSelect) {
-    // Sort High to Low on startup if price-desc is selected
-    if (sortSelect.value === 'price-desc') {
-      applySorting('price-desc');
+  if (searchInput) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery) {
+      searchInput.value = initialQuery;
     }
+
+    searchInput.addEventListener('input', filterCards);
+  }
+
+  if (sortSelect) {
     sortSelect.addEventListener('change', (e) => {
       applySorting(e.target.value);
     });
+    // Apply initial sort (High to Low default)
+    applySorting(sortSelect.value || 'price-desc');
   }
+
+  // Initial filter run
+  filterCards();
 }
 
 // Real-Time Live Sync with eBay Feedback Profile Ratings Table & Reviews

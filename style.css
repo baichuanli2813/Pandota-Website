@@ -263,11 +263,44 @@
   color: #09090b !important;
 }
 
-/* Feedback Section Alternating Contrast */
-[data-theme="light"] .feedback-section {
+/* Section Separation & Transitions */
+#inventory {
+  position: relative;
+  padding: 90px 0 95px;
+}
+
+#feedback {
+  position: relative;
+  padding: 95px 0 100px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(9, 9, 11, 0.5) 100%);
+}
+
+#contact {
+  position: relative;
+  padding: 95px 0 55px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-dark);
+}
+
+/* Light Mode Section Alternating Separation */
+[data-theme="light"] #inventory {
+  background: #f1f5f9;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] #feedback {
+  background: #ffffff;
+  border-top: 1px solid rgba(15, 23, 42, 0.12);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] #contact {
   background: #f8fafc;
-  border-top: 1px solid rgba(15, 23, 42, 0.06);
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  border-top: 1px solid rgba(15, 23, 42, 0.12);
 }
 
 [data-theme="light"] .ebay-score-summary {

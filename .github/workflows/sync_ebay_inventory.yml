@@ -32,7 +32,10 @@ jobs:
           # 1. Run the inventory builder
           .\build_site_from_100pct_scraped_ebay_page_conditions.ps1
 
-          # 2. Fix pound symbol byte encodings
+          # 2. Run the feedback profile & ratings table sync
+          .\sync_ebay_feedbacks.ps1
+
+          # 3. Fix pound symbol byte encodings
           .\fix_both_encodings.ps1
 
       - name: Commit & Push Changes (if inventory changed)

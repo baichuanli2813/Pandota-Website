@@ -17,90 +17,13 @@ Write-Host "Building inventory.html with exact $totalCount active live listings 
 
 $cardsHtml = ""
 
-# Map of live scraped conditions directly from eBay item pages:
-$liveCondMap = @{
-    "267729753193" = "New"
-    "267729862669" = "New"
-    "267729734670" = "New"
-    "267755974090" = "Used"
-    "267707331524" = "New"
-    "267753890742" = "New"
-    "267745470208" = "New"
-    "267727321251" = "New"
-    "267749453105" = "Used"
-    "267749821800" = "Used"
-    "267729802087" = "New"
-    "267722455398" = "Used"
-    "267729965028" = "New"
-    "267755994940" = "Used"
-    "267749549365" = "Used"
-    "267749815355" = "Used"
-    "267749377397" = "Used"
-    "267745389869" = "Used"
-    "267749450627" = "Used"
-    "267755926627" = "Used"
-    "267755943527" = "Used"
-    "267755998578" = "New"
-    "267749527109" = "Used"
-    "267751001037" = "Used"
-    "267729724182" = "New"
-    "267755952157" = "Used"
-    "267755953364" = "Used"
-    "267745716527" = "Used"
-    "267724077386" = "Used"
-    "267749540271" = "New"
-    "267707226458" = "Used"
-    "267729833616" = "New"
-    "267755954889" = "Used"
-    "267729716060" = "New"
-    "267693030846" = "Used"
-    "267430465802" = "Used"
-    "267729872766" = "New"
-    "267755927520" = "Used"
-    "267755930402" = "New"
-    "267729953043" = "New"
-    "267737447289" = "Used"
-    "267727293251" = "New"
-    "267707202814" = "New"
-    "267734395927" = "Used"
-    "267749825193" = "Used"
-    "267749535331" = "Used"
-    "267752340040" = "Used"
-    "267696116748" = "Used"
-    "267724113981" = "New"
-    "267705687033" = "Used"
-    "267751011916" = "Used"
-    "267724515696" = "Used"
-    "267749826375" = "Used"
-    "267752341737" = "Used"
-    "267755928454" = "Used"
-    "267751010844" = "Used"
-    "267696126054" = "Used"
-    "267749434966" = "Used"
-    "267734388443" = "Used"
-    "267755933329" = "Used"
-    "267738488721" = "For parts or not working"
-    "267749439592" = "Used"
-    "267752334041" = "Used"
-    "267700848730" = "Used"
-    "267709120613" = "Used"
-    "267729651885" = "Used"
-    "267745364867" = "Used"
-    "267709005130" = "Used"
-    "267755999760" = "New"
-    "267755968618" = "Used"
-    "267724109322" = "New"
-    "267734199450" = "Used"
-    "267734410731" = "Used"
-    "267727449613" = "Used"
-    "267694603976" = "Used"
-    "267755939395" = "Used"
-    "267734405944" = "Used"
-    "267727430252" = "Used"
-    "267714982897" = "Used"
-    "267727463283" = "Used"
-    "267727425956" = "Used"
-}
+# Load exact official conditions scraped directly from eBay listings
+$officialConds = Get-Content -Path "official_scraped_ebay_conditions.json" -Raw | ConvertFrom-Json
+
+$countNew = 0
+$countOpened = 0
+$countUsed = 0
+$countParts = 0
 
 foreach ($it in $items) {
     $itemId = $it.ItemId
@@ -112,16 +35,17 @@ foreach ($it in $items) {
     $url = $it.Url
     $img = $it.Img
 
-    # Determine condition
-    $cond = if ($liveCondMap.ContainsKey($itemId)) {
-        $liveCondMap[$itemId]
-    } elseif ($titleRaw -match '\b(NEW|SEALED|BRAND NEW)\b') {
-        "New"
-    } elseif ($titleRaw -match '\b(FAULTY|FOR PARTS|AS IS)\b') {
-        "For parts or not working"
+    # Condition is determined ONLY by official eBay listing page condition
+    $cond = if ($officialConds.PSObject.Properties[$itemId]) {
+        $officialConds.$itemId
     } else {
         "Used"
     }
+
+    if ($cond -eq "New") { $countNew++ }
+    elseif ($cond -eq "Opened - never used") { $countOpened++ }
+    elseif ($cond -eq "For parts or not working") { $countParts++ }
+    else { $countUsed++ }
 
     # Extract CPU
     $cpu = ""
@@ -157,14 +81,16 @@ foreach ($it in $items) {
         $storageStr = $matches[1]
     }
 
-    # Build pills
+    # Build condition badge matching official eBay status
     $pills = @()
     if ($cond -eq "New") {
         $pills += '<span><i class="fa-solid fa-sparkles"></i> New</span>'
     } elseif ($cond -eq "Opened - never used") {
-        $pills += '<span><i class="fa-solid fa-box-open"></i> Open Box</span>'
+        $pills += '<span><i class="fa-solid fa-box-open"></i> Opened - never used</span>'
     } elseif ($cond -eq "For parts or not working") {
         $pills += '<span><i class="fa-solid fa-wrench"></i> For Parts</span>'
+    } else {
+        $pills += '<span><i class="fa-solid fa-rotate-left"></i> Used</span>'
     }
 
     if ($cpu) {
@@ -284,16 +210,16 @@ $fullHtml = @"
               <i class="fa-solid fa-border-all"></i> All Items ($totalCount)
             </button>
             <button class="condition-pill-btn" data-condition="New">
-              <i class="fa-solid fa-sparkles"></i> New
+              <i class="fa-solid fa-sparkles"></i> New ($countNew)
             </button>
             <button class="condition-pill-btn" data-condition="Opened - never used">
-              <i class="fa-solid fa-box-open"></i> Opened - never used
+              <i class="fa-solid fa-box-open"></i> Opened - never used ($countOpened)
             </button>
             <button class="condition-pill-btn" data-condition="Used">
-              <i class="fa-solid fa-rotate-left"></i> Used
+              <i class="fa-solid fa-rotate-left"></i> Used ($countUsed)
             </button>
             <button class="condition-pill-btn" data-condition="For parts or not working">
-              <i class="fa-solid fa-wrench"></i> For Parts
+              <i class="fa-solid fa-wrench"></i> For Parts ($countParts)
             </button>
           </div>
 

@@ -536,3 +536,18 @@ if (Test-Path "index.html") {
 }
 
 Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings!"
+
+# Automatically copy all updated files to Pandota Website repo if folder exists
+$targetRepo = "C:\Users\User\Desktop\PANDOTA ACOUNTS\Pandota Website"
+if (Test-Path $targetRepo) {
+    Copy-Item -Path "$pwd\style.css" -Destination "$targetRepo\style.css" -Force
+    Copy-Item -Path "$pwd\index.html" -Destination "$targetRepo\index.html" -Force
+    Copy-Item -Path "$pwd\inventory.html" -Destination "$targetRepo\inventory.html" -Force
+    Copy-Item -Path "$pwd\script.js" -Destination "$targetRepo\script.js" -Force
+    Copy-Item -Path "$pwd\build_site_from_100pct_scraped_ebay_page_conditions.ps1" -Destination "$targetRepo\build_site_from_100pct_scraped_ebay_page_conditions.ps1" -Force
+    if (Test-Path "$pwd\sync_now.ps1") { Copy-Item -Path "$pwd\sync_now.ps1" -Destination "$targetRepo\sync_now.ps1" -Force }
+    if (Test-Path "$pwd\official_scraped_ebay_conditions.json") { Copy-Item -Path "$pwd\official_scraped_ebay_conditions.json" -Destination "$targetRepo\official_scraped_ebay_conditions.json" -Force }
+    if (Test-Path "$pwd\all_82_with_exact_scraped_prices.json") { Copy-Item -Path "$pwd\all_82_with_exact_scraped_prices.json" -Destination "$targetRepo\all_82_with_exact_scraped_prices.json" -Force }
+    if (Test-Path "$pwd\all_store_listings.json") { Copy-Item -Path "$pwd\all_store_listings.json" -Destination "$targetRepo\all_store_listings.json" -Force }
+    Write-Host "Automatically synchronized all updated files to Pandota Website repository!"
+}

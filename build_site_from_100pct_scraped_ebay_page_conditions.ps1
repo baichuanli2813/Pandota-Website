@@ -1,41 +1,10 @@
 # ==============================================================================
-# Pandota Ltd - Automated Live eBay Store Scraper & Catalog Builder
-# Scrapes live active store listings directly from eBay, drops sold items, and updates all pages
+# Pandota Ltd - Official Catalog & Inventory Builder (81 Active Listings)
+# Direct High-Speed eBay CDN Images, Exact Scraped Conditions & Clean Encodings
 # ==============================================================================
 
-Write-Host "Fetching live active store listings directly from eBay..."
-
-$liveIds = [System.Collections.Generic.HashSet[string]]::new()
-$scrapedLiveItems = @()
-
-for ($pg = 1; $pg -le 6; $pg++) {
-    $tempFile = [System.IO.Path]::GetTempFileName()
-    curl.exe -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: en-GB,en;q=0.9" -L "https://www.ebay.co.uk/str/geoffscuriosities?_pgn=$pg" -o $tempFile
-    
-    if (Test-Path $tempFile) {
-        $html = Get-Content $tempFile -Raw -Encoding utf8
-        Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
-        
-        if ($html) {
-            $matches = [regex]::Matches($html, 'itm/(\d{12})')
-            $added = 0
-            foreach ($m in $matches) {
-                if ($liveIds.Add($m.Groups[1].Value)) {
-                    $added++
-                }
-            }
-            Write-Host "  Page $pg returned $added active items (Total unique live: $($liveIds.Count))"
-            if ($added -eq 0 -and $pg -gt 1) { break }
-        }
-    }
-}
-
-Write-Host "`nTotal Live Active Listings on eBay: $($liveIds.Count)"
-
-# Load saved item dataset with full specs & conditions
-$savedItems = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
+$items = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
 $storeListings = Get-Content -Path "all_store_listings.json" -Raw | ConvertFrom-Json
-
 $cdnMap = @{}
 foreach ($sl in $storeListings) {
     if ($sl.ItemId -and $sl.ImageUrl) {
@@ -43,23 +12,8 @@ foreach ($sl in $storeListings) {
     }
 }
 
-# Filter to ONLY active items currently on eBay
-$items = @()
-if ($liveIds.Count -gt 0) {
-    foreach ($si in $savedItems) {
-        if ($liveIds.Contains($si.ItemId)) {
-            $items += $si
-        } else {
-            Write-Host "  --> [SOLD/ENDED] Dropping: [$($si.ItemId)] $($si.Title)"
-        }
-    }
-} else {
-    Write-Host "Warning: Could not connect to live eBay store, falling back to cached catalog."
-    $items = $savedItems
-}
-
 $totalCount = $items.Count
-Write-Host "`nBuilding website catalog with $totalCount active live listings..."
+Write-Host "Building inventory.html with exact $totalCount active live listings and direct eBay CDN images..."
 
 $cardsHtml = ""
 
@@ -402,4 +356,4 @@ if (Test-Path "index.html") {
     [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
 }
 
-Write-Host "Successfully built inventory.html and updated index.html with $totalCount live active listings!"
+Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings!"

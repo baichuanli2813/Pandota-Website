@@ -1,5 +1,41 @@
-$items = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
+# ==============================================================================
+# Pandota Ltd - Automated Live eBay Store Scraper & Catalog Builder
+# Scrapes live active store listings directly from eBay, drops sold items, and updates all pages
+# ==============================================================================
+
+Write-Host "Fetching live active store listings directly from eBay..."
+
+$liveIds = [System.Collections.Generic.HashSet[string]]::new()
+$scrapedLiveItems = @()
+
+for ($pg = 1; $pg -le 6; $pg++) {
+    $tempFile = [System.IO.Path]::GetTempFileName()
+    curl.exe -s -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" -H "Accept-Language: en-GB,en;q=0.9" -L "https://www.ebay.co.uk/str/geoffscuriosities?_pgn=$pg" -o $tempFile
+    
+    if (Test-Path $tempFile) {
+        $html = Get-Content $tempFile -Raw -Encoding utf8
+        Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
+        
+        if ($html) {
+            $matches = [regex]::Matches($html, 'itm/(\d{12})')
+            $added = 0
+            foreach ($m in $matches) {
+                if ($liveIds.Add($m.Groups[1].Value)) {
+                    $added++
+                }
+            }
+            Write-Host "  Page $pg returned $added active items (Total unique live: $($liveIds.Count))"
+            if ($added -eq 0 -and $pg -gt 1) { break }
+        }
+    }
+}
+
+Write-Host "`nTotal Live Active Listings on eBay: $($liveIds.Count)"
+
+# Load saved item dataset with full specs & conditions
+$savedItems = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
 $storeListings = Get-Content -Path "all_store_listings.json" -Raw | ConvertFrom-Json
+
 $cdnMap = @{}
 foreach ($sl in $storeListings) {
     if ($sl.ItemId -and $sl.ImageUrl) {
@@ -7,7 +43,23 @@ foreach ($sl in $storeListings) {
     }
 }
 
-Write-Host "Building inventory.html using 100% direct live scraped eBay page conditions and high-speed eBay CDN images..."
+# Filter to ONLY active items currently on eBay
+$items = @()
+if ($liveIds.Count -gt 0) {
+    foreach ($si in $savedItems) {
+        if ($liveIds.Contains($si.ItemId)) {
+            $items += $si
+        } else {
+            Write-Host "  --> [SOLD/ENDED] Dropping: [$($si.ItemId)] $($si.Title)"
+        }
+    }
+} else {
+    Write-Host "Warning: Could not connect to live eBay store, falling back to cached catalog."
+    $items = $savedItems
+}
+
+$totalCount = $items.Count
+Write-Host "`nBuilding website catalog with $totalCount active live listings..."
 
 $cardsHtml = ""
 
@@ -19,7 +71,7 @@ $liveCondMap = @{
     "267755974090" = "Used"
     "267707331524" = "New"
     "267753890742" = "New"
-    "267745470208" = "New" # Alienware 18 Area-51 5080 is NEW on eBay!
+    "267745470208" = "New"
     "267727321251" = "New"
     "267749453105" = "Used"
     "267749821800" = "Used"
@@ -48,20 +100,20 @@ $liveCondMap = @{
     "267755954889" = "Used"
     "267729716060" = "New"
     "267693030846" = "Used"
-    "267430465802" = "New"
+    "267430465802" = "Used"
     "267729872766" = "New"
     "267755927520" = "Used"
-    "267755930402" = "Opened - never used" # HP Omen MAX 16
+    "267755930402" = "New"
     "267729953043" = "New"
     "267737447289" = "Used"
-    "267727293251" = "New" # Lenovo Legion Go 2 is NEW
+    "267727293251" = "New"
     "267707202814" = "New"
     "267734395927" = "Used"
     "267749825193" = "Used"
     "267749535331" = "Used"
     "267752340040" = "Used"
     "267696116748" = "Used"
-    "267724113981" = "Used"
+    "267724113981" = "New"
     "267705687033" = "Used"
     "267751011916" = "Used"
     "267724515696" = "Used"
@@ -69,12 +121,11 @@ $liveCondMap = @{
     "267752341737" = "Used"
     "267755928454" = "Used"
     "267751010844" = "Used"
-    "267751013971" = "Used"
     "267696126054" = "Used"
     "267749434966" = "Used"
     "267734388443" = "Used"
     "267755933329" = "Used"
-    "267738488721" = "For parts or not working" # Razer Blade 16 FAULTY
+    "267738488721" = "For parts or not working"
     "267749439592" = "Used"
     "267752334041" = "Used"
     "267700848730" = "Used"
@@ -93,96 +144,87 @@ $liveCondMap = @{
     "267734405944" = "Used"
     "267727430252" = "Used"
     "267714982897" = "Used"
+    "267727463283" = "Used"
     "267727425956" = "Used"
 }
 
-# Pre-sort items by price High to Low by default
-$items = $items | Sort-Object {
-    if ($_.Price -match '[\d,]+(?:\.\d{2})?') {
-        [double]($matches[0] -replace ',', '')
-    } else {
-        0
-    }
-} -Descending
+foreach ($it in $items) {
+    $itemId = $it.ItemId
+    $titleRaw = $it.Title
+    $title = [System.Net.WebUtility]::HtmlEncode($titleRaw)
+    $price = $it.Price
+    $numPrice = $it.NumPrice
+    $url = $it.Url
+    $img = $it.Img
 
-foreach ($item in $items) {
-    $itemId = $item.ItemId
-    $titleRaw = $item.Title.Trim()
-    $title = [System.Web.HttpUtility]::HtmlEncode($titleRaw)
-    $price = $item.Price
-    $url = $item.Url
-    $img = $item.Image
-    
-    # Direct live scraped condition from eBay item page
-    $exactCond = "Used"
-    if ($liveCondMap.ContainsKey($itemId)) {
-        $exactCond = $liveCondMap[$itemId]
-    }
-    
-    $condIcon = "fa-rotate-left"
-    if ($exactCond -eq "New") {
-        $condIcon = "fa-sparkles"
-    } elseif ($exactCond -eq "Opened - never used") {
-        $condIcon = "fa-box-open"
-    } elseif ($exactCond -eq "For parts or not working") {
-        $condIcon = "fa-wrench"
+    # Determine condition
+    $cond = if ($liveCondMap.ContainsKey($itemId)) {
+        $liveCondMap[$itemId]
+    } elseif ($titleRaw -match '\b(NEW|SEALED|BRAND NEW)\b') {
+        "New"
+    } elseif ($titleRaw -match '\b(FAULTY|FOR PARTS|AS IS)\b') {
+        "For parts or not working"
     } else {
-        $condIcon = "fa-rotate-left"
+        "Used"
     }
-    
-    $numPrice = 999
-    if ($price -match '[\d,]+(?:\.\d{2})?') {
-        $numPrice = [double]($matches[0] -replace ',', '')
+
+    # Extract CPU
+    $cpu = ""
+    if ($titleRaw -match '(Ultra\s*\d\s*[\d\w]+)') {
+        $cpu = $matches[1]
+    } elseif ($titleRaw -match '(Ryzen\s*(?:AI)?\s*\d\s*[\d\w]+)') {
+        $cpu = $matches[1]
+    } elseif ($titleRaw -match '(i\d\s*\d+[\d\w]*)') {
+        $cpu = $matches[1]
+    } elseif ($titleRaw -match '(Snapdragon\s*X\s*[\w\d]+)') {
+        $cpu = $matches[1]
+    } elseif ($titleRaw -match '(M\d\s*(?:Pro|Max)?)') {
+        $cpu = $matches[1]
     }
-    
-    $pills = @()
-    
-    # 1. Condition Pill directly from live eBay item page
-    $pills += '<span><i class="fa-solid ' + $condIcon + '"></i> ' + $exactCond + '</span>'
-    
-    # 2. CPU / Processor / Sensor / Spec
-    if ($titleRaw -match '(Ultra 9 \d+HX|Ultra 9 \d+H|Ultra 7 \d+HX|Ultra 7 \d+H|Ultra 5 \d+V|Ultra 5 \d+U|i9 \d+HX|i9 \d+H|i7 \d+HX|i7 \d+H|i7 \d+U|i7 \d+th Gen|i5 \d+th Gen|Ryzen AI 9 HX \d+|Ryzen 9 \d+HX|Ryzen 7 \d+HS|Snapdragon X2 Elite|Snapdragon X|Z2 Extreme)') {
-        $pills += '<span><i class="fa-solid fa-microchip"></i> ' + $matches[1] + '</span>'
-    } elseif ($titleRaw -match '(Ultra 9|Ultra 7|Ultra 5|i9|i7|i5|Ryzen 9|Ryzen 7|Ryzen AI)') {
-        $pills += '<span><i class="fa-solid fa-microchip"></i> ' + $matches[1] + '</span>'
-    } elseif ($titleRaw -match '(26MP|33MP|24\.2 MP)') {
-        $pills += '<span><i class="fa-solid fa-camera"></i> ' + $matches[1] + ' Sensor</span>'
+
+    # Extract GPU
+    $gpu = ""
+    if ($titleRaw -match '(RTX\s*(?:PRO\s*)?\d{4}(?:\s*Ti|\s*Ada|\s*Blackwell)?)') {
+        $gpu = $matches[1]
+    } elseif ($titleRaw -match '(RTX\s*A\d{4})') {
+        $gpu = $matches[1]
+    } elseif ($titleRaw -match '(Radeon\s*[\d\w]+)') {
+        $gpu = $matches[1]
     }
-    
-    # 3. GPU / Lens Spec
-    if ($titleRaw -match '(RTX 5090|RTX 5080|RTX 5070 Ti|RTX 5070|RTX 5060|RTX 4090|RTX 4080|RTX 4070|RTX 4060|RTX 4050|RTX 3080 Ti|RTX 3070 Ti|RTX 3070|RTX 3050|RTX 2060|RTX 2000 Ada|RTX PRO 4000|RTX PRO 3000|RTX PRO 2000|RTX PRO 500|RTX A2000|RTX 5000 Ada)') {
-        $pills += '<span><i class="fa-solid fa-compact-disc"></i> RTX ' + ($matches[1] -replace 'RTX\s*', '') + '</span>'
-    } elseif ($titleRaw -match '(\d+-\d+mm F/?\d+\.\d|\d+-\d+mm|\d+mm F/?\d+\.\d|\d+mm)') {
-        $pills += '<span><i class="fa-solid fa-circle-dot"></i> ' + $matches[1] + '</span>'
-    }
-    
-    # 4. RAM / Storage / Display
+
+    # Extract RAM & Storage
     $ramStr = ""
     $storageStr = ""
-    $displayStr = ""
-    
-    if ($titleRaw -match '(\d+GB RAM|\d+GB)') {
-        $ramStr = $matches[1]
+    if ($titleRaw -match '(\d+GB\s*RAM|\b(?:16|32|64|128)GB\b)') {
+        $ramStr = $matches[1] -replace '\s*RAM', ''
     }
-    if ($titleRaw -match '(\d+TB SSD|\d+TB|\d+GB SSD|\d+GB Raid 0)') {
+    if ($titleRaw -match '(\d+(?:\.\d+)?TB|\b512GB\b|\b256GB\b)') {
         $storageStr = $matches[1]
     }
-    if ($titleRaw -match '(300Hz|250Hz|240Hz|180Hz|165Hz|144Hz|120Hz|OLED|4K|QHD\+|MiniLED|Mini LED|3\.2K|2\.8K)') {
-        $displayStr = $matches[1]
+
+    # Build pills
+    $pills = @()
+    if ($cond -eq "New") {
+        $pills += '<span><i class="fa-solid fa-sparkles"></i> New</span>'
+    } elseif ($cond -eq "Opened - never used") {
+        $pills += '<span><i class="fa-solid fa-box-open"></i> Open Box</span>'
+    } elseif ($cond -eq "For parts or not working") {
+        $pills += '<span><i class="fa-solid fa-wrench"></i> For Parts</span>'
     }
-    
+
+    if ($cpu) {
+        $pills += '<span><i class="fa-solid fa-microchip"></i> ' + $cpu + '</span>'
+    }
+    if ($gpu) {
+        $pills += '<span><i class="fa-solid fa-compact-disc"></i> ' + $gpu + '</span>'
+    }
     if ($ramStr -and $storageStr) {
         $pills += '<span><i class="fa-solid fa-memory"></i> ' + $ramStr + ' &bull; ' + $storageStr + '</span>'
-    } elseif ($ramStr -and $displayStr) {
-        $pills += '<span><i class="fa-solid fa-memory"></i> ' + $ramStr + ' &bull; ' + $displayStr + '</span>'
-    } elseif ($displayStr) {
-        $pills += '<span><i class="fa-solid fa-desktop"></i> ' + $displayStr + '</span>'
     } elseif ($ramStr) {
         $pills += '<span><i class="fa-solid fa-memory"></i> ' + $ramStr + '</span>'
     }
     
     $pillsHtml = $pills -join "`n                "
-    
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
 
     $cardsHtml += @"
@@ -215,8 +257,8 @@ $fullHtml = @"
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Active Inventory (82 Listings) - Pandota Ltd Official eBay Store</title>
-  <meta name="description" content="Browse all 82 active listings live from Pandota's official eBay store (geoffscuriosities). High-performance laptops, gaming rigs, workstations, and electronics.">
+  <title>All Active Inventory ($totalCount Listings) - Pandota Ltd Official eBay Store</title>
+  <meta name="description" content="Browse all $totalCount active listings live from Pandota's official eBay store (geoffscuriosities). High-performance laptops, gaming rigs, workstations, and electronics.">
   <meta name="keywords" content="Pandota inventory, Pandota laptops, Pandota eBay listings, Lenovo Legion, Alienware, ASUS ROG, HP Omen, eBay UK seller">
 
   <!-- FontAwesome Icons & Google Fonts -->
@@ -258,11 +300,7 @@ $fullHtml = @"
             </svg>
           </span>
           <span>Visit Pandota eBay Store</span>
-          <i class="fa-solid fa-arrow-up-right-from-square"></i>
         </a>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
-          <i class="fa-solid fa-bars"></i>
-        </button>
       </div>
     </div>
   </header>
@@ -276,7 +314,7 @@ $fullHtml = @"
             <span class="live-pulse-dot"></span>
             <span>Live Sync with eBay Store</span>
           </div>
-          <h1 class="section-heading inventory-main-heading">Complete Store Inventory (<span id="inventoryHeaderCount">82</span> Listings)</h1>
+          <h1 class="section-heading inventory-main-heading">Complete Store Inventory (<span id="inventoryHeaderCount">$totalCount</span> Listings)</h1>
           <p class="section-desc">
             Filter by condition or search below!
           </p>
@@ -288,7 +326,7 @@ $fullHtml = @"
           <!-- Condition Filter Pills Bar -->
           <div class="condition-filter-row" id="conditionFilterRow">
             <button class="condition-pill-btn active" data-condition="all">
-              <i class="fa-solid fa-border-all"></i> All Items (82)
+              <i class="fa-solid fa-border-all"></i> All Items ($totalCount)
             </button>
             <button class="condition-pill-btn" data-condition="New">
               <i class="fa-solid fa-sparkles"></i> New
@@ -323,42 +361,16 @@ $fullHtml = @"
       </div>
     </section>
 
-    <!-- Full Inventory Grid Section with ALL 82 Real eBay Store Items -->
+    <!-- Full Inventory Grid Section with ALL Real eBay Store Items -->
     <section class="inventory-grid-section">
       <div class="container">
         <!-- Filtered Results Subtext Line just above the first product photo -->
         <div class="filtered-results-count" id="filteredResultsCount" style="margin-bottom: 24px;">
-          <i class="fa-solid fa-list-check"></i> Showing all 82 active listings
+          Showing <span id="visibleCount" style="font-weight: 700; color: var(--text-main);">$totalCount</span> of $totalCount items in stock
         </div>
 
-        <div id="fullInventoryGrid" class="full-inventory-grid">
-
-CARD_HOLDER_PLACEHOLDER
-
-        </div>
-
-        <!-- Catalog Loaded Completion Badge -->
-        <div class="all-loaded-banner" style="text-align: center; margin-top: 40px; padding: 20px; color: var(--text-sub); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-          <i class="fa-solid fa-circle-check" style="color: #22c55e; font-size: 1.1rem;"></i>
-          <span>Showing all 82 active listings live from Pandota's eBay store</span>
-        </div>
-      </div>
-    <!-- Contact Us Section -->
-    <section class="section" id="contact" style="padding: 60px 0 40px;">
-      <div class="container" style="max-width: 760px; text-align: center;">
-        <div class="contact-box" style="background: var(--bg-card); border: 1px solid var(--border-active); border-radius: var(--radius-lg); padding: 40px 24px; box-shadow: var(--shadow-lg);">
-          <div style="width: 54px; height: 54px; border-radius: 50%; background: rgba(0, 100, 210, 0.15); color: var(--ebay-blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 1.5rem;">
-            <i class="fa-solid fa-comments"></i>
-          </div>
-          <h2 class="section-heading" style="font-size: 2rem; margin-bottom: 12px;">Contact Us</h2>
-          <p class="section-desc" style="max-width: 580px; margin: 0 auto 24px; font-size: 1.05rem;">
-            Have a question about an item or need help choosing the right spec? Please contact us via <strong>eBay messaging</strong> for fast, friendly support!
-          </p>
-          <a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener" class="btn btn-ebay" style="font-size: 1rem; padding: 14px 28px; display: inline-flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Message Us on eBay</span>
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
+        <div class="full-inventory-grid" id="inventoryGrid">
+$cardsHtml
         </div>
       </div>
     </section>
@@ -375,11 +387,19 @@ CARD_HOLDER_PLACEHOLDER
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=1.2"></script>
 </body>
 </html>
 "@
 
-$finalHtml = $fullHtml.Replace("CARD_HOLDER_PLACEHOLDER", $cardsHtml)
-[System.IO.File]::WriteAllText("inventory.html", $finalHtml, [System.Text.Encoding]::UTF8)
-Write-Host "Successfully rebuilt inventory.html using 100% direct live scraped eBay page conditions!"
+[System.IO.File]::WriteAllText("$pwd\inventory.html", $fullHtml, [System.Text.Encoding]::UTF8)
+
+# Update count references in index.html
+if (Test-Path "index.html") {
+    $indexHtml = Get-Content "index.html" -Raw -Encoding utf8
+    $indexHtml = $indexHtml -replace 'View All \(\d+\)', "View All ($totalCount)"
+    $indexHtml = $indexHtml -replace '\b\d+\+\s*Laptops\b', "$totalCount+ Laptops"
+    [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
+}
+
+Write-Host "Successfully built inventory.html and updated index.html with $totalCount live active listings!"

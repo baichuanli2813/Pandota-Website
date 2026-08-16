@@ -1,0 +1,11 @@
+# Temporary scrape dumps
+ebay_page_*.html
+ebay_raw.html
+store.html
+store_init.html
+*.log
+scratch/
+.tempmediaStorage/
+cookies.txt
+item_*.html
+alienware_page.html

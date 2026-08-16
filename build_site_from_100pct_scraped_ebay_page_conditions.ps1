@@ -146,6 +146,15 @@ $fullHtml = @"
   <title>All Active Inventory ($totalCount Listings) - Pandota Ltd Official eBay Store</title>
   <meta name="description" content="Browse all $totalCount active listings live from Pandota's official eBay store (geoffscuriosities). High-performance laptops, gaming rigs, workstations, and electronics.">
   <meta name="keywords" content="Pandota inventory, Pandota laptops, Pandota eBay listings, Lenovo Legion, Alienware, ASUS ROG, HP Omen, eBay UK seller">
+  <link rel="canonical" href="https://pandota.co.uk/inventory.html">
+
+  <!-- OpenGraph Brand Identity -->
+  <meta property="og:site_name" content="Pandota">
+  <meta property="og:title" content="All Active Inventory ($totalCount Listings) - Pandota Ltd">
+  <meta property="og:description" content="Browse active gaming laptops, ultrabooks, and workstations from Pandota Ltd.">
+  <meta property="og:url" content="https://pandota.co.uk/inventory.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://pandota.co.uk/images/panda_logo.png">
 
   <script>
     (function() {

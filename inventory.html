@@ -16,6 +16,45 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://pandota.co.uk/images/panda_logo.png">
 
+  <!-- Schema.org Knowledge Graph Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://pandota.co.uk/#organization",
+        "name": "Pandota",
+        "legalName": "Pandota Ltd",
+        "alternateName": ["Pandota UK", "Pandota Store", "Pandota Laptops", "geoffscuriosities"],
+        "url": "https://pandota.co.uk",
+        "logo": "https://pandota.co.uk/images/panda_logo.png",
+        "email": "purchasing@pandota.co.uk",
+        "identifier": "14961273",
+        "sameAs": [
+          "https://www.ebay.co.uk/str/geoffscuriosities",
+          "https://www.ebay.co.uk/usr/geoff_lee367",
+          "https://find-and-update.company-information.service.gov.uk/company/14961273"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "24 Groveley Lane",
+          "addressLocality": "Birmingham",
+          "postalCode": "B31 4QH",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://pandota.co.uk/#website",
+        "url": "https://pandota.co.uk",
+        "name": "Pandota",
+        "publisher": { "@id": "https://pandota.co.uk/#organization" }
+      }
+    ]
+  }
+  </script>
+
   <script>
     (function() {
       window.applyPandotaTheme = function(theme) {

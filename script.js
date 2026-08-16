@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 11. Live Sync with eBay Feedback Profile
   syncLiveEbayFeedback();
+
+  // 12. Live In-Browser Watcher Counter Fetcher
+  setupLiveWatcherFetcher();
 });
 
 // Theme Toggle (Light / Dark Mode with LocalStorage Persistence)
@@ -249,6 +252,23 @@ function setupHeroStockCarousel() {
     } else {
       if (couponBadgeEl) couponBadgeEl.remove();
     }
+
+    // Dynamic Live In-Browser Watcher Counter for Hero Card
+    const heroIdMatch = item.url ? item.url.match(/itm\/(\d+)/) : null;
+    let heroWatcherEl = document.getElementById('heroStockWatcher');
+    if (heroIdMatch && typeof window.fetchLiveItemWatchers === 'function') {
+      window.fetchLiveItemWatchers(heroIdMatch[1], (count) => {
+        if (!heroWatcherEl) heroWatcherEl = document.getElementById('heroStockWatcher');
+        if (heroWatcherEl) {
+          if (count > 0) {
+            heroWatcherEl.style.display = 'inline-flex';
+            heroWatcherEl.innerHTML = `<i class="fa-solid fa-eye"></i> ${count} watching`;
+          } else {
+            heroWatcherEl.style.display = 'none';
+          }
+        }
+      });
+    }
   }
 
   function startAutoCycle() {
@@ -338,9 +358,16 @@ function setupHeroStockCarousel() {
           if (match) couponText = match[0];
         }
 
-        const titleText = titleEl ? titleEl.textContent.trim() : 'Pandota Active Listing';
-        const priceText = priceEl ? priceEl.textContent.trim() : 'Check on eBay';
-        const imgSrc = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : `images/ebay_item_${id}.jpg`;
+        let imgSrc = '';
+        if (imgEl) {
+          imgSrc = imgEl.getAttribute('data-src') || imgEl.getAttribute('src') || '';
+          if (imgSrc.startsWith('data:image') && imgEl.getAttribute('data-src')) {
+            imgSrc = imgEl.getAttribute('data-src');
+          }
+        }
+        if (!imgSrc || imgSrc.startsWith('data:image')) {
+          imgSrc = `https://i.ebayimg.com/images/g/ebay_item_${id}/s-l500.jpg`;
+        }
 
         scrapedLiveItems.push({
           title: titleText,
@@ -774,4 +801,114 @@ async function syncLiveEbayFeedback() {
       console.log('Live feedback sync proxy notice:', err.message);
     }
   }
+}
+
+// 12. Live In-Browser Watcher Counter Fetcher (Exact number next to heart symbol on eBay)
+function setupLiveWatcherFetcher() {
+  const cards = document.querySelectorAll('.inventory-card[data-item-id]');
+  if (!cards.length) return;
+
+  const fetchedCache = new Map();
+
+  async function fetchItemWatchers(itemId, callback) {
+    if (fetchedCache.has(itemId)) {
+      callback(fetchedCache.get(itemId));
+      return;
+    }
+
+    const sessionKey = 'eb_w_' + itemId;
+    const sessionVal = sessionStorage.getItem(sessionKey);
+    if (sessionVal !== null) {
+      const parsed = parseInt(sessionVal, 10);
+      fetchedCache.set(itemId, parsed);
+      callback(parsed);
+      return;
+    }
+
+    const targetUrl = `https://www.ebay.co.uk/itm/${itemId}`;
+    const proxies = [
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+      `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+    ];
+
+    for (const proxy of proxies) {
+      try {
+        const res = await fetch(proxy);
+        if (!res.ok) continue;
+        const text = await res.text();
+        if (!text || text.length < 500) continue;
+
+        let watchers = 0;
+        // Check exact eBay heart/watchlist patterns
+        const m1 = text.match(/(?:aria-label="[^"]*?|title="[^"]*?)(\d+)\s*(?:watchers?|people are watching|watching)/i);
+        const m2 = text.match(/"watchCount"\s*:\s*(\d+)/i);
+        const m3 = text.match(/<button[^>]*?(?:watch|heart)[^>]*?>.*?(\d+).*?<\/button>/is);
+        const m4 = text.match(/\b(\d+)\s*(?:watchers?|people watching|watching in last \d+ hours)\b/i);
+
+        if (m1) watchers = parseInt(m1[1], 10);
+        else if (m2) watchers = parseInt(m2[1], 10);
+        else if (m3) watchers = parseInt(m3[1], 10);
+        else if (m4) watchers = parseInt(m4[1], 10);
+
+        if (isNaN(watchers)) watchers = 0;
+
+        fetchedCache.set(itemId, watchers);
+        sessionStorage.setItem(sessionKey, watchers.toString());
+        callback(watchers);
+        return;
+      } catch (e) {
+        // try next proxy
+      }
+    }
+
+    // fallback 0 if no public watchers
+    fetchedCache.set(itemId, 0);
+    sessionStorage.setItem(sessionKey, '0');
+    callback(0);
+  }
+
+  function applyWatcherBadge(card, watchers) {
+    if (!watchers || watchers <= 0) return;
+    const priceRow = card.querySelector('.inv-card-price-row') || card.querySelector('.inv-card-body');
+    if (!priceRow) return;
+
+    let badge = card.querySelector('.inv-card-watcher-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'inv-card-watcher-badge';
+      priceRow.appendChild(badge);
+    }
+    badge.innerHTML = `<i class="fa-solid fa-eye"></i> ${watchers} watching`;
+  }
+
+  // IntersectionObserver to fetch as items scroll into view
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const card = entry.target;
+          const itemId = card.getAttribute('data-item-id');
+          if (itemId) {
+            fetchItemWatchers(itemId, (count) => {
+              applyWatcherBadge(card, count);
+            });
+          }
+          obs.unobserve(card);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    cards.forEach(card => observer.observe(card));
+  } else {
+    // Fallback for older browsers: fetch first 8
+    Array.from(cards).slice(0, 8).forEach(card => {
+      const itemId = card.getAttribute('data-item-id');
+      if (itemId) {
+        fetchItemWatchers(itemId, (count) => applyWatcherBadge(card, count));
+      }
+    });
+  }
+
+  // Expose global helper for Hero Featured Card
+  window.fetchLiveItemWatchers = fetchItemWatchers;
 }

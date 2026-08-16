@@ -187,12 +187,14 @@ foreach ($item in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-price="$numPrice">
+          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice">
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>
             <div class="inv-card-body">
-              <div class="inv-card-price">$price</div>
+              <div class="inv-card-price-row">
+                <div class="inv-card-price">$price</div>
+              </div>
               <h3 class="inv-card-title">$title</h3>
               <div class="inv-card-features">
                 $pillsHtml

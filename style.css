@@ -1199,11 +1199,48 @@ a.feedback-card {
   margin-top: auto;
 }
 
+.inv-card-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .inv-card-price {
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 1.5rem;
   color: #ffffff;
+}
+
+.inv-card-watcher-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  letter-spacing: -0.2px;
+}
+
+.inv-card-watcher-badge i {
+  color: var(--ebay-blue);
+  font-size: 0.85rem;
+}
+
+[data-theme="light"] .inv-card-watcher-badge {
+  color: #334155;
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .inv-card-watcher-badge i {
+  color: #0064d2;
 }
 
 .inv-card-title {

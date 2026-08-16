@@ -1,0 +1,66 @@
+name: Sync eBay Inventory & Deploy to GitHub Pages
+
+on:
+  schedule:
+    # Runs automatically twice a day (at 06:00 and 18:00 UTC)
+    - cron: '0 6,18 * * *'
+  workflow_dispatch: # Allows manual 1-click trigger from GitHub web interface
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  sync-and-build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run PowerShell Inventory Sync & Build
+        shell: pwsh
+        run: |
+          # 1. Run the inventory builder
+          .\build_site_from_100pct_scraped_ebay_page_conditions.ps1
+
+          # 2. Fix pound symbol byte encodings
+          .\fix_both_encodings.ps1
+
+      - name: Commit & Push Changes (if inventory changed)
+        shell: pwsh
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html inventory.html style.css script.js *.json
+          $status = git status --porcelain
+          if ($status) {
+            git commit -m "Auto-sync: Updated active eBay inventory and feedback ratings [skip ci]"
+            git push
+          } else {
+            Write-Host "No changes detected. Website is already up to date with eBay."
+          }
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: sync-and-build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

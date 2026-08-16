@@ -589,20 +589,10 @@ function setupInventoryPageControls() {
   const searchInput = document.getElementById('inventorySearchInput');
   const sortSelect = document.getElementById('inventorySortSelect');
   const grid = document.getElementById('inventoryGrid') || document.getElementById('fullInventoryGrid');
-  const conditionPills = document.querySelectorAll('.condition-pill-btn');
 
   if (!grid) return;
 
   let activeConditionFilter = 'all';
-
-  conditionPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      conditionPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      activeConditionFilter = pill.getAttribute('data-condition') || 'all';
-      filterCards();
-    });
-  });
 
   function filterCards() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -612,23 +602,23 @@ function setupInventoryPageControls() {
 
     cards.forEach(card => {
       const title = (card.querySelector('.inv-card-title')?.textContent || '').toLowerCase();
-      const featuresText = card.querySelector('.inv-card-features')?.textContent || '';
-      const cardCond = card.getAttribute('data-condition') || '';
+      const featuresText = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
+      const cardCond = (card.getAttribute('data-condition') || '').trim();
       
-      const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.toLowerCase().includes(searchTerm);
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.includes(searchTerm);
       
       let matchesCondition = true;
-      if (activeConditionFilter !== 'all') {
+      if (activeConditionFilter && activeConditionFilter !== 'all') {
         if (activeConditionFilter === 'New') {
-          matchesCondition = cardCond === 'New' || featuresText.includes('New');
+          matchesCondition = (cardCond === 'New');
         } else if (activeConditionFilter === 'Opened - never used') {
-          matchesCondition = cardCond === 'Opened - never used' || featuresText.includes('Open Box') || featuresText.includes('Opened');
+          matchesCondition = (cardCond === 'Opened - never used');
         } else if (activeConditionFilter === 'Used') {
-          matchesCondition = cardCond === 'Used' || featuresText.includes('Used') || featuresText.includes('Pre-owned');
+          matchesCondition = (cardCond === 'Used');
         } else if (activeConditionFilter === 'For parts or not working') {
-          matchesCondition = cardCond === 'For parts or not working' || featuresText.includes('For Parts') || featuresText.includes('Faulty');
+          matchesCondition = (cardCond === 'For parts or not working');
         } else {
-          matchesCondition = cardCond.toLowerCase().includes(activeConditionFilter.toLowerCase()) || featuresText.toLowerCase().includes(activeConditionFilter.toLowerCase());
+          matchesCondition = cardCond.toLowerCase() === activeConditionFilter.toLowerCase();
         }
       }
 
@@ -663,6 +653,17 @@ function setupInventoryPageControls() {
       }
     }
   }
+
+  // Delegated click handler on condition buttons
+  document.addEventListener('click', (e) => {
+    const pill = e.target.closest('.condition-pill-btn');
+    if (!pill) return;
+    e.preventDefault();
+    document.querySelectorAll('.condition-pill-btn').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeConditionFilter = pill.getAttribute('data-condition') || 'all';
+    filterCards();
+  });
 
   function getCardPrice(card) {
     const attr = card.getAttribute('data-price');

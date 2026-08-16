@@ -303,7 +303,7 @@ $cardsHtml
     </div>
   </footer>
 
-  <script src="script.js?v=1.2"></script>
+  <script src="script.js?v=2.0"></script>
 </body>
 </html>
 "@

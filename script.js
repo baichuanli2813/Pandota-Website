@@ -2,41 +2,41 @@
 
 // 1. Instant Theme Init (Runs immediately to prevent theme flash)
 window.applyPandotaTheme = function(theme) {
-  if (theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
+  if (theme === 'dark') {
     document.documentElement.removeAttribute('data-theme');
     document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
   }
   try {
     localStorage.setItem('pandota_theme', theme);
   } catch(e) {}
   
   document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn').forEach(btn => {
-    btn.innerHTML = theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-    btn.setAttribute('title', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+    btn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
   });
 };
 
 window.togglePandotaTheme = function() {
-  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-  const next = current === 'light' ? 'dark' : 'light';
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
   window.applyPandotaTheme(next);
 };
 
 // Immediately apply saved theme on load
 (function() {
   try {
-    const saved = localStorage.getItem('pandota_theme') || 'dark';
+    const saved = localStorage.getItem('pandota_theme') || 'light';
     window.applyPandotaTheme(saved);
   } catch(e) {
-    window.applyPandotaTheme('dark');
+    window.applyPandotaTheme('light');
   }
 })();
 
 function setupThemeToggle() {
   try {
-    const saved = localStorage.getItem('pandota_theme') || 'dark';
+    const saved = localStorage.getItem('pandota_theme') || 'light';
     window.applyPandotaTheme(saved);
   } catch(e) {}
 }

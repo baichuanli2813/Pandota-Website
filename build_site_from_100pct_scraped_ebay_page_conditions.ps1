@@ -139,7 +139,7 @@ foreach ($it in $items) {
 
 $fullHtml = @"
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -150,24 +150,24 @@ $fullHtml = @"
   <script>
     (function() {
       window.applyPandotaTheme = function(theme) {
-        if (theme === 'light') {
-          document.documentElement.setAttribute('data-theme', 'light');
-        } else {
+        if (theme === 'dark') {
           document.documentElement.removeAttribute('data-theme');
           document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
         }
         try { localStorage.setItem('pandota_theme', theme); } catch(e) {}
         
         var btns = document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn');
         btns.forEach(function(btn) {
-          btn.innerHTML = theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
-          btn.setAttribute('title', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+          btn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+          btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
         });
       };
 
       window.togglePandotaTheme = function() {
-        var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        var next = current === 'light' ? 'dark' : 'light';
+        var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
         window.applyPandotaTheme(next);
       };
 
@@ -198,13 +198,9 @@ $fullHtml = @"
         }
       });
 
-      var saved = 'dark';
-      try { saved = localStorage.getItem('pandota_theme') || 'dark'; } catch(e) {}
-      if (saved === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+      var saved = 'light';
+      try { saved = localStorage.getItem('pandota_theme') || 'light'; } catch(e) {}
+      window.applyPandotaTheme(saved);
     })();
   </script>
 

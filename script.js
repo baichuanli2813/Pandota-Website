@@ -170,43 +170,49 @@ function setupHeroStockCarousel() {
 
   if (!container) return;
 
-  // Active listings fallback array
+  // Active flagship listings with direct high-speed eBay CDN images
   let liveListings = [
     {
-      title: "Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop",
-      price: "£1,049.00",
-      img: "images/ebay_item_267755974090.jpg",
-      url: "https://www.ebay.co.uk/itm/267755974090"
-    },
-    {
-      title: "NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY",
-      price: "£2,599.00",
-      img: "images/ebay_item_267753890742.jpg",
-      url: "https://www.ebay.co.uk/itm/267753890742"
+      title: "NEW Lenovo Legion 9 18\" Ultra 9 275HX 64GB 2TB RTX 5090 UHD+ 4K 240Hz Laptop",
+      price: "£3,799.00",
+      img: "https://i.ebayimg.com/images/g/CXoAAeSw-MdqfbfC/s-l500.jpg",
+      url: "https://www.ebay.co.uk/itm/267755998578"
     },
     {
       title: "Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop",
       price: "£2,599.00",
-      img: "images/ebay_item_267745470208.jpg",
+      img: "https://i.ebayimg.com/images/g/IMQAAeSwqhxqRVu-/s-l500.jpg",
       url: "https://www.ebay.co.uk/itm/267745470208"
     },
     {
       title: "NEW HP Omen MAX 16 Ultra 9 275HX RTX 5090 64GB 2TB QHD 240Hz OLED Gaming Laptop",
       price: "£2,899.00",
-      img: "images/ebay_item_267755930402.jpg",
+      img: "https://i.ebayimg.com/images/g/2HwAAeSwSKxqfZrP/s-l500.jpg",
       url: "https://www.ebay.co.uk/itm/267755930402"
+    },
+    {
+      title: "NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY",
+      price: "£2,599.00",
+      img: "https://i.ebayimg.com/images/g/HlsAAeSwdh5qezif/s-l500.jpg",
+      url: "https://www.ebay.co.uk/itm/267753890742"
+    },
+    {
+      title: "NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 32GB 2TB RTX 5080 OLED 120Hz Laptop",
+      price: "£2,699.00",
+      img: "https://i.ebayimg.com/images/g/nhAAAeSwYexqVg10/s-l500.jpg",
+      url: "https://www.ebay.co.uk/itm/267727321251"
     },
     {
       title: "NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console",
       price: "£1,099.00",
-      img: "images/ebay_item_267727293251.jpg",
+      img: "https://i.ebayimg.com/images/g/OPEAAeSwiSdqGr2r/s-l500.jpg",
       url: "https://www.ebay.co.uk/itm/267727293251"
     },
     {
-      title: "NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 RTX 5080 32GB 2TB OLED Gaming Laptop",
-      price: "£2,699.00",
-      img: "images/ebay_item_267727321251.jpg",
-      url: "https://www.ebay.co.uk/itm/267727321251"
+      title: "Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop",
+      price: "£1,049.00",
+      img: "https://i.ebayimg.com/images/g/yeEAAeSw3bJqfa3q/s-l500.jpg",
+      url: "https://www.ebay.co.uk/itm/267755974090"
     }
   ];
 
@@ -214,37 +220,32 @@ function setupHeroStockCarousel() {
   let autoCycleTimer = null;
 
   function renderHeroItem(idx) {
-    if (liveListings.length === 0) return;
+    if (!liveListings || liveListings.length === 0) return;
     const item = liveListings[idx];
     if (!item) return;
 
-    container.style.opacity = '0.3';
-    setTimeout(() => {
-      if (imgEl) {
-        imgEl.src = item.img;
-        imgEl.alt = item.title;
-      }
-      if (titleEl) titleEl.textContent = item.title;
-      if (priceEl) priceEl.textContent = item.price;
-      if (linkEl) linkEl.href = item.url;
-      if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
+    if (imgEl) {
+      imgEl.src = item.img;
+      imgEl.alt = item.title;
+    }
+    if (titleEl) titleEl.textContent = item.title;
+    if (priceEl) priceEl.textContent = item.price;
+    if (linkEl) linkEl.href = item.url;
+    if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
 
-      // Dynamic eBay Coupon Badge for Hero Card
-      let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
-      if (item.coupon) {
-        if (!couponBadgeEl) {
-          couponBadgeEl = document.createElement('div');
-          couponBadgeEl.className = 'hero-stock-coupon-badge';
-          if (titleEl) titleEl.parentNode.insertBefore(couponBadgeEl, titleEl);
-        }
-        couponBadgeEl.innerHTML = `<i class="fa-solid fa-ticket"></i> ${item.coupon}`;
-        couponBadgeEl.style.display = 'inline-flex';
-      } else {
-        if (couponBadgeEl) couponBadgeEl.remove();
+    // Dynamic eBay Coupon Badge for Hero Card
+    let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
+    if (item.coupon) {
+      if (!couponBadgeEl) {
+        couponBadgeEl = document.createElement('div');
+        couponBadgeEl.className = 'hero-stock-coupon-badge';
+        if (titleEl) titleEl.parentNode.insertBefore(couponBadgeEl, titleEl);
       }
-
-      container.style.opacity = '1';
-    }, 120);
+      couponBadgeEl.innerHTML = `<i class="fa-solid fa-ticket"></i> ${item.coupon}`;
+      couponBadgeEl.style.display = 'inline-flex';
+    } else {
+      if (couponBadgeEl) couponBadgeEl.remove();
+    }
   }
 
   function startAutoCycle() {
@@ -254,26 +255,38 @@ function setupHeroStockCarousel() {
         currentIndex = (currentIndex + 1) % liveListings.length;
         renderHeroItem(currentIndex);
       }
-    }, 5000); // Auto-update to next live item every 5 seconds
+    }, 5000); // Auto-update to next item every 5 seconds
   }
 
   function stopAutoCycle() {
     if (autoCycleTimer) clearInterval(autoCycleTimer);
   }
 
+  window.heroPrevItem = function() {
+    if (liveListings.length === 0) return;
+    currentIndex = (currentIndex - 1 + liveListings.length) % liveListings.length;
+    renderHeroItem(currentIndex);
+    startAutoCycle();
+  };
+
+  window.heroNextItem = function() {
+    if (liveListings.length === 0) return;
+    currentIndex = (currentIndex + 1) % liveListings.length;
+    renderHeroItem(currentIndex);
+    startAutoCycle();
+  };
+
   if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + liveListings.length) % liveListings.length;
-      renderHeroItem(currentIndex);
-      startAutoCycle();
+    prevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.heroPrevItem();
     });
   }
 
   if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % liveListings.length;
-      renderHeroItem(currentIndex);
-      startAutoCycle();
+    nextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.heroNextItem();
     });
   }
 

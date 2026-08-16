@@ -99,14 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
 // Theme Toggle (Light / Dark Mode with LocalStorage Persistence)
 function setupThemeToggle() {
   const toggleBtn = document.getElementById('themeToggleBtn');
-  const savedTheme = localStorage.getItem('pandota_theme') || 'dark';
+  const savedTheme = localStorage.getItem('pandota_theme') || 'light';
 
-  if (savedTheme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-  } else {
+  if (savedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
   }
 
   if (toggleBtn) {

@@ -1,11 +1,18 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pandota Ltd - High-Performance Laptop Specialist on eBay</title>
   <meta name="description" content="Pandota Ltd is a top-rated UK VAT registered eBay seller (Est. 2013) with 100% positive feedback and over 11,000 items sold. Specializing in high-performance laptops, gaming laptops, ultrabooks, and workstations with DPD Next-Day Delivery.">
   <meta name="keywords" content="Pandota, Pandota Ltd, Pandota eBay, geoffscuriosities, geoff_lee367, high performance laptops, gaming laptops, Lenovo Legion, Dell Alienware, DPD Next-Day Delivery, UK laptop seller">
+
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pandota_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 
   <!-- FontAwesome Icons & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -34,7 +41,7 @@
 
       <div class="nav-actions">
         <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
-          <i class="fa-solid fa-sun"></i>
+          <i class="fa-solid fa-moon"></i>
         </button>
         <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener" class="btn btn-ebay">
           <span class="ebay-logo-svg-wrap">

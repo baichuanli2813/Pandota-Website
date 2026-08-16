@@ -207,13 +207,20 @@ foreach ($it in $items) {
 
 $fullHtml = @"
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Active Inventory ($totalCount Listings) - Pandota Ltd Official eBay Store</title>
   <meta name="description" content="Browse all $totalCount active listings live from Pandota's official eBay store (geoffscuriosities). High-performance laptops, gaming rigs, workstations, and electronics.">
   <meta name="keywords" content="Pandota inventory, Pandota laptops, Pandota eBay listings, Lenovo Legion, Alienware, ASUS ROG, HP Omen, eBay UK seller">
+
+  <script>
+    (function() {
+      var saved = localStorage.getItem('pandota_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
 
   <!-- FontAwesome Icons & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -242,7 +249,7 @@ $fullHtml = @"
 
       <div class="nav-actions">
         <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
-          <i class="fa-solid fa-sun"></i>
+          <i class="fa-solid fa-moon"></i>
         </button>
         <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener" class="btn btn-ebay">
           <span class="ebay-logo-svg-wrap">

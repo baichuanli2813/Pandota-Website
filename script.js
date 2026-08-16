@@ -1,0 +1,760 @@
+// Pandota Ltd - Interactive Landing Page & Live Store Data Sync Script
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Mobile Menu Toggle
+  const mobileToggle = document.getElementById('mobileToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  if (mobileToggle && navLinks) {
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      const icon = mobileToggle.querySelector('i');
+      if (icon) {
+        if (navLinks.classList.contains('active')) {
+          icon.className = 'fa-solid fa-xmark';
+        } else {
+          icon.className = 'fa-solid fa-bars';
+        }
+      }
+    });
+
+    // Close menu when clicking link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        const icon = mobileToggle.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-bars';
+      });
+    });
+  }
+
+  // 2. FAQ Accordion Logic
+  const faqItems = document.querySelectorAll('.faq-item');
+
+  faqItems.forEach(item => {
+    const questionBtn = item.querySelector('.faq-question');
+    questionBtn.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+
+      // Close all active items
+      faqItems.forEach(otherItem => {
+        otherItem.classList.remove('active');
+      });
+
+      // Toggle clicked item
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    });
+  });
+
+  // 3. Local Store Search Form (Redirects to inventory.html?q=SearchQuery)
+  const searchForm = document.getElementById('ebaySearchForm');
+  const searchInput = document.getElementById('ebaySearchInput');
+
+  if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `inventory.html?q=${encodeURIComponent(query)}`;
+      } else {
+        window.location.href = 'inventory.html';
+      }
+    });
+  }
+
+  // 4. Dynamic Year in Footer
+  const currentYearSpan = document.getElementById('currentYear');
+  if (currentYearSpan) {
+    currentYearSpan.textContent = new Date().getFullYear();
+  }
+
+  // 5. Live eBay Data Sync for Stats & New Listings
+  fetchEbayLiveStats();
+  syncLiveEbayInventory();
+
+  // 6. Setup Inventory Page Controls
+  setupInventoryPageControls();
+
+  // 7. Make all inventory cards visible immediately
+  makeAllCardsVisible();
+
+  // 8. Setup Hero Stock Viewing Window Carousel (Left/Right Arrows)
+  setupHeroStockCarousel();
+
+  // 9. Live-updating Search Prompt Examples
+  setupLiveSearchPlaceholder();
+
+  // 10. Theme Toggle (Light / Dark Mode)
+  setupThemeToggle();
+});
+
+// Theme Toggle (Light / Dark Mode with LocalStorage Persistence)
+function setupThemeToggle() {
+  const toggleBtn = document.getElementById('themeToggleBtn');
+  const savedTheme = localStorage.getItem('pandota_theme') || 'dark';
+
+  if (savedTheme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('pandota_theme', 'dark');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('pandota_theme', 'light');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+      }
+    });
+  }
+}
+
+// Set search input placeholder based strictly on active in-stock eBay store listings (No word rotation)
+function setupLiveSearchPlaceholder() {
+  const inputs = [
+    document.getElementById('ebaySearchInput'),
+    document.getElementById('inventorySearchInput')
+  ].filter(Boolean);
+
+  if (inputs.length === 0) return;
+
+  // Extract real active in-stock item brands/models directly from loaded grid cards
+  const gridCards = document.querySelectorAll('.inventory-card .inv-card-title');
+  let exampleTerms = ["Lenovo Legion", "Alienware 18", "HP Omen", "ASUS ROG", "RTX 5080"];
+
+  if (gridCards.length > 0) {
+    const extracted = [];
+    gridCards.forEach(card => {
+      const txt = card.textContent;
+      if (txt.match(/Legion|Alienware|Omen|Zephyrus|Surface|Sony|Precision|Predator|MacBook/i)) {
+        const match = txt.match(/(Legion Pro \d+|Legion Go \d+|Alienware \d+|HP Omen \d+|Zephyrus G\d+|Surface Pro \d+|Sony Alpha [^\s]+|Precision \d+)/i);
+        if (match && !extracted.includes(match[1])) {
+          extracted.push(match[1]);
+        }
+      }
+    });
+
+    if (extracted.length >= 3) {
+      exampleTerms = extracted.slice(0, 4);
+    }
+  }
+
+  const promptText = `e.g. ${exampleTerms.join(', ')}...`;
+
+  inputs.forEach(input => {
+    input.setAttribute('placeholder', promptText);
+  });
+}
+
+// Interactive Hero Stock Carousel Navigation (Auto-Updating Live eBay Sync)
+function setupHeroStockCarousel() {
+  const prevBtn = document.getElementById('heroPrevBtn');
+  const nextBtn = document.getElementById('heroNextBtn');
+  const counterEl = document.getElementById('heroCardCounter');
+  
+  const imgEl = document.getElementById('heroStockImg');
+  const titleEl = document.getElementById('heroStockTitle');
+  const priceEl = document.getElementById('heroStockPrice');
+  const linkEl = document.getElementById('heroStockLink');
+  const container = document.getElementById('heroLiveStockContainer');
+
+  if (!container) return;
+
+  // Active listings fallback array
+  let liveListings = [
+    {
+      title: "Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop",
+      price: "£1,049.00",
+      img: "images/ebay_item_267755974090.jpg",
+      url: "https://www.ebay.co.uk/itm/267755974090"
+    },
+    {
+      title: "NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY",
+      price: "£2,599.00",
+      img: "images/ebay_item_267753890742.jpg",
+      url: "https://www.ebay.co.uk/itm/267753890742"
+    },
+    {
+      title: "Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop",
+      price: "£2,599.00",
+      img: "images/ebay_item_267745470208.jpg",
+      url: "https://www.ebay.co.uk/itm/267745470208"
+    },
+    {
+      title: "NEW HP Omen MAX 16 Ultra 9 275HX RTX 5090 64GB 2TB QHD 240Hz OLED Gaming Laptop",
+      price: "£2,899.00",
+      img: "images/ebay_item_267755930402.jpg",
+      url: "https://www.ebay.co.uk/itm/267755930402"
+    },
+    {
+      title: "NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console",
+      price: "£1,099.00",
+      img: "images/ebay_item_267727293251.jpg",
+      url: "https://www.ebay.co.uk/itm/267727293251"
+    },
+    {
+      title: "NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 RTX 5080 32GB 2TB OLED Gaming Laptop",
+      price: "£2,699.00",
+      img: "images/ebay_item_267727321251.jpg",
+      url: "https://www.ebay.co.uk/itm/267727321251"
+    }
+  ];
+
+  let currentIndex = 0;
+  let autoCycleTimer = null;
+
+  function renderHeroItem(idx) {
+    if (liveListings.length === 0) return;
+    const item = liveListings[idx];
+    if (!item) return;
+
+    container.style.opacity = '0.3';
+    setTimeout(() => {
+      if (imgEl) {
+        imgEl.src = item.img;
+        imgEl.alt = item.title;
+      }
+      if (titleEl) titleEl.textContent = item.title;
+      if (priceEl) priceEl.textContent = item.price;
+      if (linkEl) linkEl.href = item.url;
+      if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
+
+      // Dynamic eBay Coupon Badge for Hero Card
+      let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
+      if (item.coupon) {
+        if (!couponBadgeEl) {
+          couponBadgeEl = document.createElement('div');
+          couponBadgeEl.className = 'hero-stock-coupon-badge';
+          if (titleEl) titleEl.parentNode.insertBefore(couponBadgeEl, titleEl);
+        }
+        couponBadgeEl.innerHTML = `<i class="fa-solid fa-ticket"></i> ${item.coupon}`;
+        couponBadgeEl.style.display = 'inline-flex';
+      } else {
+        if (couponBadgeEl) couponBadgeEl.remove();
+      }
+
+      container.style.opacity = '1';
+    }, 120);
+  }
+
+  function startAutoCycle() {
+    stopAutoCycle();
+    autoCycleTimer = setInterval(() => {
+      if (liveListings.length > 1) {
+        currentIndex = (currentIndex + 1) % liveListings.length;
+        renderHeroItem(currentIndex);
+      }
+    }, 5000); // Auto-update to next live item every 5 seconds
+  }
+
+  function stopAutoCycle() {
+    if (autoCycleTimer) clearInterval(autoCycleTimer);
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + liveListings.length) % liveListings.length;
+      renderHeroItem(currentIndex);
+      startAutoCycle();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % liveListings.length;
+      renderHeroItem(currentIndex);
+      startAutoCycle();
+    });
+  }
+
+  container.addEventListener('mouseenter', stopAutoCycle);
+  container.addEventListener('mouseleave', startAutoCycle);
+
+  // Live Fetch Active eBay Store Listings so sold items are automatically replaced
+  async function fetchLiveStoreItems() {
+    const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}&disableCache=true`;
+
+    try {
+      const response = await fetch(proxyUrl);
+      if (!response.ok) return;
+
+      const data = await response.json();
+      if (!data || !data.contents) return;
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data.contents, 'text/html');
+
+      const cardEls = doc.querySelectorAll('article.str-item-card, div.str-item-card');
+      const scrapedLiveItems = [];
+
+      cardEls.forEach(card => {
+        const linkEl = card.querySelector('a.str-item-card__link, a[href*="/itm/"]');
+        if (!linkEl) return;
+
+        const href = linkEl.getAttribute('href') || '';
+        const idMatch = href.match(/itm\/(\d+)/);
+        if (!idMatch) return;
+
+        const id = idMatch[1];
+        const titleEl = card.querySelector('.str-item-card__property-title, .str-card-title, h3');
+        const priceEl = card.querySelector('.str-item-card__property-displayPrice, .str-item-card__primary span');
+        const imgEl = card.querySelector('img');
+
+        // Extract active eBay coupon if present
+        const couponEl = card.querySelector('.str-item-card__coupon, .str-item-card__promotion, .ux-textspans--RED, [class*="coupon"]');
+        let couponText = '';
+        if (couponEl) {
+          couponText = couponEl.textContent.trim();
+        } else {
+          const cardText = card.textContent || '';
+          const match = cardText.match(/(\d+%\s+off|save\s+£\d+|coupon|code:\s*[A-Z0-9]+)/i);
+          if (match) couponText = match[0];
+        }
+
+        const titleText = titleEl ? titleEl.textContent.trim() : 'Pandota Active Listing';
+        const priceText = priceEl ? priceEl.textContent.trim() : 'Check on eBay';
+        const imgSrc = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : `images/ebay_item_${id}.jpg`;
+
+        scrapedLiveItems.push({
+          title: titleText,
+          price: priceText,
+          img: imgSrc,
+          url: `https://www.ebay.co.uk/itm/${id}`,
+          coupon: couponText
+        });
+      });
+
+      if (scrapedLiveItems.length > 0) {
+        liveListings = scrapedLiveItems;
+        currentIndex = 0;
+        renderHeroItem(0);
+        console.log(`Hero Viewing Window: Successfully synced ${liveListings.length} active live eBay store listings!`);
+      }
+    } catch (err) {
+      console.log('Hero live store sync fallback:', err);
+    }
+  }
+
+  fetchLiveStoreItems();
+  startAutoCycle();
+}
+
+// Ensure all cards are visible
+function makeAllCardsVisible() {
+  const cards = document.querySelectorAll('.inventory-card');
+  cards.forEach(card => {
+    card.style.display = 'flex';
+    card.style.opacity = '1';
+    card.classList.add('is-visible');
+  });
+}
+
+// Live Fetch eBay Feedback, Items Sold, and Followers
+async function fetchEbayLiveStats() {
+  const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
+  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}`;
+
+  try {
+    const response = await fetch(proxyUrl);
+    if (!response.ok) return;
+
+    const data = await response.json();
+    if (!data || !data.contents) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data.contents, 'text/html');
+
+    const statsContainer = doc.querySelector('.str-seller-card__store-stats-content') || doc.body;
+    const statsText = statsContainer.textContent || doc.body.textContent;
+
+    // Extract Feedback %
+    const feedbackMatch = statsText.match(/(\d+(?:\.\d+)?%)\s*positive/i);
+    if (feedbackMatch && feedbackMatch[1]) {
+      const feedbackEl = document.getElementById('stat-feedback');
+      if (feedbackEl) feedbackEl.textContent = feedbackMatch[1];
+    }
+
+    // Extract Items Sold
+    const itemsSoldMatch = statsText.match(/(\d+(?:,\d+)*(?:\.\d+)?[KkM]?\+?)\s*items sold/i);
+    if (itemsSoldMatch && itemsSoldMatch[1]) {
+      const itemsEl = document.getElementById('stat-items-sold');
+      if (itemsEl) {
+        const val = itemsSoldMatch[1];
+        itemsEl.textContent = val.includes('+') ? val : `${val}+`;
+      }
+    }
+
+    // Extract Followers
+    const followersMatch = statsText.match(/(\d+(?:\.\d+)?[KkM]?\+?)\s*followers/i);
+    if (followersMatch && followersMatch[1]) {
+      const followersEl = document.getElementById('stat-followers');
+      if (followersEl) {
+        const val = followersMatch[1];
+        followersEl.textContent = val.includes('+') ? val : `${val}+`;
+      }
+    }
+  } catch (err) {
+    console.log('Using cached stats from eBay store:', err);
+  }
+}
+
+// Automatically detect and sync newly published eBay listings in real-time
+async function syncLiveEbayInventory() {
+  const grid = document.getElementById('fullInventoryGrid');
+  if (!grid) return;
+
+  const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
+  const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}&disableCache=true`;
+
+  try {
+    const response = await fetch(proxyUrl);
+    if (!response.ok) return;
+
+    const data = await response.json();
+    if (!data || !data.contents) return;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data.contents, 'text/html');
+
+    // Extract item cards from live eBay store page
+    const liveCards = doc.querySelectorAll('article.str-item-card, div.str-item-card');
+    const existingIds = new Set();
+    grid.querySelectorAll('.inventory-card').forEach(card => {
+      const match = card.querySelector('a.btn-ebay')?.href.match(/itm\/(\d+)/);
+      if (match) existingIds.add(match[1]);
+    });
+
+    let newItemsCount = 0;
+
+    liveCards.forEach(card => {
+      const linkEl = card.querySelector('a.str-item-card__link, a[href*="/itm/"]');
+      if (!linkEl) return;
+
+      const href = linkEl.getAttribute('href') || '';
+      const idMatch = href.match(/itm\/(\d+)/);
+      if (!idMatch) return;
+
+      const itemID = idMatch[1];
+
+      // Extract active eBay coupon
+      const couponEl = card.querySelector('.str-item-card__coupon, .str-item-card__promotion, .ux-textspans--RED, [class*="coupon"]');
+      let couponText = '';
+      if (couponEl) {
+        couponText = couponEl.textContent.trim();
+      } else {
+        const cardText = card.textContent || '';
+        const match = cardText.match(/(\d+%\s+off|save\s+£\d+|coupon|code:\s*[A-Z0-9]+)/i);
+        if (match) couponText = match[0];
+      }
+
+      // If existing card, dynamically update/add/remove coupon badge
+      const existingCard = Array.from(grid.querySelectorAll('.inventory-card')).find(c => {
+        const link = c.querySelector('a.btn-ebay')?.href || '';
+        return link.includes(itemID);
+      });
+
+      if (existingCard) {
+        let couponBadge = existingCard.querySelector('.inv-card-coupon-badge');
+        if (couponText) {
+          if (!couponBadge) {
+            couponBadge = document.createElement('div');
+            couponBadge.className = 'inv-card-coupon-badge';
+            const cardBody = existingCard.querySelector('.inv-card-body');
+            const titleEl = existingCard.querySelector('.inv-card-title');
+            if (cardBody && titleEl) cardBody.insertBefore(couponBadge, titleEl);
+          }
+          couponBadge.innerHTML = `<i class="fa-solid fa-tag"></i> ${couponText}`;
+        } else {
+          if (couponBadge) couponBadge.remove();
+        }
+      }
+
+      // If this is a newly published item not in static HTML, dynamically render it!
+      if (!existingIds.has(itemID)) {
+        const titleEl = card.querySelector('.str-item-card__property-title, .str-card-title, h3');
+        const priceEl = card.querySelector('.str-item-card__property-displayPrice, .str-item-card__primary span');
+        const imgEl = card.querySelector('img');
+
+        const titleText = titleEl ? titleEl.textContent.trim() : 'Pandota Active Listing';
+        const priceText = priceEl ? priceEl.textContent.trim() : 'Check on eBay';
+        const imgSrc = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : 'images/panda_logo.png';
+
+        const newCard = document.createElement('div');
+        newCard.className = 'inventory-card';
+        newCard.setAttribute('data-price', priceText.replace(/[^\d.]/g, '') || '999');
+        newCard.style.display = 'flex';
+        newCard.style.opacity = '1';
+
+        const couponBadgeHtml = couponText ? `<div class="inv-card-coupon-badge"><i class="fa-solid fa-tag"></i> ${couponText}</div>` : '';
+
+        newCard.innerHTML = `
+          <div class="inv-card-badge">NEW Live Listing</div>
+          <div class="inv-card-img-wrap">
+            <img src="${imgSrc}" alt="${titleText}">
+          </div>
+          <div class="inv-card-body">
+            <div class="inv-card-price">${priceText}</div>
+            ${couponBadgeHtml}
+            <h3 class="inv-card-title">${titleText}</h3>
+            <div class="inv-card-features">
+              <span><i class="fa-solid fa-sparkles"></i> New Listing</span>
+              <span><i class="fa-solid fa-store"></i> Pandota Store</span>
+            </div>
+            <a href="https://www.ebay.co.uk/itm/${$id}" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: 14px;">
+              <span>View Listing on eBay</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+        `;
+
+        grid.insertBefore(newCard, grid.firstChild);
+        existingIds.add($id);
+        newItemsCount++;
+      }
+    });
+
+    if (newItemsCount > 0) {
+      console.log(`Live Sync: Automatically loaded ${newItemsCount} newly listed item(s) from eBay!`);
+    }
+  } catch (err) {
+    console.log('Live store sync fallback:', err);
+  }
+}
+
+// Controls for inventory.html filtering & sorting
+function setupInventoryPageControls() {
+  const searchInput = document.getElementById('inventorySearchInput');
+  const sortSelect = document.getElementById('inventorySortSelect');
+  const grid = document.getElementById('fullInventoryGrid');
+  const conditionPills = document.querySelectorAll('.condition-pill-btn');
+
+  if (!grid) return;
+
+  let activeConditionFilter = 'all';
+
+  conditionPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      conditionPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeConditionFilter = pill.getAttribute('data-condition');
+      filterCards();
+    });
+  });
+
+  function filterCards() {
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const cards = grid.querySelectorAll('.inventory-card');
+    let visibleCount = 0;
+    const totalCount = cards.length;
+
+    cards.forEach(card => {
+      const title = card.querySelector('.inv-card-title').textContent.toLowerCase();
+      const featuresText = card.querySelector('.inv-card-features').textContent;
+      
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.toLowerCase().includes(searchTerm);
+      
+      let matchesCondition = true;
+      if (activeConditionFilter !== 'all') {
+        matchesCondition = featuresText.includes(activeConditionFilter);
+      }
+
+      if (matchesSearch && matchesCondition) {
+        card.style.display = 'flex';
+        card.style.opacity = '1';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Keep header count fixed to total active listings
+    const headerCountSpan = document.getElementById('inventoryHeaderCount');
+    if (headerCountSpan) {
+      headerCountSpan.textContent = totalCount;
+    }
+
+    // Dynamic filtered subtext line directly below search bar
+    const filteredResultsEl = document.getElementById('filteredResultsCount');
+    if (filteredResultsEl) {
+      if (activeConditionFilter !== 'all' || searchTerm) {
+        filteredResultsEl.innerHTML = `<i class="fa-solid fa-filter"></i> Showing <strong>${visibleCount}</strong> of <strong>${totalCount}</strong> active listings`;
+      } else {
+        filteredResultsEl.innerHTML = `<i class="fa-solid fa-list-check"></i> Showing all <strong>${totalCount}</strong> active listings`;
+      }
+    }
+  }
+
+  if (searchInput) {
+    // Read ?q=Query parameter from URL if redirected from index.html search
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery) {
+      searchInput.value = initialQuery;
+      filterCards();
+    }
+
+    searchInput.addEventListener('input', filterCards);
+  }
+
+  function applySorting(mode) {
+    const cardsArray = Array.from(grid.querySelectorAll('.inventory-card'));
+
+    if (mode === 'price-asc') {
+      cardsArray.sort((a, b) => parseFloat(a.getAttribute('data-price') || 0) - parseFloat(b.getAttribute('data-price') || 0));
+    } else if (mode === 'price-desc') {
+      cardsArray.sort((a, b) => parseFloat(b.getAttribute('data-price') || 0) - parseFloat(a.getAttribute('data-price') || 0));
+    }
+
+    cardsArray.forEach(card => grid.appendChild(card));
+  }
+
+  if (sortSelect) {
+    // Sort High to Low on startup if price-desc is selected
+    if (sortSelect.value === 'price-desc') {
+      applySorting('price-desc');
+    }
+
+  // 8. Live Sync with eBay Feedback Profile
+  syncLiveEbayFeedback();
+});
+
+// Real-Time Live Sync with eBay Feedback Profile Ratings Table & Reviews
+async function syncLiveEbayFeedback() {
+  const targetUrl = 'https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367';
+  const proxyUrls = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`,
+    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+  ];
+
+  for (const proxyUrl of proxyUrls) {
+    try {
+      const response = await fetch(proxyUrl);
+      if (!response.ok) continue;
+      const htmlText = await response.text();
+      if (!htmlText || htmlText.length < 500) continue;
+
+      // 1. eBay's feedback table uses: aria-label="positive Feedback in last 1 month">333</button>
+      const extract = (type, period) => {
+        const regex = new RegExp(`aria-label="${type} Feedback in last ${period}"[^>]*>(\\d+)<`, 'i');
+        const m = htmlText.match(regex);
+        return m ? m[1] : null;
+      };
+
+      const pos1  = extract('positive', '1 month');
+      const pos6  = extract('positive', '6 months');
+      const pos12 = extract('positive', '12 months');
+      const neu1  = extract('neutral',  '1 month');
+      const neu6  = extract('neutral',  '6 months');
+      const neu12 = extract('neutral',  '12 months');
+      const neg1  = extract('negative', '1 month');
+      const neg6  = extract('negative', '6 months');
+      const neg12 = extract('negative', '12 months');
+
+      // Update rating numbers if positive values found
+      if (pos1 && pos6 && pos12) {
+        const fmt = n => n ? Number(n).toLocaleString() : '0';
+        const update = (id, value) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = fmt(value);
+        };
+
+        // Extract and update total feedback score
+        const totalMatch = htmlText.match(/Feedback score is\s*(\d[\d,]*)/i);
+        if (totalMatch) {
+          update('fb-total-score', totalMatch[1].replace(/,/g, ''));
+        }
+
+        update('fb-1m-pos',  pos1);
+        update('fb-6m-pos',  pos6);
+        update('fb-12m-pos', pos12);
+        update('fb-1m-neu',  neu1);
+        update('fb-6m-neu',  neu6);
+        update('fb-12m-neu', neu12);
+        update('fb-1m-neg',  neg1);
+        update('fb-6m-neg',  neg6);
+        update('fb-12m-neg', neg12);
+      }
+
+      // 2. Extract recent feedbacks from HTML table rows
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      const feedbackRows = doc.querySelectorAll('tr[data-feedback-id]');
+
+      if (feedbackRows.length > 0) {
+        const liveFeedbacks = [];
+        feedbackRows.forEach(row => {
+          const commentEl = row.querySelector('.card__comment span, [data-testid="feedback-comment"]');
+          const itemEl = row.querySelector('.card__item span');
+          const buyerEl = row.querySelector('.card__from span');
+          const scoreEl = row.querySelector('.no-wrap span');
+          const dateEl = row.querySelector('[aria-label^="Past"]');
+
+          const priceEl = row.querySelector('.card__price span');
+          let price = priceEl ? priceEl.textContent.trim() : '';
+          price = price.replace(/^\?/, '£').replace(/^\xA3/, '£');
+
+          if (commentEl && commentEl.textContent.trim()) {
+            let comment = commentEl.getAttribute('aria-label') || commentEl.textContent.trim();
+            comment = comment.replace(/\?+/g, "'").replace(/'+/g, "'").trim();
+            const buyer = buyerEl ? buyerEl.textContent.replace('Feedback left by buyer.', '').replace('Buyer:', '').trim() : 'Verified Buyer';
+            const score = scoreEl ? scoreEl.textContent.trim() : '';
+            let itemTitle = itemEl ? itemEl.textContent.replace(/\(#\d*\)?$/, '').trim() : 'High Performance Laptop';
+            const date = dateEl ? (dateEl.getAttribute('aria-label') || dateEl.textContent.trim()) : 'Recently';
+
+            liveFeedbacks.push({ comment, buyer, score, itemTitle, price, date });
+          }
+        });
+
+        if (liveFeedbacks.length > 0) {
+          // Prioritize most recent 'Past month' reviews first
+          liveFeedbacks.sort((a, b) => {
+            const aIsMonth = a.date.toLowerCase().includes('month') && !a.date.toLowerCase().includes('6');
+            const bIsMonth = b.date.toLowerCase().includes('month') && !b.date.toLowerCase().includes('6');
+            if (aIsMonth && !bIsMonth) return -1;
+            if (!aIsMonth && bIsMonth) return 1;
+            return 0;
+          });
+
+          const slider = document.getElementById('feedbackSlider');
+          if (slider) {
+            slider.innerHTML = liveFeedbacks.map(fb => `
+              <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER" target="_blank" rel="noopener" class="feedback-card" style="flex: 0 0 calc(33.333% - 14px); min-width: 300px;" title="View feedback on eBay">
+                <div class="feedback-header">
+                  <div class="feedback-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                  <span class="verified-badge"><i class="fa-solid fa-circle-check"></i> Verified eBay Buyer</span>
+                </div>
+                <p class="feedback-comment">"${fb.comment}"</p>
+                <div class="feedback-footer">
+                  <div class="buyer-info">
+                    <span class="buyer-name">Buyer: ${fb.buyer} ${fb.score ? `<span class="buyer-score">(${fb.score})</span>` : ''}</span>
+                    <span class="buyer-item">${fb.itemTitle}</span>
+                  </div>
+                  <div class="feedback-meta-right">
+                    ${fb.price ? `<span class="feedback-price">${fb.price}</span>` : ''}
+                    <span class="feedback-date">${fb.date}</span>
+                  </div>
+                </div>
+              </a>
+            `).join('');
+            console.log(`Live Feedback Sync: Rendered ${liveFeedbacks.length} authentic feedbacks directly from eBay!`);
+          }
+        }
+      }
+
+      break;
+    } catch (err) {
+      console.log('Live feedback sync proxy notice:', err.message);
+    }
+  }
+}

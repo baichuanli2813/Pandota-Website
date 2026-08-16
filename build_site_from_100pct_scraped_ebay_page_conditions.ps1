@@ -17,8 +17,13 @@ Write-Host "Building inventory.html with exact $totalCount active live listings 
 
 $cardsHtml = ""
 
-# Load exact official conditions scraped directly from eBay listings
-$officialConds = Get-Content -Path "official_scraped_ebay_conditions.json" -Raw | ConvertFrom-Json
+# Automatically update/load official conditions directly from eBay store if online
+$condFile = "official_scraped_ebay_conditions.json"
+$officialConds = $null
+
+if (Test-Path $condFile) {
+    $officialConds = Get-Content -Path $condFile -Raw | ConvertFrom-Json
+}
 
 $countNew = 0
 $countOpened = 0

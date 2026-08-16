@@ -523,19 +523,28 @@ async function syncLiveEbayInventory() {
         }
       }
 
-      // If this is a newly published item not in static HTML, dynamically render it!
-      if (!existingIds.has(itemID)) {
-        const titleEl = card.querySelector('.str-item-card__property-title, .str-card-title, h3');
-        const priceEl = card.querySelector('.str-item-card__property-displayPrice, .str-item-card__primary span');
-        const imgEl = card.querySelector('img');
-
-        const titleText = titleEl ? titleEl.textContent.trim() : 'Pandota Active Listing';
-        const priceText = priceEl ? priceEl.textContent.trim() : 'Check on eBay';
-        const imgSrc = imgEl ? (imgEl.src || imgEl.getAttribute('data-src') || '') : 'images/panda_logo.png';
+        // Extract exact condition from live eBay store item card
+        const condEl = card.querySelector('.str-item-card__property-condition, [class*="condition"], .ux-textspans--SECONDARY');
+        const condRaw = (condEl ? condEl.textContent.trim() : '').toLowerCase();
+        let exactCond = "Used";
+        let condBadgeHtml = '<span><i class="fa-solid fa-rotate-left"></i> Used</span>';
+        
+        if (condRaw.includes('opened') || condRaw.includes('open box') || condRaw.includes('never used')) {
+          exactCond = "Opened - never used";
+          condBadgeHtml = '<span><i class="fa-solid fa-box-open"></i> Opened - never used</span>';
+        } else if (condRaw.includes('brand new') || condRaw.includes('new with') || condRaw === 'new') {
+          exactCond = "New";
+          condBadgeHtml = '<span><i class="fa-solid fa-sparkles"></i> New</span>';
+        } else if (condRaw.includes('parts') || condRaw.includes('faulty') || condRaw.includes('not working')) {
+          exactCond = "For parts or not working";
+          condBadgeHtml = '<span><i class="fa-solid fa-wrench"></i> For Parts</span>';
+        }
 
         const newCard = document.createElement('div');
-        newCard.className = 'inventory-card';
+        newCard.className = 'inventory-card is-visible';
+        newCard.setAttribute('data-item-id', itemID);
         newCard.setAttribute('data-price', priceText.replace(/[^\d.]/g, '') || '999');
+        newCard.setAttribute('data-condition', exactCond);
         newCard.style.display = 'flex';
         newCard.style.opacity = '1';
 
@@ -551,7 +560,7 @@ async function syncLiveEbayInventory() {
             ${couponBadgeHtml}
             <h3 class="inv-card-title">${titleText}</h3>
             <div class="inv-card-features">
-              <span><i class="fa-solid fa-sparkles"></i> New Listing</span>
+              ${condBadgeHtml}
               <span><i class="fa-solid fa-store"></i> Pandota Store</span>
             </div>
             <a href="https://www.ebay.co.uk/itm/${itemID}" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: 14px;">

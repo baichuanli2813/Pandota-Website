@@ -2089,7 +2089,7 @@ a.feedback-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 36px 28px;
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
@@ -2113,7 +2113,7 @@ a.feedback-card {
   align-items: center;
   justify-content: center;
   font-size: 1.35rem;
-  margin-bottom: 6px;
+  margin-bottom: 14px;
 }
 
 [data-theme="light"] .sell-card-icon {
@@ -2126,11 +2126,8 @@ a.feedback-card {
   font-size: 1.22rem;
   color: var(--text-main);
   font-weight: 700;
-  min-height: 3rem;
-  display: flex;
-  align-items: flex-start;
-  line-height: 1.35;
-  margin-bottom: 10px;
+  line-height: 1.3;
+  margin-bottom: 14px;
 }
 
 [data-theme="light"] .sell-card h3 {
@@ -2140,9 +2137,9 @@ a.feedback-card {
 .sell-card p {
   font-size: 0.92rem;
   color: var(--text-sub);
-  line-height: 1.6;
+  line-height: 1.65;
   flex: 1;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 [data-theme="light"] .sell-card p {
@@ -2153,12 +2150,11 @@ a.feedback-card {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 11px;
   padding: 0;
   margin-top: auto;
   border-top: 1px solid var(--border);
-  padding-top: 20px;
-  min-height: 105px;
+  padding-top: 18px;
 }
 
 .sell-card-list li {

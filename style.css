@@ -277,6 +277,13 @@
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(9, 9, 11, 0.5) 100%);
 }
 
+#sell {
+  position: relative;
+  padding: 95px 0;
+  border-top: 1px solid var(--border);
+  background: var(--bg-dark);
+}
+
 #contact {
   position: relative;
   padding: 95px 0 55px;
@@ -298,9 +305,15 @@
   box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.04);
 }
 
+[data-theme="light"] #sell {
+  background: #edf2f7;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+}
+
 [data-theme="light"] #contact {
-  background: #f8fafc;
-  border-top: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  border-top: 1px solid rgba(15, 23, 42, 0.1);
 }
 
 [data-theme="light"] .ebay-score-summary {
@@ -2059,6 +2072,291 @@ a.feedback-card {
 .faq-item.active .faq-answer {
   max-height: 300px;
   padding: 0 24px 24px 24px;
+}
+
+/* ==========================================================================
+   Sell To Us & Supplier Partnerships Component Styles
+   ========================================================================== */
+.sell-options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  align-items: stretch;
+  margin-bottom: 36px;
+}
+
+.sell-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  height: 100%;
+}
+
+.sell-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-active);
+}
+
+.sell-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 100, 210, 0.14);
+  color: var(--ebay-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+}
+
+[data-theme="light"] .sell-card-icon {
+  background: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+}
+
+.sell-card h3 {
+  font-size: 1.22rem;
+  color: var(--text-main);
+  font-weight: 700;
+  min-height: 3rem;
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+[data-theme="light"] .sell-card h3 {
+  color: #0f172a !important;
+}
+
+.sell-card p {
+  font-size: 0.92rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+[data-theme="light"] .sell-card p {
+  color: #475569 !important;
+}
+
+.sell-card-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  min-height: 105px;
+}
+
+.sell-card-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+.sell-card-list li i {
+  color: #10b981;
+  font-size: 0.85rem;
+}
+
+[data-theme="light"] .sell-card-list li {
+  color: #334155;
+}
+
+[data-theme="light"] .sell-card-list {
+  border-top-color: rgba(15, 23, 42, 0.1);
+}
+
+[data-theme="light"] .sell-card {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow: 0 6px 20px -3px rgba(15, 23, 42, 0.05);
+}
+
+[data-theme="light"] .sell-card:hover {
+  border-color: rgba(15, 23, 42, 0.22);
+  box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.1);
+}
+
+/* Brands & Specs Prioritized Box */
+.sell-brands-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px 30px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+[data-theme="light"] .sell-brands-box {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+}
+
+.sell-brands-header h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-theme="light"] .sell-brands-header h4 {
+  color: #0f172a !important;
+}
+
+.sell-tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sell-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+[data-theme="light"] .sell-tag {
+  background: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #1e293b;
+}
+
+/* Sell Section CTA Banner Box */
+.sell-cta-box {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1px solid #334155;
+  border-radius: var(--radius-lg);
+  padding: 38px 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.sell-cta-content h3 {
+  font-size: 1.45rem;
+  color: #ffffff !important;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.sell-cta-content p {
+  font-size: 0.96rem;
+  color: #cbd5e1 !important;
+  max-width: 560px;
+  line-height: 1.55;
+}
+
+.sell-cta-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Standout High-Contrast Email Specs Button (Clean, No Glow) */
+.btn-specs-highlight {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  padding: 15px 34px !important;
+  border-radius: var(--radius-full) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  transition: all 0.25s ease !important;
+  letter-spacing: 0.01em;
+}
+
+.btn-specs-highlight i.fa-envelope {
+  color: #0f172a;
+  font-size: 1.05rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-specs-highlight i.fa-arrow-right {
+  font-size: 0.9rem;
+  color: #0f172a;
+  transition: transform 0.2s ease;
+}
+
+.btn-specs-highlight:hover {
+  background: #f1f5f9 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  color: #000000 !important;
+}
+
+.btn-specs-highlight:hover i.fa-arrow-right {
+  transform: translateX(4px);
+}
+
+.sell-cta-subtext {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.sell-cta-subtext strong {
+  color: #e2e8f0;
+}
+
+@media (max-width: 992px) {
+  .sell-options-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .sell-cta-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+    align-items: center;
+  }
+  .sell-cta-actions {
+    align-items: center;
+    width: 100%;
+  }
+  .btn-specs-highlight {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Call to Action Banner */

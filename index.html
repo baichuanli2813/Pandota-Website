@@ -31,6 +31,33 @@
         window.applyPandotaTheme(next);
       };
 
+      window.togglePandotaMobileMenu = function() {
+        var navLinks = document.getElementById('navLinks');
+        var btn = document.getElementById('mobileToggle');
+        if (!navLinks) return;
+        var isOpen = navLinks.classList.toggle('active');
+        if (btn) {
+          var icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+          }
+        }
+      };
+
+      // Close mobile menu when clicking any nav link
+      document.addEventListener('click', function(e) {
+        var link = e.target.closest('#navLinks a');
+        if (link) {
+          var navLinks = document.getElementById('navLinks');
+          var btn = document.getElementById('mobileToggle');
+          if (navLinks) navLinks.classList.remove('active');
+          if (btn) {
+            var icon = btn.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-bars';
+          }
+        }
+      });
+
       var saved = 'dark';
       try { saved = localStorage.getItem('pandota_theme') || 'dark'; } catch(e) {}
       if (saved === 'light') {
@@ -71,7 +98,7 @@
         <button class="theme-toggle-btn" id="themeToggleBtn" onclick="togglePandotaTheme()" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-moon"></i>
         </button>
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+        <button class="mobile-toggle" id="mobileToggle" onclick="togglePandotaMobileMenu()" aria-label="Toggle mobile menu">
           <i class="fa-solid fa-bars"></i>
         </button>
       </div>

@@ -2706,31 +2706,42 @@ html, body {
 
   /* Hamburger Menu Toggle */
   .mobile-toggle {
-    display: flex;
+    display: flex !important;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .header-container {
+    position: relative;
   }
 
   .nav-links {
-    display: none;
+    display: none !important;
     position: absolute;
-    top: 60px;
+    top: 100%;
     left: 0;
+    right: 0;
     width: 100%;
     background: var(--bg-card);
     flex-direction: column;
-    padding: 14px 16px;
+    padding: 16px 20px;
     gap: 8px;
     border-bottom: 1px solid var(--border-active);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
-    z-index: 999;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+    z-index: 1001;
   }
 
   [data-theme="light"] .nav-links {
     background: #ffffff;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
   }
 
   .nav-links.active {
-    display: flex;
+    display: flex !important;
     animation: mobileMenuSlideDown 0.22s ease forwards;
   }
 

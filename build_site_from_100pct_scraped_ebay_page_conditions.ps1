@@ -304,6 +304,129 @@ $cardsHtml
   </footer>
 
   <script src="script.js?v=2.0"></script>
+  
+  <script>
+  (function() {
+    function initInventoryControls() {
+      var searchInput = document.getElementById('inventorySearchInput');
+      var sortSelect = document.getElementById('inventorySortSelect');
+      var grid = document.getElementById('inventoryGrid');
+      if (!grid) return;
+
+      var activeCondition = 'all';
+
+      function getCardPrice(card) {
+        var attr = card.getAttribute('data-price');
+        if (attr && !isNaN(parseFloat(attr)) && parseFloat(attr) > 0) {
+          return parseFloat(attr);
+        }
+        var priceEl = card.querySelector('.inv-card-price');
+        if (priceEl) {
+          var parsed = parseFloat(priceEl.textContent.replace(/[^\d.]/g, ''));
+          if (!isNaN(parsed)) return parsed;
+        }
+        return 0;
+      }
+
+      function sortGrid(mode) {
+        var cards = Array.from(grid.querySelectorAll('.inventory-card'));
+        cards.sort(function(a, b) {
+          var pA = getCardPrice(a);
+          var pB = getCardPrice(b);
+          return mode === 'price-asc' ? (pA - pB) : (pB - pA);
+        });
+        cards.forEach(function(card) {
+          grid.appendChild(card);
+        });
+      }
+
+      function filterGrid() {
+        var query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        var cards = grid.querySelectorAll('.inventory-card');
+        var visible = 0;
+        var total = cards.length;
+
+        cards.forEach(function(card) {
+          var title = (card.querySelector('.inv-card-title')?.textContent || '').toLowerCase();
+          var features = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
+          var cond = (card.getAttribute('data-condition') || '').trim();
+
+          var matchesSearch = !query || title.indexOf(query) !== -1 || features.indexOf(query) !== -1;
+          var matchesCond = true;
+
+          if (activeCondition !== 'all') {
+            if (activeCondition === 'New') {
+              matchesCond = (cond === 'New');
+            } else if (activeCondition === 'Opened - never used') {
+              matchesCond = (cond === 'Opened - never used');
+            } else if (activeCondition === 'Used') {
+              matchesCond = (cond === 'Used');
+            } else if (activeCondition === 'For parts or not working') {
+              matchesCond = (cond === 'For parts or not working');
+            } else {
+              matchesCond = cond.toLowerCase() === activeCondition.toLowerCase();
+            }
+          }
+
+          if (matchesSearch && matchesCond) {
+            card.style.setProperty('display', 'flex', 'important');
+            card.style.setProperty('opacity', '1', 'important');
+            visible++;
+          } else {
+            card.style.setProperty('display', 'none', 'important');
+          }
+        });
+
+        var visibleSpan = document.getElementById('visibleCount');
+        if (visibleSpan) visibleSpan.textContent = visible;
+
+        var subtext = document.getElementById('filteredResultsCount');
+        if (subtext) {
+          if (activeCondition !== 'all' || query) {
+            subtext.innerHTML = '<i class="fa-solid fa-filter"></i> Showing <strong>' + visible + '</strong> of <strong>' + total + '</strong> active listings';
+          } else {
+            subtext.innerHTML = 'Showing <span id="visibleCount" style="font-weight: 700; color: var(--text-main);">' + total + '</span> of ' + total + ' items in stock';
+          }
+        }
+      }
+
+      // Direct onclick binding for condition buttons
+      document.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
+        btn.onclick = function(e) {
+          if (e) e.preventDefault();
+          document.querySelectorAll('.condition-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeCondition = btn.getAttribute('data-condition') || 'all';
+          filterGrid();
+        };
+      });
+
+      if (searchInput) {
+        searchInput.oninput = filterGrid;
+        var params = new URLSearchParams(window.location.search);
+        var q = params.get('q');
+        if (q) {
+          searchInput.value = q;
+        }
+      }
+
+      if (sortSelect) {
+        sortSelect.onchange = function() {
+          sortGrid(sortSelect.value);
+        };
+        sortGrid(sortSelect.value || 'price-desc');
+      }
+
+      filterGrid();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initInventoryControls);
+    } else {
+      initInventoryControls();
+    }
+  })();
+  </script>
 </body>
 </html>
 "@

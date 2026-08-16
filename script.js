@@ -912,3 +912,57 @@ function setupLiveWatcherFetcher() {
   // Expose global helper for Hero Featured Card
   window.fetchLiveItemWatchers = fetchItemWatchers;
 }
+
+/**
+ * Enhanced Email Us / Copy-to-Clipboard Handler
+ */
+function setupEmailSpecsHandler() {
+  const emailButtons = document.querySelectorAll('.btn-specs-highlight, .sell-cta-subtext');
+  if (!emailButtons || emailButtons.length === 0) return;
+
+  const emailAddress = "purchasing@pandota.co.uk";
+
+  // Create toast notification element if not exists
+  let toast = document.getElementById('emailCopyToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'emailCopyToast';
+    toast.className = 'email-copy-toast';
+    toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span><strong>${emailAddress}</strong> copied to clipboard!</span>`;
+    document.body.appendChild(toast);
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    if (msg) toast.innerHTML = msg;
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4000);
+  }
+
+  emailButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // Copy email to clipboard
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(emailAddress).then(() => {
+          showToast(`<i class="fa-solid fa-circle-check"></i> <span><strong>${emailAddress}</strong> copied to clipboard!</span>`);
+        }).catch(() => {
+          showToast(`<i class="fa-solid fa-envelope"></i> <span>Send specs to: <strong>${emailAddress}</strong></span>`);
+        });
+      } else {
+        showToast(`<i class="fa-solid fa-envelope"></i> <span>Send specs to: <strong>${emailAddress}</strong></span>`);
+      }
+
+      // If it's the badge (not a link), prevent default navigation
+      if (!btn.getAttribute('href')) {
+        e.preventDefault();
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupEmailSpecsHandler();
+});

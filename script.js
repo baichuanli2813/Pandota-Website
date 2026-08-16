@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 10. Theme Toggle (Light / Dark Mode)
   setupThemeToggle();
+
+  // 11. Live Sync with eBay Feedback Profile
+  syncLiveEbayFeedback();
 });
 
 // Theme Toggle (Light / Dark Mode with LocalStorage Persistence)
@@ -637,10 +640,11 @@ function setupInventoryPageControls() {
     if (sortSelect.value === 'price-desc') {
       applySorting('price-desc');
     }
-
-  // 8. Live Sync with eBay Feedback Profile
-  syncLiveEbayFeedback();
-});
+    sortSelect.addEventListener('change', (e) => {
+      applySorting(e.target.value);
+    });
+  }
+}
 
 // Real-Time Live Sync with eBay Feedback Profile Ratings Table & Reviews
 async function syncLiveEbayFeedback() {

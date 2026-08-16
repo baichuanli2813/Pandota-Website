@@ -1,6 +1,13 @@
 $items = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
+$storeListings = Get-Content -Path "all_store_listings.json" -Raw | ConvertFrom-Json
+$cdnMap = @{}
+foreach ($sl in $storeListings) {
+    if ($sl.ItemId -and $sl.ImageUrl) {
+        $cdnMap[$sl.ItemId] = $sl.ImageUrl
+    }
+}
 
-Write-Host "Building inventory.html using 100% direct live scraped eBay page conditions..."
+Write-Host "Building inventory.html using 100% direct live scraped eBay page conditions and high-speed eBay CDN images..."
 
 $cardsHtml = ""
 
@@ -176,11 +183,13 @@ foreach ($item in $items) {
     
     $pillsHtml = $pills -join "`n                "
     
+    $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
+
     $cardsHtml += @"
           <!-- Item $itemId -->
           <div class="inventory-card" data-price="$numPrice">
             <div class="inv-card-img-wrap">
-              <img src="$img" alt="$title">
+              <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>
             <div class="inv-card-body">
               <div class="inv-card-price">$price</div>

@@ -262,6 +262,9 @@ $fullHtml = @"
           </span>
           <span>Visit Pandota eBay Store</span>
         </a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </div>
   </header>

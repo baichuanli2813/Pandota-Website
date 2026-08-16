@@ -1831,63 +1831,799 @@ a.feedback-card {
   border-top: 1px solid var(--border);
 }
 
-/* Responsive Media Queries */
+/* ==========================================================================
+   Comprehensive Mobile & Responsive Optimization System
+   ========================================================================== */
+
+/* Universal Mobile Fixes */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Base Mobile Header & Navigation */
+.mobile-toggle {
+  display: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .mobile-toggle {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #0f172a;
+}
+
+.mobile-toggle:hover {
+  border-color: var(--border-active);
+}
+
+/* Tablets & Below (<= 992px) */
 @media (max-width: 992px) {
-  .hero-grid, .categories-layout {
+  .hero-grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 28px;
+  }
+  
+  .hero-content {
+    align-items: center;
+    text-align: center;
   }
 
   .hero-title {
-    font-size: 2.75rem;
+    font-size: clamp(1.8rem, 4.5vw, 2.5rem);
+  }
+
+  .hero-desc {
+    max-width: 100%;
+    margin: 0 auto;
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .search-form-wrap {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .hero-stats {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .hero-live-inventory-box {
+    max-width: 540px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .categories-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   .footer-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 24px;
   }
 }
 
+/* Smartphones & Small Tablets (<= 768px) */
 @media (max-width: 768px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  .section {
+    padding: 40px 0;
+  }
+
+  .header-container {
+    height: 60px;
+  }
+
+  .logo-brand {
+    font-size: 1.15rem;
+    gap: 8px;
+    letter-spacing: 0.03em;
+  }
+
+  .logo-brand img.brand-panda-img {
+    height: 34px;
+  }
+
+  /* Compact Header Action Elements */
+  .nav-actions {
+    gap: 8px;
+    align-items: center;
+  }
+
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.85rem;
+  }
+
+  .btn-ebay {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    gap: 6px;
+    border-radius: var(--radius-full);
+  }
+
+  .btn-ebay .ebay-svg-logo {
+    height: 14px;
+  }
+
+  .btn-ebay .ebay-logo-svg-wrap {
+    padding: 2px 6px;
+  }
+
+  /* Hide long "Visit Pandota eBay Store" text and arrow in header on mobile */
+  .header .btn-ebay span:not(.ebay-logo-svg-wrap) {
+    display: none;
+  }
+
+  .header .btn-ebay i {
+    display: none;
+  }
+
+  /* Hamburger Menu Toggle */
+  .mobile-toggle {
+    display: flex;
+  }
+
   .nav-links {
     display: none;
     position: absolute;
-    top: 84px;
+    top: 60px;
     left: 0;
     width: 100%;
     background: var(--bg-card);
     flex-direction: column;
-    padding: 24px;
-    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-active);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4);
+    z-index: 999;
+  }
+
+  [data-theme="light"] .nav-links {
+    background: #ffffff;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
   }
 
   .nav-links.active {
     display: flex;
+    animation: mobileMenuSlideDown 0.22s ease forwards;
   }
 
-  .mobile-toggle {
+  @keyframes mobileMenuSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-links li {
+    width: 100%;
+  }
+
+  .nav-links a {
     display: block;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
   }
 
-  .category-list {
-    grid-template-columns: 1fr;
+  .nav-links a:hover,
+  .nav-links a.active-nav {
+    background: rgba(0, 100, 210, 0.08);
+    color: var(--ebay-blue) !important;
+  }
+
+  /* Hero Mobile Enhancements with refined letter sizing */
+  .hero {
+    padding: 20px 0 28px;
+  }
+
+  .pill-badge {
+    padding: 5px 12px;
+    font-size: 0.74rem;
+    gap: 6px;
+  }
+
+  .pill-badge img {
+    height: 16px;
+  }
+
+  .hero-content {
+    gap: 14px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.4rem, 5.2vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-desc {
+    font-size: 0.86rem;
+    line-height: 1.42;
+    color: var(--text-sub);
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 14px;
+    font-size: 0.84rem;
+    justify-content: center;
+  }
+
+  .search-banner {
+    padding: 20px 14px;
+    margin: 20px 0;
   }
 
   .search-form {
     flex-direction: column;
+    gap: 8px;
+    padding: 6px;
+    margin-top: 12px;
   }
 
+  .search-input {
+    width: 100%;
+    min-height: 38px;
+    font-size: 0.84rem;
+    padding: 8px 12px;
+  }
+
+  .search-form .btn-primary {
+    width: 100%;
+    min-height: 40px;
+    font-size: 0.84rem;
+    padding: 8px 12px;
+  }
+
+  /* Compact 3-Column Stats Grid */
   .hero-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+    padding: 8px 6px !important;
+    border-radius: 12px;
+    margin-top: 10px;
+  }
+
+  .stat-item {
+    padding: 4px 2px;
+    text-align: center;
+  }
+
+  .stat-item h4 {
+    font-size: 0.98rem !important;
+    margin-bottom: 2px;
+  }
+
+  .stat-item p {
+    font-size: 0.62rem !important;
+    line-height: 1.15;
+  }
+
+  /* Hero Live Stock Card Viewing Window on Mobile */
+  .hero-live-inventory-box {
+    padding: 12px;
+    border-radius: 14px;
+    gap: 10px;
+  }
+
+  .hero-inv-header {
+    padding-bottom: 8px;
+  }
+
+  .hero-inv-live-badge {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+
+  .hero-inv-view-all {
+    font-size: 0.72rem;
+  }
+
+  .hero-nav-arrow {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  .hero-stock-card {
+    border-radius: 10px;
+  }
+
+  .hero-stock-img-box {
+    height: 145px;
+    padding: 6px;
+  }
+
+  .hero-stock-price-tag {
+    top: 8px;
+    right: 8px;
+    font-size: 0.92rem;
+    padding: 3px 9px;
+  }
+
+  .hero-stock-info {
+    padding: 10px 10px 12px;
+    gap: 6px;
+  }
+
+  .hero-stock-title {
+    font-size: 0.84rem;
+    line-height: 1.3;
+    height: 2.2rem;
+    margin-bottom: 4px;
+    -webkit-line-clamp: 2;
+  }
+
+  .hero-stock-specs span {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+  }
+
+  .hero-stock-coupon-badge {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+    margin-top: 4px;
+  }
+
+  .hero-stock-cta {
+    min-height: 38px;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    margin-top: 4px;
+  }
+
+  /* Section Headings & Text */
+  .section-title-area {
+    margin: 0 auto 20px;
+  }
+
+  .section-subtitle {
+    font-size: 0.72rem;
+    margin-bottom: 6px;
+  }
+
+  .section-heading {
+    font-size: clamp(1.25rem, 4.5vw, 1.55rem) !important;
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    font-size: 0.84rem !important;
+    line-height: 1.4;
+  }
+
+  /* Feedback & Ratings Breakdown on Mobile */
+  .feedback-section {
+    padding: 30px 0 24px;
+  }
+
+  .ebay-score-summary {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 6px 10px !important;
+    padding: 8px 12px !important;
+    font-size: 0.76rem;
+    border-radius: 10px;
+  }
+
+  .feedback-stats-card {
+    padding: 10px 8px !important;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+
+  .ebay-feedback-table th,
+  .ebay-feedback-table td {
+    padding: 5px 3px !important;
+    font-size: 0.72rem;
+  }
+
+  .feedback-side-btn {
+    display: none !important;
+  }
+
+  .feedback-carousel-wrap {
+    margin: 0 -14px;
+    padding: 0 14px 8px;
+  }
+
+  .feedback-card {
+    flex: 0 0 80% !important;
+    min-width: 220px !important;
+    max-width: 280px !important;
+    padding: 12px !important;
+    border-radius: 12px;
+    scroll-snap-align: center;
+  }
+
+  .feedback-stars {
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+  }
+
+  .feedback-comment {
+    font-size: 0.8rem;
+    line-height: 1.38;
+    margin-bottom: 8px;
+  }
+
+  .buyer-name {
+    font-size: 0.72rem;
+  }
+
+  .buyer-item {
+    font-size: 0.68rem;
+    line-height: 1.3;
+  }
+
+  /* Inventory Page Controls on Mobile */
+  .inventory-hero {
+    padding: 16px 0 10px;
+  }
+
+  .inventory-main-heading {
+    font-size: clamp(1.3rem, 4.8vw, 1.65rem) !important;
+  }
+
+  .inventory-sub-heading {
+    font-size: 0.8rem;
+    margin-top: 2px;
+  }
+
+  .inventory-controls-bar {
+    padding: 10px 8px !important;
+    gap: 8px !important;
+    border-radius: 12px;
+    margin-top: 10px;
+    flex-direction: column;
+  }
+
+  .search-filter-input-wrap {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .search-filter-input-wrap i {
+    font-size: 0.78rem;
+    left: 10px;
+  }
+
+  .inventory-search-input {
+    font-size: 0.8rem;
+    padding: 7px 10px 7px 30px;
+    min-height: 36px;
+    border-radius: 8px;
+  }
+
+  .condition-filter-row {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    gap: 6px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .condition-filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .condition-pill-btn {
+    white-space: nowrap;
+    padding: 5px 10px !important;
+    font-size: 0.74rem !important;
+    flex-shrink: 0;
+    border-radius: 9999px;
+  }
+
+  .sort-select-wrap {
+    width: 100%;
+    justify-content: space-between;
+    font-size: 0.75rem;
+  }
+
+  .sort-select-wrap label {
+    font-size: 0.74rem;
+  }
+
+  .inventory-sort-select {
+    flex: 1;
+    font-size: 0.76rem;
+    padding: 5px 8px;
+    min-height: 34px;
+    border-radius: 8px;
+  }
+
+  /* Inventory Product Cards Grid */
+  .full-inventory-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .inventory-card {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .inv-card-img-wrap {
+    height: 145px;
+    padding: 6px;
+  }
+
+  .inv-card-condition-badge {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    top: 6px;
+    left: 6px;
+  }
+
+  .inv-card-body {
+    padding: 10px 10px 12px;
+    gap: 6px;
+  }
+
+  .inv-card-title {
+    font-size: 0.84rem;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    height: 2.2rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .inv-card-features {
+    gap: 3px;
+    margin-bottom: 4px;
+  }
+
+  .inv-card-features span {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+  }
+
+  .inv-card-price-row {
+    margin-top: 2px;
+  }
+
+  .inv-card-price {
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .inv-card-coupon-badge {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+  }
+
+  .inv-card-watchers {
+    font-size: 0.66rem;
+  }
+
+  .inv-card-btn {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 0.76rem;
+    border-radius: 8px;
+  }
+
+  /* Categories & Features Grid */
+  .category-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .category-card {
+    padding: 12px 10px;
+    border-radius: 10px;
+    gap: 6px;
+  }
+
+  .category-card h4 {
+    font-size: 0.85rem;
+  }
+
+  .category-card p {
+    font-size: 0.72rem;
+  }
+
+  .category-link {
+    font-size: 0.72rem;
+  }
+
+  .features-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .feature-card {
+    padding: 14px 12px !important;
+    border-radius: 12px;
+    gap: 8px;
+  }
+
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .feature-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .feature-card p {
+    font-size: 0.8rem;
+    line-height: 1.38;
+  }
+
+  /* FAQ Section on Mobile */
+  .faq-accordion {
+    gap: 8px;
+  }
+
+  .faq-question {
+    padding: 12px 14px;
+    font-size: 0.86rem;
+  }
+
+  .faq-answer {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    padding: 0 14px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 14px 14px 14px;
+  }
+
+  /* CTA Banner & Contact */
+  .cta-banner {
+    padding: 22px 14px !important;
+    margin: 22px auto !important;
+    border-radius: 14px;
+  }
+
+  .cta-banner h2 {
+    font-size: 1.28rem !important;
+    margin-bottom: 6px;
+  }
+
+  .cta-banner p {
+    font-size: 0.82rem !important;
+    margin-bottom: 12px;
+  }
+
+  .contact-box {
+    padding: 18px 12px !important;
+    border-radius: 14px;
+  }
+
+  .contact-box h2 {
+    font-size: 1.25rem !important;
+  }
+
+  .contact-box p {
+    font-size: 0.8rem !important;
+  }
+
+  .contact-methods {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .contact-card {
+    padding: 10px;
+    font-size: 0.78rem;
+    border-radius: 10px;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 26px 0 16px;
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+  }
+
+  .footer-col ul {
+    gap: 6px;
+  }
+
+  .footer-col p,
+  .footer-col a {
+    font-size: 0.76rem;
   }
 
   .footer-bottom {
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
     text-align: center;
+    font-size: 0.7rem;
+    padding-top: 12px;
+  }
+}
+
+/* Extra Small Phones (<= 380px) */
+@media (max-width: 380px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .logo-brand span {
+    font-size: 1.05rem;
+  }
+
+  .logo-brand img.brand-panda-img {
+    height: 28px;
+  }
+
+  .stat-item h4 {
+    font-size: 0.88rem !important;
+  }
+
+  .stat-item p {
+    font-size: 0.58rem !important;
+  }
+
+  .hero-stock-img-box {
+    height: 125px;
+  }
+
+  .inv-card-img-wrap {
+    height: 125px;
+  }
+
+  .inv-card-price {
+    font-size: 1.05rem;
   }
 }
 

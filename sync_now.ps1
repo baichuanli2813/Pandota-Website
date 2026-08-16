@@ -96,11 +96,36 @@ if ($browser) {
 }
 
 if ($allParsedItems.Count -gt 0) {
-    Write-Host "Successfully fetched $($allParsedItems.Count) live active items from eBay!"
+    Write-Host "Scraped $($allParsedItems.Count) live items from eBay!"
     
-    # Save live scraped active catalog
-    $allParsedItems | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
-    $allParsedItems | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
+    # Load existing full catalog
+    $existingCatalog = @()
+    if (Test-Path "all_82_with_exact_scraped_prices.json") {
+        $existingCatalog = Get-Content "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
+    }
+
+    $mergedCatalog = @()
+    $mergedIds = @{}
+
+    # 1. Add all freshly scraped live items
+    foreach ($it in $allParsedItems) {
+        $mergedCatalog += $it
+        $mergedIds[$it.ItemId] = $true
+    }
+
+    # 2. Preserve any existing valid catalog items from other pages
+    foreach ($ex in $existingCatalog) {
+        if (-not $mergedIds.ContainsKey($ex.ItemId)) {
+            $mergedCatalog += $ex
+            $mergedIds[$ex.ItemId] = $true
+        }
+    }
+
+    Write-Host "Total merged active catalog: $($mergedCatalog.Count) listings."
+
+    # Save merged active catalog
+    $mergedCatalog | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
+    $mergedCatalog | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
 
     # Also update conditions mapping
     $existingConds = @{}
@@ -109,7 +134,7 @@ if ($allParsedItems.Count -gt 0) {
     }
 
     $updatedConds = @{}
-    foreach ($item in $allParsedItems) {
+    foreach ($item in $mergedCatalog) {
         $id = $item.ItemId
         $title = $item.Title
         if ($existingConds.PSObject.Properties[$id]) {
@@ -129,7 +154,7 @@ if ($allParsedItems.Count -gt 0) {
     }
     $updatedConds | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditions.json" -Encoding utf8
 } else {
-    Write-Host "Warning: Could not connect to live eBay store directly. Using existing cached catalog."
+    Write-Host "Keeping current full catalog ($((Get-Content 'all_82_with_exact_scraped_prices.json' -Raw | ConvertFrom-Json).Count) listings)."
 }
 
 # 2. Build inventory.html and update index.html

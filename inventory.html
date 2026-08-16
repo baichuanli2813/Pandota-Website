@@ -44,19 +44,56 @@
         }
       };
 
-      // Close mobile menu when clicking any nav link
-      document.addEventListener('click', function(e) {
-        var link = e.target.closest('#navLinks a');
-        if (link) {
-          var navLinks = document.getElementById('navLinks');
-          var btn = document.getElementById('mobileToggle');
-          if (navLinks) navLinks.classList.remove('active');
-          if (btn) {
-            var icon = btn.querySelector('i');
-            if (icon) icon.className = 'fa-solid fa-bars';
+      window.handleEmailSpecsClick = function(e) {
+        var email = 'purchasing@pandota.co.uk';
+        var mailtoUrl = 'mailto:' + email + '?subject=Laptop%20Sale%20%2F%20Supplier%20Inquiry%20-%20Pandota';
+        
+        // 1. Copy to clipboard
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email);
+          } else {
+            var temp = document.createElement('input');
+            temp.value = email;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
           }
+        } catch(err) {}
+
+        // 2. Button visual feedback
+        var btn = document.getElementById('emailSpecsBtn');
+        var btnText = document.getElementById('emailSpecsBtnText');
+        if (btnText) {
+          var original = btnText.innerHTML;
+          btnText.innerHTML = 'Email Copied (' + email + ')';
+          if (btn) btn.style.background = '#10b981';
+          setTimeout(function() {
+            if (btnText) btnText.innerHTML = original;
+            if (btn) btn.style.background = '';
+          }, 3500);
         }
-      });
+
+        // 3. Show Toast Notification
+        var toast = document.getElementById('emailToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'emailToast';
+          toast.className = 'email-copy-toast';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Copied <strong>' + email + '</strong> to clipboard (Opening email...)</span>';
+        toast.classList.add('show');
+        setTimeout(function() {
+          toast.classList.remove('show');
+        }, 4000);
+
+        // 4. Trigger mailto
+        setTimeout(function() {
+          window.location.href = mailtoUrl;
+        }, 250);
+      };
 
       var saved = 'light';
       try { saved = localStorage.getItem('pandota_theme') || 'light'; } catch(e) {}

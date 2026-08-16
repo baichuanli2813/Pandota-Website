@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,8 +9,35 @@
 
   <script>
     (function() {
-      var saved = localStorage.getItem('pandota_theme') || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
+      window.applyPandotaTheme = function(theme) {
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        try { localStorage.setItem('pandota_theme', theme); } catch(e) {}
+        
+        var btns = document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn');
+        btns.forEach(function(btn) {
+          btn.innerHTML = theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+          btn.setAttribute('title', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+        });
+      };
+
+      window.togglePandotaTheme = function() {
+        var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = current === 'light' ? 'dark' : 'light';
+        window.applyPandotaTheme(next);
+      };
+
+      var saved = 'dark';
+      try { saved = localStorage.getItem('pandota_theme') || 'dark'; } catch(e) {}
+      if (saved === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
     })();
   </script>
 
@@ -41,7 +68,7 @@
       </nav>
 
       <div class="nav-actions">
-        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="togglePandotaTheme()" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-moon"></i>
         </button>
         <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
@@ -371,7 +398,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">1 Month</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:ONE_MONTH" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 1-Month Positive Feedbacks on eBay">
-                        <span id="fb-1m-pos">335</span>
+                        <span id="fb-1m-pos">334</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">
@@ -389,7 +416,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">6 Months</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:SIX_MONTHS" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 6-Month Positive Feedbacks on eBay">
-                        <span id="fb-6m-pos">1,357</span>
+                        <span id="fb-6m-pos">1,356</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">
@@ -407,7 +434,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">12 Months</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:TWELVE_MONTHS" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 12-Month Positive Feedbacks on eBay">
-                        <span id="fb-12m-pos">2,131</span>
+                        <span id="fb-12m-pos">2,130</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">

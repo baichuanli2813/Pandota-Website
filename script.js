@@ -1,129 +1,142 @@
 // Pandota Ltd - Interactive Landing Page & Live Store Data Sync Script
 
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. Mobile Menu Toggle
-  const mobileToggle = document.getElementById('mobileToggle');
-  const navLinks = document.getElementById('navLinks');
-
-  if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      const icon = mobileToggle.querySelector('i');
-      if (icon) {
-        if (navLinks.classList.contains('active')) {
-          icon.className = 'fa-solid fa-xmark';
-        } else {
-          icon.className = 'fa-solid fa-bars';
-        }
-      }
-    });
-
-    // Close menu when clicking link
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-        const icon = mobileToggle.querySelector('i');
-        if (icon) icon.className = 'fa-solid fa-bars';
-      });
-    });
+// 1. Instant Theme Init (Runs immediately to prevent theme flash)
+window.applyPandotaTheme = function(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.setAttribute('data-theme', 'dark');
   }
-
-  // 2. FAQ Accordion Logic
-  const faqItems = document.querySelectorAll('.faq-item');
-
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    questionBtn.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
-
-      // Close all active items
-      faqItems.forEach(otherItem => {
-        otherItem.classList.remove('active');
-      });
-
-      // Toggle clicked item
-      if (!isActive) {
-        item.classList.add('active');
-      }
-    });
+  try {
+    localStorage.setItem('pandota_theme', theme);
+  } catch(e) {}
+  
+  document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn').forEach(btn => {
+    btn.innerHTML = theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+    btn.setAttribute('title', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
   });
+};
 
-  // 3. Local Store Search Form (Redirects to inventory.html?q=SearchQuery)
-  const searchForm = document.getElementById('ebaySearchForm');
-  const searchInput = document.getElementById('ebaySearchInput');
+window.togglePandotaTheme = function() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  const next = current === 'light' ? 'dark' : 'light';
+  window.applyPandotaTheme(next);
+};
 
-  if (searchForm && searchInput) {
-    searchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const query = searchInput.value.trim();
-      if (query) {
-        window.location.href = `inventory.html?q=${encodeURIComponent(query)}`;
-      } else {
-        window.location.href = 'inventory.html';
+// Immediately apply saved theme on load
+(function() {
+  try {
+    const saved = localStorage.getItem('pandota_theme') || 'dark';
+    window.applyPandotaTheme(saved);
+  } catch(e) {
+    window.applyPandotaTheme('dark');
+  }
+})();
+
+function setupThemeToggle() {
+  try {
+    const saved = localStorage.getItem('pandota_theme') || 'dark';
+    window.applyPandotaTheme(saved);
+  } catch(e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Theme Toggle Buttons
+  try { setupThemeToggle(); } catch(e) { console.error('Theme toggle error:', e); }
+
+  // 2. Mobile Menu Toggle
+  try {
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (mobileToggle && navLinks) {
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const icon = mobileToggle.querySelector('i');
+        if (icon) {
+          if (navLinks.classList.contains('active')) {
+            icon.className = 'fa-solid fa-xmark';
+          } else {
+            icon.className = 'fa-solid fa-bars';
+          }
+        }
+      });
+
+      // Close menu when clicking link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          const icon = mobileToggle.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-bars';
+        });
+      });
+    }
+  } catch(e) { console.error('Mobile menu error:', e); }
+
+  // 3. FAQ Accordion Logic
+  try {
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const questionBtn = item.querySelector('.faq-question');
+      if (questionBtn) {
+        questionBtn.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          faqItems.forEach(otherItem => otherItem.classList.remove('active'));
+          if (!isActive) item.classList.add('active');
+        });
       }
     });
-  }
+  } catch(e) { console.error('FAQ error:', e); }
 
-  // 4. Dynamic Year in Footer
-  const currentYearSpan = document.getElementById('currentYear');
-  if (currentYearSpan) {
-    currentYearSpan.textContent = new Date().getFullYear();
-  }
+  // 4. Local Store Search Form (Redirects to inventory.html?q=SearchQuery)
+  try {
+    const searchForm = document.getElementById('ebaySearchForm');
+    const searchInput = document.getElementById('ebaySearchInput');
 
-  // 5. Live eBay Data Sync for Stats & New Listings
-  fetchEbayLiveStats();
-  syncLiveEbayInventory();
+    if (searchForm && searchInput) {
+      searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `inventory.html?q=${encodeURIComponent(query)}`;
+        } else {
+          window.location.href = 'inventory.html';
+        }
+      });
+    }
+  } catch(e) { console.error('Search form error:', e); }
+
+  // 5. Dynamic Year in Footer
+  try {
+    const currentYearSpan = document.getElementById('currentYear');
+    if (currentYearSpan) {
+      currentYearSpan.textContent = new Date().getFullYear();
+    }
+  } catch(e) {}
 
   // 6. Make all inventory cards visible initially
-  makeAllCardsVisible();
+  try { makeAllCardsVisible(); } catch(e) {}
 
   // 7. Setup Inventory Page Controls
-  setupInventoryPageControls();
+  try { setupInventoryPageControls(); } catch(e) { console.error('Inventory controls error:', e); }
 
-  // 8. Setup Hero Stock Viewing Window Carousel (Left/Right Arrows)
-  setupHeroStockCarousel();
+  // 8. Setup Hero Stock Viewing Window Carousel
+  try { setupHeroStockCarousel(); } catch(e) {}
 
   // 9. Live-updating Search Prompt Examples
-  setupLiveSearchPlaceholder();
+  try { setupLiveSearchPlaceholder(); } catch(e) {}
 
-  // 10. Theme Toggle (Light / Dark Mode)
-  setupThemeToggle();
+  // 10. Live eBay Data Sync for Stats & New Listings
+  try { fetchEbayLiveStats(); } catch(e) {}
+  try { syncLiveEbayInventory(); } catch(e) {}
 
   // 11. Live Sync with eBay Feedback Profile
-  syncLiveEbayFeedback();
+  try { syncLiveEbayFeedback(); } catch(e) {}
 
   // 12. Live In-Browser Watcher Counter Fetcher
-  setupLiveWatcherFetcher();
+  try { setupLiveWatcherFetcher(); } catch(e) {}
 });
-
-// Theme Toggle (Light / Dark Mode with LocalStorage Persistence)
-function setupThemeToggle() {
-  const toggleBtn = document.getElementById('themeToggleBtn');
-  const savedTheme = localStorage.getItem('pandota_theme') || 'light';
-
-  if (savedTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light');
-    if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-  }
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      if (currentTheme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('pandota_theme', 'dark');
-        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('pandota_theme', 'light');
-        toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-      }
-    });
-  }
-}
 
 // Set search input placeholder based strictly on active in-stock eBay store listings (No word rotation)
 function setupLiveSearchPlaceholder() {

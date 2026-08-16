@@ -139,7 +139,7 @@ foreach ($it in $items) {
 
 $fullHtml = @"
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -149,8 +149,35 @@ $fullHtml = @"
 
   <script>
     (function() {
-      var saved = localStorage.getItem('pandota_theme') || 'light';
-      document.documentElement.setAttribute('data-theme', saved);
+      window.applyPandotaTheme = function(theme) {
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        try { localStorage.setItem('pandota_theme', theme); } catch(e) {}
+        
+        var btns = document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn');
+        btns.forEach(function(btn) {
+          btn.innerHTML = theme === 'light' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+          btn.setAttribute('title', theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode');
+        });
+      };
+
+      window.togglePandotaTheme = function() {
+        var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = current === 'light' ? 'dark' : 'light';
+        window.applyPandotaTheme(next);
+      };
+
+      var saved = 'dark';
+      try { saved = localStorage.getItem('pandota_theme') || 'dark'; } catch(e) {}
+      if (saved === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
     })();
   </script>
 
@@ -181,7 +208,7 @@ $fullHtml = @"
       </nav>
 
       <div class="nav-actions">
-        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="togglePandotaTheme()" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-moon"></i>
         </button>
         <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle mobile menu">
@@ -415,6 +442,13 @@ $cardsHtml
           sortGrid(sortSelect.value);
         };
         sortGrid(sortSelect.value || 'price-desc');
+      }
+
+      // Standalone Theme Toggle Helper
+      if (typeof window.applyPandotaTheme === 'function') {
+        var currentSaved = 'dark';
+        try { currentSaved = localStorage.getItem('pandota_theme') || 'dark'; } catch(e) {}
+        window.applyPandotaTheme(currentSaved);
       }
 
       filterGrid();

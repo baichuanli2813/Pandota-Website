@@ -47,7 +47,8 @@ jobs:
           $status = git status --porcelain
           if ($status) {
             git commit -m "Auto-sync: Updated active eBay inventory and feedback ratings [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin main
           } else {
             Write-Host "No changes detected. Website is already up to date with eBay."
           }

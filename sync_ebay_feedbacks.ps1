@@ -15,25 +15,26 @@ if (Test-Path $tempFile) {
     if ($html -and $html.Length -gt 1000) {
         Write-Host "Successfully fetched feedback profile HTML ($($html.Length) bytes)!"
 
-        # Extract Total Feedback Score
+        # Extract Total Feedback Score (e.g. <p aria-label="Feedback score is 6253">6253</p>)
         $totalScore = ""
-        if ($html -match '(?i)aria-label="Feedback score:\s*([\d,]+)"') {
-            $totalScore = $matches[1]
-        } elseif ($html -match '(?i)feedback-score-total">([\d,]+)<') {
-            $totalScore = $matches[1]
+        if ($html -match '(?i)aria-label="Feedback score is\s*(\d+)"') {
+            $rawScore = [int]$matches[1]
+            $totalScore = "{0:N0}" -f $rawScore
+        } elseif ($html -match '(?i)geoff_lee367</a>&nbsp;\(<p[^>]*>(\d+)</p>') {
+            $rawScore = [int]$matches[1]
+            $totalScore = "{0:N0}" -f $rawScore
         }
 
-        # Extract Positive %
+        # Extract Positive % (e.g. Positive Feedback (last 12 months): 100%)
         $posPercent = ""
-        if ($html -match '(?i)(\d+(?:\.\d+)?%)\s*positive\s*feedback') {
+        if ($html -match '(?i)Positive Feedback\s*\([^)]*\):\s*(\d+(?:\.\d+)?%)') {
             $posPercent = $matches[1]
         }
 
         # Extract Table Cells: Positive, Neutral, Negative for 1M, 6M, 12M
-        # eBay aria-labels: "positive Feedback in last 1 month">333</button>
-        $p1m = if ($html -match '(?i)positive Feedback in last 1 month">([\d,]+)<') { $matches[1] } else { "" }
-        $p6m = if ($html -match '(?i)positive Feedback in last 6 months">([\d,]+)<') { $matches[1] } else { "" }
-        $p12m = if ($html -match '(?i)positive Feedback in last 12 months">([\d,]+)<') { $matches[1] } else { "" }
+        $p1m = if ($html -match '(?i)positive Feedback in last 1 month">([\d,]+)<') { "{0:N0}" -f [int]($matches[1] -replace ',', '') } else { "" }
+        $p6m = if ($html -match '(?i)positive Feedback in last 6 months">([\d,]+)<') { "{0:N0}" -f [int]($matches[1] -replace ',', '') } else { "" }
+        $p12m = if ($html -match '(?i)positive Feedback in last 12 months">([\d,]+)<') { "{0:N0}" -f [int]($matches[1] -replace ',', '') } else { "" }
 
         $n1m = if ($html -match '(?i)neutral Feedback in last 1 month">([\d,]+)<') { $matches[1] } else { "" }
         $n6m = if ($html -match '(?i)neutral Feedback in last 6 months">([\d,]+)<') { $matches[1] } else { "" }
@@ -49,21 +50,31 @@ if (Test-Path $tempFile) {
         Write-Host "  Neutral:  1M=$n1m | 6M=$n6m | 12M=$n12m"
         Write-Host "  Negative: 1M=$neg1m | 6M=$neg6m | 12M=$neg12m"
 
-        # Update index.html if file exists
+        # Update index.html
         if (Test-Path "index.html") {
             $indexHtml = Get-Content "index.html" -Raw -Encoding utf8
 
             if ($totalScore) {
-                $indexHtml = $indexHtml -replace 'id="totalFeedbackScore">[\d,]+<', "id=`"totalFeedbackScore`">$totalScore<"
+                $indexHtml = $indexHtml -replace 'id="fb-total-score">[\d,]+<', "id=`"fb-total-score`">$totalScore<"
             }
             if ($p1m) {
-                $indexHtml = $indexHtml -replace 'id="fb-pos-1m">[\d,]+<', "id=`"fb-pos-1m`">$p1m<"
-                $indexHtml = $indexHtml -replace 'id="fb-pos-6m">[\d,]+<', "id=`"fb-pos-6m`">$p6m<"
-                $indexHtml = $indexHtml -replace 'id="fb-pos-12m">[\d,]+<', "id=`"fb-pos-12m`">$p12m<"
+                $indexHtml = $indexHtml -replace 'id="fb-1m-pos">[\d,]+<', "id=`"fb-1m-pos`">$p1m<"
+                $indexHtml = $indexHtml -replace 'id="fb-6m-pos">[\d,]+<', "id=`"fb-6m-pos`">$p6m<"
+                $indexHtml = $indexHtml -replace 'id="fb-12m-pos">[\d,]+<', "id=`"fb-12m-pos`">$p12m<"
+            }
+            if ($n1m) {
+                $indexHtml = $indexHtml -replace 'id="fb-1m-neu">[\d,]+<', "id=`"fb-1m-neu`">$n1m<"
+                $indexHtml = $indexHtml -replace 'id="fb-6m-neu">[\d,]+<', "id=`"fb-6m-neu`">$n6m<"
+                $indexHtml = $indexHtml -replace 'id="fb-12m-neu">[\d,]+<', "id=`"fb-12m-neu`">$n12m<"
+            }
+            if ($neg1m) {
+                $indexHtml = $indexHtml -replace 'id="fb-1m-neg">[\d,]+<', "id=`"fb-1m-neg`">$neg1m<"
+                $indexHtml = $indexHtml -replace 'id="fb-6m-neg">[\d,]+<', "id=`"fb-6m-neg`">$neg6m<"
+                $indexHtml = $indexHtml -replace 'id="fb-12m-neg">[\d,]+<', "id=`"fb-12m-neg`">$neg12m<"
             }
 
             [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
-            Write-Host "Successfully updated index.html with live feedback ratings!"
+            Write-Host "Successfully updated index.html with live feedback score ($totalScore) and ratings!"
         }
     } else {
         Write-Host "Notice: Could not parse live feedback HTML, keeping current ratings."

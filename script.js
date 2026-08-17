@@ -1,4 +1,4 @@
-// Pandota Ltd - Interactive Landing Page & Live Store Data Sync Script
+﻿// Pandota Ltd - Interactive Landing Page & Live Store Data Sync Script
 
 // 1. Instant Theme Init (Runs immediately to prevent theme flash)
 window.applyPandotaTheme = function(theme) {

@@ -92,6 +92,18 @@
         }
       };
 
+      window.handleHeroSearch = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var input = document.getElementById('ebaySearchInput');
+        var query = input ? input.value.trim() : '';
+        if (query) {
+          window.location.href = 'inventory.html?q=' + encodeURIComponent(query);
+        } else {
+          window.location.href = 'inventory.html';
+        }
+        return false;
+      };
+
       window.handleEmailSpecsClick = function(e) {
         var email = 'purchasing@pandota.co.uk';
         var mailtoUrl = 'mailto:' + email + '?subject=Laptop%20Sale%20%2F%20Supplier%20Inquiry%20-%20Pandota';
@@ -201,12 +213,12 @@
 
           <!-- Prominent Search Bar in Hero -->
           <div class="hero-search-wrap" id="search">
-            <form class="hero-search-form" id="ebaySearchForm">
+            <form class="hero-search-form" id="ebaySearchForm" action="inventory.html" method="GET" onsubmit="return handleHeroSearch(event)">
               <div class="hero-search-inner">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" class="search-input" id="ebaySearchInput" placeholder="e.g. Legion Go 2, RTX 5080, Alienware, Omen..." aria-label="Search Pandota laptop inventory">
+                <input type="text" class="search-input" id="ebaySearchInput" name="q" placeholder="e.g. Legion Go 2, RTX 5080, Alienware, Omen..." aria-label="Search Pandota laptop inventory">
               </div>
-              <button type="submit" class="btn btn-primary hero-search-btn">
+              <button type="submit" class="btn btn-primary hero-search-btn" id="heroSearchBtn">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <span>Search Inventory</span>
               </button>

@@ -1,4 +1,4 @@
-foreach ($file in @("index.html", "inventory.html", "script.js")) {
+foreach ($file in @("index.html", "inventory.html", "sell.html", "script.js")) {
     if (Test-Path $file) {
         $bytes = [System.IO.File]::ReadAllBytes($file)
         $newBytes = [System.Collections.Generic.List[byte]]::new()

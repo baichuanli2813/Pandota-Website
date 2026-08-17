@@ -850,7 +850,7 @@ a {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
   list-style: none;
 }
 
@@ -862,6 +862,51 @@ a {
 
 .nav-links a:hover {
   color: var(--accent-white);
+}
+
+.nav-sell-highlight {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 100, 210, 0.12);
+  border: 1px solid rgba(0, 100, 210, 0.35);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  color: #60a5fa !important;
+  font-weight: 600 !important;
+  transition: all 0.25s ease;
+}
+
+.nav-sell-highlight:hover {
+  background: #0064d2;
+  border-color: #0064d2;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 100, 210, 0.35);
+  transform: translateY(-1px);
+}
+
+.nav-hot-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: #10b981;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+  margin-left: 2px;
+}
+
+[data-theme="light"] .nav-sell-highlight {
+  background: rgba(0, 100, 210, 0.08);
+  border-color: rgba(0, 100, 210, 0.25);
+  color: #0064d2 !important;
+}
+
+[data-theme="light"] .nav-sell-highlight:hover {
+  background: #0064d2;
+  border-color: #0064d2;
+  color: #ffffff !important;
 }
 
 .nav-actions {
@@ -2547,6 +2592,453 @@ a.feedback-card {
   .btn-specs-highlight {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Dedicated Sell To Us Page Styles (sell.html)
+   ========================================================================== */
+
+.sell-page-hero {
+  padding: 60px 0 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sell-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.sell-hero-heading {
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.sell-hero-desc {
+  font-size: 1.12rem;
+  color: var(--text-sub);
+  max-width: 760px;
+  line-height: 1.65;
+  margin: 0 auto 32px;
+}
+
+.sell-hero-cta-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.btn-sell-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0064d2;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 8px 24px rgba(0, 100, 210, 0.35);
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-sell-primary:hover {
+  background: #0052b0;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 100, 210, 0.5);
+}
+
+.btn-sell-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-main) !important;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 14px 28px;
+  border-radius: var(--radius-full);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-sell-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+}
+
+/* Trust Guarantees Grid */
+.sell-guarantees-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 60px;
+}
+
+.sell-guarantee-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.sell-guarantee-card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-3px);
+}
+
+.sell-guarantee-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 100, 210, 0.12);
+  color: #60a5fa;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+}
+
+.sell-guarantee-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.sell-guarantee-card p {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+
+/* Steps Timeline */
+.sell-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 70px;
+}
+
+.sell-step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 26px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.sell-step-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.08);
+  font-family: var(--font-heading);
+}
+
+[data-theme="light"] .sell-step-badge {
+  color: rgba(15, 23, 42, 0.08);
+}
+
+.sell-step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: #0064d2;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0, 100, 210, 0.3);
+}
+
+.sell-step-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+}
+
+.sell-step-card p {
+  font-size: 0.92rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+
+/* Interactive Laptop Quote Generator Form Card */
+.sell-form-wrapper {
+  background: linear-gradient(135deg, rgba(24, 24, 27, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(0, 100, 210, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 44px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  margin-bottom: 70px;
+  position: relative;
+}
+
+.sell-form-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 36px;
+}
+
+.sell-form-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.sell-form-header p {
+  font-size: 0.95rem;
+  color: #94a3b8;
+}
+
+.sell-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.sell-form-full {
+  grid-column: 1 / -1;
+}
+
+.sell-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sell-form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sell-form-field input,
+.sell-form-field select,
+.sell-form-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.sell-form-field input:focus,
+.sell-form-field select:focus,
+.sell-form-field textarea:focus {
+  outline: none;
+  border-color: #0064d2;
+  box-shadow: 0 0 0 3px rgba(0, 100, 210, 0.25);
+  background: #111827;
+}
+
+.sell-form-field select option {
+  background: #18181b;
+  color: #ffffff;
+}
+
+.sell-form-submit-row {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.btn-submit-valuation {
+  width: 100%;
+  max-width: 480px;
+  padding: 16px 28px;
+  background: linear-gradient(135deg, #0064d2 0%, #0052b0 100%);
+  color: #ffffff !important;
+  font-size: 1.08rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 100, 210, 0.4);
+  transition: all 0.25s ease;
+}
+
+.btn-submit-valuation:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 100, 210, 0.6);
+  background: linear-gradient(135deg, #0073ea 0%, #0064d2 100%);
+}
+
+.sell-form-note {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* FAQ Accordion */
+.sell-faq-section {
+  margin-bottom: 70px;
+}
+
+.sell-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.sell-faq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: all 0.25s ease;
+}
+
+.sell-faq-card:hover {
+  border-color: var(--border-active);
+}
+
+.sell-faq-card h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sell-faq-card h4 i {
+  color: #0064d2;
+}
+
+.sell-faq-card p {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+
+/* Light Theme Overrides for Sell Page */
+[data-theme="light"] .sell-page-hero .sell-hero-heading {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .sell-guarantee-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .sell-step-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .sell-form-wrapper {
+  background: #ffffff;
+  border-color: rgba(0, 100, 210, 0.25);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .sell-form-header h2 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .sell-form-field label {
+  color: #334155;
+}
+
+[data-theme="light"] .sell-form-field input,
+[data-theme="light"] .sell-form-field select,
+[data-theme="light"] .sell-form-field textarea {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.15);
+  color: #0f172a;
+}
+
+[data-theme="light"] .sell-form-field input:focus,
+[data-theme="light"] .sell-form-field select:focus,
+[data-theme="light"] .sell-form-field textarea:focus {
+  background: #ffffff;
+}
+
+[data-theme="light"] .sell-form-field select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+[data-theme="light"] .sell-faq-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+}
+
+@media (max-width: 992px) {
+  .sell-guarantees-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sell-steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .sell-faq-grid {
+    grid-template-columns: 1fr;
+  }
+  .sell-form-wrapper {
+    padding: 28px 18px;
+  }
+  .sell-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .sell-guarantees-grid {
+    grid-template-columns: 1fr;
   }
 }
 

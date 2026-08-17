@@ -295,6 +295,7 @@ if (Test-Path $targetDir) {
     Copy-Item -Path ".\style.css" -Destination "$targetDir\style.css" -Force
     Copy-Item -Path ".\index.html" -Destination "$targetDir\index.html" -Force
     Copy-Item -Path ".\inventory.html" -Destination "$targetDir\inventory.html" -Force
+    Copy-Item -Path ".\sell.html" -Destination "$targetDir\sell.html" -Force
     Copy-Item -Path ".\script.js" -Destination "$targetDir\script.js" -Force
     Copy-Item -Path ".\sitemap.xml" -Destination "$targetDir\sitemap.xml" -Force
     Copy-Item -Path ".\robots.txt" -Destination "$targetDir\robots.txt" -Force

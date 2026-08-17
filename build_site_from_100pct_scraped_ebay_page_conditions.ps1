@@ -551,7 +551,7 @@ $fullHtml = @"
           <li><a href="index.html#about">About Pandota</a></li>
           <li><a href="index.html#features">What We Do</a></li>
           <li><a href="inventory.html" class="active-nav">All Inventory</a></li>
-          <li><a href="index.html#sell">Sell to Us</a></li>
+          <li><a href="sell.html" class="nav-sell-highlight"><i class="fa-solid fa-handshake"></i> Sell to Us <span class="nav-hot-badge">Top Prices</span></a></li>
           <li><a href="index.html#contact">Contact Us</a></li>
         </ul>
       </nav>
@@ -662,7 +662,7 @@ $cardsHtml
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="inventory.html">All Inventory</a></li>
-            <li><a href="index.html#sell">Sell to Us</a></li>
+            <li><a href="sell.html">Sell to Us</a></li>
             <li><a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">eBay Store</a></li>
             <li><a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener">Contact via eBay</a></li>
           </ul>

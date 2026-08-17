@@ -51,7 +51,7 @@ if (Test-Path $tempFile) {
         Write-Host "  Negative: 1M=$neg1m | 6M=$neg6m | 12M=$neg12m"
 
         # Update index.html
-        if (Test-Path "index.html") {
+        if ((Test-Path "index.html") -and $totalScore) {
             $indexHtml = Get-Content "index.html" -Raw -Encoding utf8
 
             if ($totalScore) {
@@ -75,6 +75,8 @@ if (Test-Path $tempFile) {
 
             [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
             Write-Host "Successfully updated index.html with live feedback score ($totalScore) and ratings!"
+        } else {
+            Write-Host "Keeping current feedback ratings."
         }
     } else {
         Write-Host "Notice: Could not parse live feedback HTML, keeping current ratings."

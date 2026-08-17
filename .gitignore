@@ -9,3 +9,8 @@ scratch/
 cookies.txt
 item_*.html
 alienware_page.html
+
+# Secrets and Credentials
+ebay_credentials.json
+.env
+*.secret

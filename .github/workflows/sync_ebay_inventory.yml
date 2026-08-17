@@ -26,17 +26,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run PowerShell Inventory Sync & Build
+      - name: Run Official eBay API Sync & Site Build
         shell: pwsh
         run: |
-          # 1. Run the inventory builder
-          .\build_site_from_100pct_scraped_ebay_page_conditions.ps1
-
-          # 2. Run the feedback profile & ratings table sync
-          .\sync_ebay_feedbacks.ps1
-
-          # 3. Fix pound symbol byte encodings
-          .\fix_both_encodings.ps1
+          # Run official eBay REST API sync pipeline
+          .\sync_ebay_api.ps1
 
       - name: Commit & Push Changes (if inventory changed)
         shell: pwsh

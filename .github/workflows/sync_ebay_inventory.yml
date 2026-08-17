@@ -26,14 +26,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Run Official eBay API Sync & Site Build
+      - name: Run Official eBay Seller Hub Sync & Site Build
         shell: pwsh
         env:
           EBAY_APP_ID: ${{ secrets.EBAY_APP_ID }}
+          EBAY_DEV_ID: ${{ secrets.EBAY_DEV_ID }}
           EBAY_CERT_ID: ${{ secrets.EBAY_CERT_ID }}
+          EBAY_USER_TOKEN: ${{ secrets.EBAY_USER_TOKEN }}
         run: |
-          # Run official eBay REST API sync pipeline
-          .\sync_ebay_api.ps1
+          # Run direct Seller Hub sync pipeline for 100% exact quantities, conditions and watchers
+          .\sync_seller_hub_exact.ps1
 
       - name: Commit & Push Changes (if inventory changed)
         shell: pwsh

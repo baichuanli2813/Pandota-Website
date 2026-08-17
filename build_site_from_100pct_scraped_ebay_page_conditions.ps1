@@ -1,6 +1,6 @@
 # ==============================================================================
 # Pandota Ltd - Official Catalog & Inventory Builder
-# Direct High-Speed eBay CDN Images, Exact Scraped Conditions, Category Filtering & Clean Encodings
+# Direct High-Speed eBay CDN Images, Dynamic Real-Time Categories (Threshold >= 2), Clean Encodings
 # ==============================================================================
 
 $items = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
@@ -13,36 +13,110 @@ foreach ($sl in $storeListings) {
 }
 
 $totalCount = $items.Count
-Write-Host "Building inventory.html with exact $totalCount active live listings, category badges and direct eBay CDN images..."
+Write-Host "Building inventory.html with dynamic categories (>= 2 threshold) across $totalCount active listings..."
 
-function Get-ItemCategory($title) {
-    if ($title -match '(?i)Alienware') {
-        return "Alienware"
-    } elseif ($title -match '(?i)Dell|XPS|Precision|Latitude') {
-        return "Dell"
-    } elseif ($title -match '(?i)Lenovo|Legion|ThinkPad|LOQ|Yoga') {
-        return "Lenovo"
-    } elseif ($title -match '(?i)ASUS|ROG|Zephyrus|Strix|TUF|ZenBook|Flow') {
-        return "ASUS"
-    } elseif ($title -match '(?i)HP|Omen|Victus|ZBook|EliteBook|Envy') {
-        return "HP"
-    } elseif ($title -match '(?i)Sony Alpha|Sony E-|Sony FE|Lens|Camera') {
-        return "Sony Cameras"
-    } elseif ($title -match '(?i)Surface|Microsoft') {
-        return "Microsoft Surface"
-    } elseif ($title -match '(?i)Razer|Blade|MSI|Titan|Raider|Stealth|Vector|Katana') {
-        return "Razer & MSI"
-    } else {
-        return "Other"
+# Recognized brand rules with distinct icons
+$brandDefinitions = @(
+    @{ Name = "Alienware";       Icon = "fa-gamepad";               Pattern = '(?i)\bAlienware\b' },
+    @{ Name = "Dell";            Icon = "fa-desktop";               Pattern = '(?i)\b(Dell|XPS|Precision|Latitude|Inspiron)\b' },
+    @{ Name = "Lenovo";          Icon = "fa-laptop";                Pattern = '(?i)\b(Lenovo|Legion|ThinkPad|LOQ|Yoga|IdeaPad)\b' },
+    @{ Name = "ASUS";            Icon = "fa-microchip";             Pattern = '(?i)\b(ASUS|ROG|Zephyrus|Strix|SCAR|TUF|ZenBook|Flow|ProArt)\b' },
+    @{ Name = "HP";              Icon = "fa-bolt";                  Pattern = '(?i)\b(HP|Omen|Victus|ZBook|EliteBook|Envy|Pavilion|Spectre)\b' },
+    @{ Name = "Sony";            Icon = "fa-camera";                Pattern = '(?i)\b(Sony|Alpha\s*A\d+|SEL\d+|ILCE)\b' },
+    @{ Name = "Microsoft";       Icon = "fa-tablet-screen-button";  Pattern = '(?i)\b(Surface|Microsoft)\b' },
+    @{ Name = "MacBook";         Icon = "fa-brands fa-apple";       Pattern = '(?i)\b(MacBook|Apple|iMac|Mac\s*Mini)\b' },
+    @{ Name = "Razer";           Icon = "fa-shield-halved";         Pattern = '(?i)\b(Razer|Blade)\b' },
+    @{ Name = "MSI";             Icon = "fa-dragon";                Pattern = '(?i)\b(MSI|Titan|Raider|Stealth|Vector|Katana|Pulse|Creator)\b' },
+    @{ Name = "Acer";            Icon = "fa-display";               Pattern = '(?i)\b(Acer|Predator|Helios|Nitro|Swift|Triton)\b' },
+    @{ Name = "PC Specialist";   Icon = "fa-gears";                 Pattern = '(?i)\b(PC\s*Specialist|Defiance|Recoil|Elimina)\b' },
+    @{ Name = "Samsung";         Icon = "fa-mobile-screen";         Pattern = '(?i)\b(Samsung|Galaxy\s*Book)\b' },
+    @{ Name = "Gigabyte";        Icon = "fa-server";                Pattern = '(?i)\b(Gigabyte|AORUS|Aero)\b' },
+    @{ Name = "Framework";       Icon = "fa-screwdriver-wrench";   Pattern = '(?i)\bFramework\b' }
+)
+
+function Detect-BrandName($title) {
+    foreach ($b in $brandDefinitions) {
+        if ($title -match $b.Pattern) {
+            return $b.Name
+        }
     }
+    return "Other"
 }
 
-$cardsHtml = ""
+function Get-BrandIcon($brandName) {
+    foreach ($b in $brandDefinitions) {
+        if ($b.Name -eq $brandName) { return $b.Icon }
+    }
+    return "fa-boxes-stacked"
+}
+
+# 1. Analyze initial brand distributions
+$rawBrandCounts = @{}
+foreach ($it in $items) {
+    $bName = Detect-BrandName $it.Title
+    if (-not $rawBrandCounts.ContainsKey($bName)) { $rawBrandCounts[$bName] = 0 }
+    $rawBrandCounts[$bName]++
+}
+
+# 2. Determine qualifying categories (>= 2 listings), consolidate others (< 2) into 'Other'
+$qualifyingCategories = [System.Collections.Generic.List[string]]::new()
+$otherCount = 0
+
+foreach ($b in $brandDefinitions) {
+    $bName = $b.Name
+    if ($rawBrandCounts.ContainsKey($bName)) {
+        if ($rawBrandCounts[$bName] -ge 2) {
+            $qualifyingCategories.Add($bName)
+        } else {
+            $otherCount += $rawBrandCounts[$bName]
+        }
+    }
+}
+if ($rawBrandCounts.ContainsKey("Other")) {
+    $otherCount += $rawBrandCounts["Other"]
+}
+
+# Sort qualifying categories by count descending
+$sortedQualifying = $qualifyingCategories | Sort-Object { $rawBrandCounts[$_] } -Descending
+
+Write-Host "Qualifying Category Pills (Count >= 2):"
+foreach ($qc in $sortedQualifying) {
+    Write-Host " - $qc ($($rawBrandCounts[$qc]) items)"
+}
+if ($otherCount -gt 0) {
+    Write-Host " - Other ($otherCount items)"
+}
+
+# 3. Generate Category Pills HTML
+$categoryPillsHtml = @"
+            <button class="category-pill-btn active" data-category="all">
+              <i class="fa-solid fa-border-all"></i> All ($totalCount)
+            </button>
+"@
+
+foreach ($qc in $sortedQualifying) {
+    $cIcon = Get-BrandIcon $qc
+    $cCount = $rawBrandCounts[$qc]
+    $categoryPillsHtml += @"
+
+            <button class="category-pill-btn" data-category="$qc">
+              <i class="fa-solid $cIcon"></i> $qc ($cCount)
+            </button>
+"@
+}
+
+if ($otherCount -gt 0) {
+    $categoryPillsHtml += @"
+
+            <button class="category-pill-btn" data-category="Other">
+              <i class="fa-solid fa-boxes-stacked"></i> Other ($otherCount)
+            </button>
+"@
+}
 
 # Automatically update/load official conditions directly from eBay store if online
 $condFile = "official_scraped_ebay_conditions.json"
 $officialConds = $null
-
 if (Test-Path $condFile) {
     $officialConds = Get-Content -Path $condFile -Raw | ConvertFrom-Json
 }
@@ -53,22 +127,14 @@ $countUsed = 0
 $countParts = 0
 $countCoupons = 0
 
-$countLenovo = 0
-$countDell = 0
-$countAlienware = 0
-$countAsus = 0
-$countHp = 0
-$countSony = 0
-$countSurface = 0
-$countRazerMsi = 0
-$countOther = 0
-
 # Count active coupons across items
 foreach ($it in $items) {
     if ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "") {
         $countCoupons++
     }
 }
+
+$cardsHtml = ""
 
 foreach ($it in $items) {
     $itemId = $it.ItemId
@@ -80,17 +146,9 @@ foreach ($it in $items) {
     $url = $it.Url
     $img = $it.Img
 
-    # Category matching eBay Store Categories
-    $cat = Get-ItemCategory $titleRaw
-    if ($cat -eq "Lenovo") { $countLenovo++ }
-    elseif ($cat -eq "Dell") { $countDell++ }
-    elseif ($cat -eq "Alienware") { $countAlienware++ }
-    elseif ($cat -eq "ASUS") { $countAsus++ }
-    elseif ($cat -eq "HP") { $countHp++ }
-    elseif ($cat -eq "Sony Cameras") { $countSony++ }
-    elseif ($cat -eq "Microsoft Surface") { $countSurface++ }
-    elseif ($cat -eq "Razer & MSI") { $countRazerMsi++ }
-    else { $countOther++ }
+    # Determine assigned category for filtering
+    $detectedBrand = Detect-BrandName $titleRaw
+    $assignedCategory = if ($qualifyingCategories.Contains($detectedBrand)) { $detectedBrand } else { "Other" }
 
     # Condition is determined directly from official eBay listing condition
     $cond = if ($it.PSObject.Properties['Condition'] -and $it.Condition) {
@@ -141,8 +199,11 @@ foreach ($it in $items) {
     }
 
     # Build feature pills with Category badge first
+    $cardIcon = Get-BrandIcon $detectedBrand
+    $displayBadge = if ($detectedBrand -ne "Other") { $detectedBrand } else { "Specialty" }
+
     $pills = @()
-    $pills += "<span class=`"inv-card-pill category-pill`"><i class=`"fa-solid fa-tag`"></i> $cat</span>"
+    $pills += "<span class=`"inv-card-pill category-pill`"><i class=`"fa-solid $cardIcon`"></i> $displayBadge</span>"
 
     if ($cond -eq "New") {
         $pills += '<span><i class="fa-solid fa-sparkles"></i> New</span>'
@@ -244,7 +305,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-category="$cat" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
+          <div class="inventory-card" data-item-id="$itemId" data-brand="$detectedBrand" data-category="$assignedCategory" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_$itemId.jpg';}">
 $watchOverlayHtml
@@ -268,15 +329,50 @@ $viewsBadgeHtml
 "@
 }
 
-$couponPillHtml = if ($countCoupons -gt 0) {
-    @"
+# 4. Generate Condition Pills (Never show any pill with 0 count)
+$conditionPillsList = @()
+$conditionPillsList += @"
+            <button class="condition-pill-btn active" data-condition="all">
+              <i class="fa-solid fa-border-all"></i> All Conditions ($totalCount)
+            </button>
+"@
+
+if ($countNew -gt 0) {
+    $conditionPillsList += @"
+            <button class="condition-pill-btn" data-condition="New">
+              <i class="fa-solid fa-sparkles"></i> New ($countNew)
+            </button>
+"@
+}
+if ($countOpened -gt 0) {
+    $conditionPillsList += @"
+            <button class="condition-pill-btn" data-condition="Opened - never used">
+              <i class="fa-solid fa-box-open"></i> Opened - never used ($countOpened)
+            </button>
+"@
+}
+if ($countUsed -gt 0) {
+    $conditionPillsList += @"
+            <button class="condition-pill-btn" data-condition="Used">
+              <i class="fa-solid fa-rotate-left"></i> Used ($countUsed)
+            </button>
+"@
+}
+if ($countParts -gt 0) {
+    $conditionPillsList += @"
+            <button class="condition-pill-btn" data-condition="For parts or not working">
+              <i class="fa-solid fa-wrench"></i> For Parts ($countParts)
+            </button>
+"@
+}
+if ($countCoupons -gt 0) {
+    $conditionPillsList += @"
             <button class="condition-pill-btn coupon-pill-btn" data-condition="coupon" id="couponFilterPill">
               <i class="fa-solid fa-tag"></i> eBay Coupons ($countCoupons)
             </button>
 "@
-} else {
-    ""
 }
+$conditionPillsHtml = $conditionPillsList -join "`n"
 
 $fullHtml = @"
 <!DOCTYPE html>
@@ -486,63 +582,19 @@ $fullHtml = @"
           </p>
         </div>
 
-        <!-- Filter Controls Bar with Category & Condition Pills -->
+        <!-- Filter Controls Bar with Dynamic Category & Condition Pills -->
         <div class="inventory-controls-bar" style="flex-direction: column; align-items: stretch; gap: 14px;">
           
-          <!-- Category Filter Pills Bar -->
+          <!-- Dynamic Category Filter Pills Bar (Threshold >= 2 items) -->
           <div class="category-filter-row" id="categoryFilterRow">
             <div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>
-            <button class="category-pill-btn active" data-category="all">
-              <i class="fa-solid fa-border-all"></i> All ($totalCount)
-            </button>
-            <button class="category-pill-btn" data-category="Lenovo">
-              <i class="fa-solid fa-laptop"></i> Lenovo ($countLenovo)
-            </button>
-            <button class="category-pill-btn" data-category="Dell">
-              <i class="fa-solid fa-desktop"></i> Dell ($countDell)
-            </button>
-            <button class="category-pill-btn" data-category="Alienware">
-              <i class="fa-solid fa-gamepad"></i> Alienware ($countAlienware)
-            </button>
-            <button class="category-pill-btn" data-category="ASUS">
-              <i class="fa-solid fa-microchip"></i> ASUS ($countAsus)
-            </button>
-            <button class="category-pill-btn" data-category="HP">
-              <i class="fa-solid fa-bolt"></i> HP ($countHp)
-            </button>
-            <button class="category-pill-btn" data-category="Sony Cameras">
-              <i class="fa-solid fa-camera"></i> Sony ($countSony)
-            </button>
-            <button class="category-pill-btn" data-category="Microsoft Surface">
-              <i class="fa-solid fa-tablet-screen-button"></i> Surface ($countSurface)
-            </button>
-            <button class="category-pill-btn" data-category="Razer & MSI">
-              <i class="fa-solid fa-shield-halved"></i> Razer &amp; MSI ($countRazerMsi)
-            </button>
-            <button class="category-pill-btn" data-category="Other">
-              <i class="fa-solid fa-boxes-stacked"></i> Other ($countOther)
-            </button>
+$categoryPillsHtml
           </div>
 
-          <!-- Condition Filter Pills Bar -->
+          <!-- Dynamic Condition Filter Pills Bar (Never shows 0 count pills) -->
           <div class="condition-filter-row" id="conditionFilterRow">
             <div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>
-            <button class="condition-pill-btn active" data-condition="all">
-              <i class="fa-solid fa-border-all"></i> All Conditions ($totalCount)
-            </button>
-            <button class="condition-pill-btn" data-condition="New">
-              <i class="fa-solid fa-sparkles"></i> New ($countNew)
-            </button>
-            <button class="condition-pill-btn" data-condition="Opened - never used">
-              <i class="fa-solid fa-box-open"></i> Opened - never used ($countOpened)
-            </button>
-            <button class="condition-pill-btn" data-condition="Used">
-              <i class="fa-solid fa-rotate-left"></i> Used ($countUsed)
-            </button>
-            <button class="condition-pill-btn" data-condition="For parts or not working">
-              <i class="fa-solid fa-wrench"></i> For Parts ($countParts)
-            </button>
-$couponPillHtml
+$conditionPillsHtml
           </div>
 
           <!-- Search & Sort Row -->
@@ -624,17 +676,159 @@ $cardsHtml
     </div>
   </footer>
 
-  <!-- Instant Filtering, Search & Sorting Logic -->
+  <!-- Instant Filtering, Real-Time Dynamic Filter Sync & Sorting Logic -->
   <script>
   (function() {
+    var BRAND_RULES = [
+      { name: 'Alienware', icon: 'fa-gamepad', pattern: /\bAlienware\b/i },
+      { name: 'Dell', icon: 'fa-desktop', pattern: /\b(Dell|XPS|Precision|Latitude|Inspiron)\b/i },
+      { name: 'Lenovo', icon: 'fa-laptop', pattern: /\b(Lenovo|Legion|ThinkPad|LOQ|Yoga|IdeaPad)\b/i },
+      { name: 'ASUS', icon: 'fa-microchip', pattern: /\b(ASUS|ROG|Zephyrus|Strix|SCAR|TUF|ZenBook|Flow|ProArt)\b/i },
+      { name: 'HP', icon: 'fa-bolt', pattern: /\b(HP|Omen|Victus|ZBook|EliteBook|Envy|Pavilion|Spectre)\b/i },
+      { name: 'Sony', icon: 'fa-camera', pattern: /\b(Sony|Alpha\s*A\d+|SEL\d+|ILCE)\b/i },
+      { name: 'Microsoft', icon: 'fa-tablet-screen-button', pattern: /\b(Surface|Microsoft)\b/i },
+      { name: 'MacBook', icon: 'fa-brands fa-apple', pattern: /\b(MacBook|Apple|iMac|Mac\s*Mini)\b/i },
+      { name: 'Razer', icon: 'fa-shield-halved', pattern: /\b(Razer|Blade)\b/i },
+      { name: 'MSI', icon: 'fa-dragon', pattern: /\b(MSI|Titan|Raider|Stealth|Vector|Katana|Pulse|Creator)\b/i },
+      { name: 'Acer', icon: 'fa-display', pattern: /\b(Acer|Predator|Helios|Nitro|Swift|Triton)\b/i },
+      { name: 'PC Specialist', icon: 'fa-gears', pattern: /\b(PC\s*Specialist|Defiance|Recoil|Elimina)\b/i },
+      { name: 'Samsung', icon: 'fa-mobile-screen', pattern: /\b(Samsung|Galaxy\s*Book)\b/i },
+      { name: 'Gigabyte', icon: 'fa-server', pattern: /\b(Gigabyte|AORUS|Aero)\b/i },
+      { name: 'Framework', icon: 'fa-screwdriver-wrench', pattern: /\bFramework\b/i }
+    ];
+
+    function detectCardBrand(title) {
+      for (var i = 0; i < BRAND_RULES.length; i++) {
+        if (BRAND_RULES[i].pattern.test(title)) return BRAND_RULES[i];
+      }
+      return { name: 'Other', icon: 'fa-boxes-stacked' };
+    }
+
     function initInventoryControls() {
       var grid = document.getElementById('inventoryGrid');
       var searchInput = document.getElementById('inventorySearchInput');
       var sortSelect = document.getElementById('inventorySortSelect');
+      var categoryRow = document.getElementById('categoryFilterRow');
+      var conditionRow = document.getElementById('conditionFilterRow');
       if (!grid) return;
 
       var activeCategory = 'all';
       var activeCondition = 'all';
+
+      // Dynamically rebuild category & condition pills from live cards in real time
+      function refreshLiveFilterPills() {
+        var cards = Array.from(grid.querySelectorAll('.inventory-card'));
+        if (!cards.length) return;
+
+        var brandCounts = {};
+        var condCounts = { 'New': 0, 'Opened - never used': 0, 'Used': 0, 'For parts or not working': 0, 'coupon': 0 };
+
+        cards.forEach(function(card) {
+          var title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+          var detected = detectCardBrand(title);
+          var bName = detected.name;
+          brandCounts[bName] = (brandCounts[bName] || 0) + 1;
+
+          var cond = (card.getAttribute('data-condition') || '').trim();
+          if (condCounts.hasOwnProperty(cond)) condCounts[cond]++;
+          if (card.getAttribute('data-coupon') === 'true') condCounts['coupon']++;
+        });
+
+        // Determine qualifying categories (>= 2 listings), consolidate others (< 2) into 'Other'
+        var qualifying = [];
+        var otherCount = 0;
+
+        BRAND_RULES.forEach(function(rule) {
+          var count = brandCounts[rule.name] || 0;
+          if (count >= 2) {
+            qualifying.push({ name: rule.name, icon: rule.icon, count: count });
+          } else if (count > 0) {
+            otherCount += count;
+          }
+        });
+        if (brandCounts['Other']) otherCount += brandCounts['Other'];
+
+        // Sort qualifying categories by count descending
+        qualifying.sort(function(a, b) { return b.count - a.count; });
+
+        // Update card data-category in real time based on active qualifying categories
+        cards.forEach(function(card) {
+          var title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+          var detected = detectCardBrand(title);
+          var isQual = qualifying.some(function(q) { return q.name.toLowerCase() === detected.name.toLowerCase(); });
+          card.setAttribute('data-category', isQual ? detected.name : 'Other');
+        });
+
+        // Render Category Pills HTML
+        if (categoryRow) {
+          var catHtml = '<div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>';
+          catHtml += '<button class="category-pill-btn' + (activeCategory === 'all' ? ' active' : '') + '" data-category="all"><i class="fa-solid fa-border-all"></i> All (' + cards.length + ')</button>';
+          
+          qualifying.forEach(function(q) {
+            var isActive = (activeCategory.toLowerCase() === q.name.toLowerCase());
+            catHtml += '<button class="category-pill-btn' + (isActive ? ' active' : '') + '" data-category="' + q.name + '"><i class="fa-solid ' + q.icon + '"></i> ' + q.name + ' (' + q.count + ')</button>';
+          });
+
+          if (otherCount > 0) {
+            var isOtherActive = (activeCategory.toLowerCase() === 'other');
+            catHtml += '<button class="category-pill-btn' + (isOtherActive ? ' active' : '') + '" data-category="Other"><i class="fa-solid fa-boxes-stacked"></i> Other (' + otherCount + ')</button>';
+          }
+
+          categoryRow.innerHTML = catHtml;
+          bindCategoryListeners();
+        }
+
+        // Render Condition Pills HTML (Never render 0 count pills)
+        if (conditionRow) {
+          var condHtml = '<div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>';
+          condHtml += '<button class="condition-pill-btn' + (activeCondition === 'all' ? ' active' : '') + '" data-condition="all"><i class="fa-solid fa-border-all"></i> All Conditions (' + cards.length + ')</button>';
+          
+          if (condCounts['New'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'New' ? ' active' : '') + '" data-condition="New"><i class="fa-solid fa-sparkles"></i> New (' + condCounts['New'] + ')</button>';
+          }
+          if (condCounts['Opened - never used'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'Opened - never used' ? ' active' : '') + '" data-condition="Opened - never used"><i class="fa-solid fa-box-open"></i> Opened - never used (' + condCounts['Opened - never used'] + ')</button>';
+          }
+          if (condCounts['Used'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'Used' ? ' active' : '') + '" data-condition="Used"><i class="fa-solid fa-rotate-left"></i> Used (' + condCounts['Used'] + ')</button>';
+          }
+          if (condCounts['For parts or not working'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'For parts or not working' ? ' active' : '') + '" data-condition="For parts or not working"><i class="fa-solid fa-wrench"></i> For Parts (' + condCounts['For parts or not working'] + ')</button>';
+          }
+          if (condCounts['coupon'] > 0) {
+            condHtml += '<button class="condition-pill-btn coupon-pill-btn' + (activeCondition === 'coupon' ? ' active' : '') + '" data-condition="coupon"><i class="fa-solid fa-tag"></i> eBay Coupons (' + condCounts['coupon'] + ')</button>';
+          }
+
+          conditionRow.innerHTML = condHtml;
+          bindConditionListeners();
+        }
+      }
+
+      function bindCategoryListeners() {
+        if (!categoryRow) return;
+        categoryRow.querySelectorAll('.category-pill-btn').forEach(function(btn) {
+          btn.onclick = function(e) {
+            if (e) e.preventDefault();
+            categoryRow.querySelectorAll('.category-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            activeCategory = btn.getAttribute('data-category') || 'all';
+            filterGrid();
+          };
+        });
+      }
+
+      function bindConditionListeners() {
+        if (!conditionRow) return;
+        conditionRow.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
+          btn.onclick = function(e) {
+            if (e) e.preventDefault();
+            conditionRow.querySelectorAll('.condition-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            activeCondition = btn.getAttribute('data-condition') || 'all';
+            filterGrid();
+          };
+        });
+      }
 
       function getCardPrice(card) {
         var attr = card.getAttribute('data-price');
@@ -743,27 +937,7 @@ $cardsHtml
         }
       }
 
-      // Direct onclick binding for category buttons
-      document.querySelectorAll('.category-pill-btn').forEach(function(btn) {
-        btn.onclick = function(e) {
-          if (e) e.preventDefault();
-          document.querySelectorAll('.category-pill-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          activeCategory = btn.getAttribute('data-category') || 'all';
-          filterGrid();
-        };
-      });
-
-      // Direct onclick binding for condition buttons
-      document.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
-        btn.onclick = function(e) {
-          if (e) e.preventDefault();
-          document.querySelectorAll('.condition-pill-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          activeCondition = btn.getAttribute('data-condition') || 'all';
-          filterGrid();
-        };
-      });
+      refreshLiveFilterPills();
 
       if (searchInput) {
         searchInput.oninput = filterGrid;
@@ -812,4 +986,4 @@ if (Test-Path "index.html") {
     [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
 }
 
-Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings and category filters!"
+Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings and dynamic threshold-based categories!"

@@ -205,23 +205,23 @@
           </p>
         </div>
 
-        <!-- Filter Controls Bar with Category & Condition Pills -->
+        <!-- Filter Controls Bar with Dynamic Category & Condition Pills -->
         <div class="inventory-controls-bar" style="flex-direction: column; align-items: stretch; gap: 14px;">
           
-          <!-- Category Filter Pills Bar -->
+          <!-- Dynamic Category Filter Pills Bar (Threshold >= 2 items) -->
           <div class="category-filter-row" id="categoryFilterRow">
             <div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>
             <button class="category-pill-btn active" data-category="all">
               <i class="fa-solid fa-border-all"></i> All (75)
             </button>
-            <button class="category-pill-btn" data-category="Lenovo">
-              <i class="fa-solid fa-laptop"></i> Lenovo (17)
-            </button>
             <button class="category-pill-btn" data-category="Dell">
               <i class="fa-solid fa-desktop"></i> Dell (19)
             </button>
-            <button class="category-pill-btn" data-category="Alienware">
-              <i class="fa-solid fa-gamepad"></i> Alienware (5)
+            <button class="category-pill-btn" data-category="Lenovo">
+              <i class="fa-solid fa-laptop"></i> Lenovo (17)
+            </button>
+            <button class="category-pill-btn" data-category="Sony">
+              <i class="fa-solid fa-camera"></i> Sony (11)
             </button>
             <button class="category-pill-btn" data-category="ASUS">
               <i class="fa-solid fa-microchip"></i> ASUS (8)
@@ -229,21 +229,21 @@
             <button class="category-pill-btn" data-category="HP">
               <i class="fa-solid fa-bolt"></i> HP (5)
             </button>
-            <button class="category-pill-btn" data-category="Sony Cameras">
-              <i class="fa-solid fa-camera"></i> Sony (11)
+            <button class="category-pill-btn" data-category="Alienware">
+              <i class="fa-solid fa-gamepad"></i> Alienware (5)
             </button>
-            <button class="category-pill-btn" data-category="Microsoft Surface">
-              <i class="fa-solid fa-tablet-screen-button"></i> Surface (3)
+            <button class="category-pill-btn" data-category="Microsoft">
+              <i class="fa-solid fa-tablet-screen-button"></i> Microsoft (3)
             </button>
-            <button class="category-pill-btn" data-category="Razer & MSI">
-              <i class="fa-solid fa-shield-halved"></i> Razer &amp; MSI (3)
+            <button class="category-pill-btn" data-category="PC Specialist">
+              <i class="fa-solid fa-gears"></i> PC Specialist (2)
             </button>
             <button class="category-pill-btn" data-category="Other">
-              <i class="fa-solid fa-boxes-stacked"></i> Other (4)
+              <i class="fa-solid fa-boxes-stacked"></i> Other (5)
             </button>
           </div>
 
-          <!-- Condition Filter Pills Bar -->
+          <!-- Dynamic Condition Filter Pills Bar (Never shows 0 count pills) -->
           <div class="condition-filter-row" id="conditionFilterRow">
             <div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>
             <button class="condition-pill-btn active" data-condition="all">
@@ -261,7 +261,6 @@
             <button class="condition-pill-btn" data-condition="For parts or not working">
               <i class="fa-solid fa-wrench"></i> For Parts (1)
             </button>
-
           </div>
 
           <!-- Search & Sort Row -->
@@ -296,7 +295,7 @@
 
         <div class="full-inventory-grid" id="inventoryGrid">
           <!-- Item 267734199450 -->
-          <div class="inventory-card" data-item-id="267734199450" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="14" data-views="250" >
+          <div class="inventory-card" data-item-id="267734199450" data-brand="Dell" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="14" data-views="250" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/9-AAAeSwROhqX0Co/$_57.JPG?set_id=880000500F" alt="Dell Precision 7780 i7 13850HX RTX 5000 Ada 64GB 2TB Workstation Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267734199450.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="14 buyers watching on eBay">
@@ -315,7 +314,7 @@
               </div>
               <h3 class="inv-card-title">Dell Precision 7780 i7 13850HX RTX 5000 Ada 64GB 2TB Workstation Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 13850HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5000 Ada</span>
@@ -327,7 +326,7 @@
               </a>
             </div>
           </div>          <!-- Item 267734388443 -->
-          <div class="inventory-card" data-item-id="267734388443" data-category="Dell" data-price="2499.00" data-condition="Used" data-watchers="11" data-views="172" >
+          <div class="inventory-card" data-item-id="267734388443" data-brand="Dell" data-category="Dell" data-price="2499.00" data-condition="Used" data-watchers="11" data-views="172" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/U2sAAeSwjF1qX4TN/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 9 285HX 64GB 1T RTX PRO 4000 120Hz FHD VAT 3YR Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267734388443.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="11 buyers watching on eBay">
@@ -346,7 +345,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 9 285HX 64GB 1T RTX PRO 4000 120Hz FHD VAT 3YR Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000</span>
@@ -358,7 +357,7 @@
               </a>
             </div>
           </div>          <!-- Item 267734395927 -->
-          <div class="inventory-card" data-item-id="267734395927" data-category="Dell" data-price="2349.00" data-condition="Used" data-watchers="15" data-views="188" >
+          <div class="inventory-card" data-item-id="267734395927" data-brand="Dell" data-category="Dell" data-price="2349.00" data-condition="Used" data-watchers="15" data-views="188" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/w-4AAeSwRRNqX4dU/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 4000 64GB 512GB 120Hz VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267734395927.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="15 buyers watching on eBay">
@@ -377,7 +376,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 4000 64GB 512GB 120Hz VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000</span>
@@ -389,7 +388,7 @@
               </a>
             </div>
           </div>          <!-- Item 267734405944 -->
-          <div class="inventory-card" data-item-id="267734405944" data-category="Dell" data-price="2499.00" data-condition="Used" data-watchers="11" data-views="168" >
+          <div class="inventory-card" data-item-id="267734405944" data-brand="Dell" data-category="Dell" data-price="2499.00" data-condition="Used" data-watchers="11" data-views="168" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/ksYAAeSw0-xqX4sL/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 3000 64GB 1T OLED Touch VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267734405944.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="11 buyers watching on eBay">
@@ -408,7 +407,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 3000 64GB 1T OLED Touch VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 3000</span>
@@ -420,7 +419,7 @@
               </a>
             </div>
           </div>          <!-- Item 267734410731 -->
-          <div class="inventory-card" data-item-id="267734410731" data-category="Dell" data-price="2069.00" data-condition="Used" data-watchers="7" data-views="104" >
+          <div class="inventory-card" data-item-id="267734410731" data-brand="Dell" data-category="Dell" data-price="2069.00" data-condition="Used" data-watchers="7" data-views="104" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/4qAAAeSwz-BqX4yJ/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 3000 64GB 1TB FHD 120Hz VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267734410731.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="7 buyers watching on eBay">
@@ -439,7 +438,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 3000 64GB 1TB FHD 120Hz VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 3000</span>
@@ -451,7 +450,7 @@
               </a>
             </div>
           </div>          <!-- Item 267705687033 -->
-          <div class="inventory-card" data-item-id="267705687033" data-category="Lenovo" data-price="849.00" data-condition="Used" data-watchers="28" data-views="304" >
+          <div class="inventory-card" data-item-id="267705687033" data-brand="Lenovo" data-category="Lenovo" data-price="849.00" data-condition="Used" data-watchers="28" data-views="304" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/8hEAAeSw60hqOCJm/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad T14s 2-in-1 U7 265U 32GB 256GB 4G Convertible Laptop 2029 WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267705687033.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="28 buyers watching on eBay">
@@ -470,7 +469,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad T14s 2-in-1 U7 265U 32GB 256GB 4G Convertible Laptop 2029 WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 256GB</span>
               </div>
@@ -480,7 +479,7 @@
               </a>
             </div>
           </div>          <!-- Item 267707202814 -->
-          <div class="inventory-card" data-item-id="267707202814" data-category="Microsoft Surface" data-price="1499.00" data-condition="New" data-watchers="26" data-views="334" >
+          <div class="inventory-card" data-item-id="267707202814" data-brand="Microsoft" data-category="Microsoft" data-price="1499.00" data-condition="New" data-watchers="26" data-views="334" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/nkUAAeSwk35qUVEu/$_57.JPG?set_id=880000500F" alt="NEW Microsoft Surface Pro 12 2026 13&quot; Snapdragon X2 Elite 16GB 1TB OLED Tablet" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267707202814.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="26 buyers watching on eBay">
@@ -499,7 +498,7 @@
               </div>
               <h3 class="inv-card-title">NEW Microsoft Surface Pro 12 2026 13&quot; Snapdragon X2 Elite 16GB 1TB OLED Tablet</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Microsoft Surface</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tablet-screen-button"></i> Microsoft</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Snapdragon X2</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 1TB</span>
@@ -510,7 +509,7 @@
               </a>
             </div>
           </div>          <!-- Item 267707226458 -->
-          <div class="inventory-card" data-item-id="267707226458" data-category="ASUS" data-price="1049.00" data-condition="Used" data-watchers="41" data-views="577" >
+          <div class="inventory-card" data-item-id="267707226458" data-brand="ASUS" data-category="ASUS" data-price="1049.00" data-condition="Used" data-watchers="41" data-views="577" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/XLUAAeSwTAVqOmjD/$_57.JPG?set_id=880000500F" alt="ASUS Zenbook Pro Duo 15.6 i7 12700H RTX 3070 Ti 32GB 1TB 4K OLED Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267707226458.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="41 buyers watching on eBay">
@@ -529,7 +528,7 @@
               </div>
               <h3 class="inv-card-title">ASUS Zenbook Pro Duo 15.6 i7 12700H RTX 3070 Ti 32GB 1TB 4K OLED Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 12700H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 3070 Ti</span>
@@ -541,7 +540,7 @@
               </a>
             </div>
           </div>          <!-- Item 267707331524 -->
-          <div class="inventory-card" data-item-id="267707331524" data-category="Sony Cameras" data-price="829.00" data-condition="New" data-watchers="145" data-views="1474" >
+          <div class="inventory-card" data-item-id="267707331524" data-brand="Sony" data-category="Sony" data-price="829.00" data-condition="New" data-watchers="145" data-views="1474" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/q3MAAeSw3alqOoDq/$_57.JPG?set_id=880000500F" alt="NEW SEALED Sony Alpha A7 III 24.2 MP Mirrorless Camera - Body Only -2YR Warranty" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267707331524.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="145 buyers watching on eBay">
@@ -560,7 +559,7 @@
               </div>
               <h3 class="inv-card-title">NEW SEALED Sony Alpha A7 III 24.2 MP Mirrorless Camera - Body Only -2YR Warranty</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267707331524" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -569,7 +568,7 @@
               </a>
             </div>
           </div>          <!-- Item 267709005130 -->
-          <div class="inventory-card" data-item-id="267709005130" data-category="Alienware" data-price="3199.00" data-condition="Used" data-watchers="44" data-views="685" >
+          <div class="inventory-card" data-item-id="267709005130" data-brand="Alienware" data-category="Alienware" data-price="3199.00" data-condition="Used" data-watchers="44" data-views="685" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/olsAAeSwW-FqJl7n/$_57.JPG?set_id=880000500F" alt="Alienware 18 Area-51 Ultra 9 275HX 32GB 2TB RTX 5090 QHD 300Hz Gaming Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267709005130.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="44 buyers watching on eBay">
@@ -588,7 +587,7 @@
               </div>
               <h3 class="inv-card-title">Alienware 18 Area-51 Ultra 9 275HX 32GB 2TB RTX 5090 QHD 300Hz Gaming Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Alienware</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gamepad"></i> Alienware</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 275HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -600,7 +599,7 @@
               </a>
             </div>
           </div>          <!-- Item 267709120613 -->
-          <div class="inventory-card" data-item-id="267709120613" data-category="Other" data-price="209.00" data-condition="Used" data-watchers="14" data-views="152" >
+          <div class="inventory-card" data-item-id="267709120613" data-brand="MacBook" data-category="Other" data-price="209.00" data-condition="Used" data-watchers="14" data-views="152" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/IUoAAeSwtZFqPML2/$_57.JPG?set_id=880000500F" alt="Apple MacBook Air 13&quot; 2020 i5 10th Gen 8GB 512GB - 289 Cycles Battery Normal" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267709120613.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="14 buyers watching on eBay">
@@ -619,7 +618,7 @@
               </div>
               <h3 class="inv-card-title">Apple MacBook Air 13&quot; 2020 i5 10th Gen 8GB 512GB - 289 Cycles Battery Normal</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Other</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-brands fa-apple"></i> MacBook</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i5 10th</span>
               </div>
@@ -629,7 +628,7 @@
               </a>
             </div>
           </div>          <!-- Item 267738488721 -->
-          <div class="inventory-card" data-item-id="267738488721" data-category="Razer & MSI" data-price="949.00" data-condition="For parts or not working" data-watchers="83" data-views="2467" >
+          <div class="inventory-card" data-item-id="267738488721" data-brand="Razer" data-category="Other" data-price="949.00" data-condition="For parts or not working" data-watchers="83" data-views="2467" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/OiIAAeSwHjVqZJkq/$_57.JPG?set_id=880000500F" alt="Razer Blade 16 i9 13950HX RTX 4080 32GB 1TB QHD+ 240Hz Gaming Laptop - *FAULTY*" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267738488721.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="83 buyers watching on eBay">
@@ -648,7 +647,7 @@
               </div>
               <h3 class="inv-card-title">Razer Blade 16 i9 13950HX RTX 4080 32GB 1TB QHD+ 240Hz Gaming Laptop - *FAULTY*</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Razer & MSI</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-shield-halved"></i> Razer</span>
                 <span><i class="fa-solid fa-wrench"></i> For Parts</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13950HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4080</span>
@@ -660,7 +659,7 @@
               </a>
             </div>
           </div>          <!-- Item 267714982897 -->
-          <div class="inventory-card" data-item-id="267714982897" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="11" data-views="98" >
+          <div class="inventory-card" data-item-id="267714982897" data-brand="Dell" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="11" data-views="98" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/uUsAAeSwHt1qRWRY/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 Blackwell 32GB 1TB FHD+ Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267714982897.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="11 buyers watching on eBay">
@@ -679,7 +678,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 Blackwell 32GB 1TB FHD+ Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000 Blackwell</span>
@@ -691,7 +690,7 @@
               </a>
             </div>
           </div>          <!-- Item 267745364867 -->
-          <div class="inventory-card" data-item-id="267745364867" data-category="Lenovo" data-price="1349.00" data-condition="Used" data-watchers="5" data-views="166" >
+          <div class="inventory-card" data-item-id="267745364867" data-brand="Lenovo" data-category="Lenovo" data-price="1349.00" data-condition="Used" data-watchers="5" data-views="166" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/lCcAAeSwU6VqbxC4/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 2000 Ada 64GB 512GB Workstation Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267745364867.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="5 buyers watching on eBay">
@@ -710,7 +709,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 2000 Ada 64GB 512GB Workstation Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13900H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2000 Ada</span>
@@ -722,7 +721,7 @@
               </a>
             </div>
           </div>          <!-- Item 267745389869 -->
-          <div class="inventory-card" data-item-id="267745389869" data-category="ASUS" data-price="3299.00" data-condition="Used" data-watchers="46" data-views="622" >
+          <div class="inventory-card" data-item-id="267745389869" data-brand="ASUS" data-category="ASUS" data-price="3299.00" data-condition="Used" data-watchers="46" data-views="622" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/61wAAeSwms5qbxzV/$_57.JPG?set_id=880000500F" alt="ASUS ROG Zephyrus G16 Ultra 9 285H RTX 5090 64GB 4TB OLED 240Hz Laptop 2027 WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267745389869.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="46 buyers watching on eBay">
@@ -741,7 +740,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ROG Zephyrus G16 Ultra 9 285H RTX 5090 64GB 4TB OLED 240Hz Laptop 2027 WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -753,7 +752,7 @@
               </a>
             </div>
           </div>          <!-- Item 267745470208 -->
-          <div class="inventory-card" data-item-id="267745470208" data-category="Alienware" data-price="2599.00" data-condition="New" data-watchers="32" data-views="637" >
+          <div class="inventory-card" data-item-id="267745470208" data-brand="Alienware" data-category="Alienware" data-price="2599.00" data-condition="New" data-watchers="32" data-views="637" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/IMQAAeSwqhxqRVu-/$_57.JPG?set_id=880000500F" alt="Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267745470208.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="32 buyers watching on eBay">
@@ -772,7 +771,7 @@
               </div>
               <h3 class="inv-card-title">Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Alienware</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gamepad"></i> Alienware</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 275HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5080</span>
@@ -784,7 +783,7 @@
               </a>
             </div>
           </div>          <!-- Item 267745716527 -->
-          <div class="inventory-card" data-item-id="267745716527" data-category="HP" data-price="419.00" data-condition="Used" data-watchers="8" data-views="108" >
+          <div class="inventory-card" data-item-id="267745716527" data-brand="HP" data-category="HP" data-price="419.00" data-condition="Used" data-watchers="8" data-views="108" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/1wsAAeSw2Adqb4kY/$_57.JPG?set_id=880000500F" alt="HP Elitebook 840 14 Inch G10 i7 1365U 16GB 512GB Laptop 2028 Onsite WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267745716527.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="8 buyers watching on eBay">
@@ -803,7 +802,7 @@
               </div>
               <h3 class="inv-card-title">HP Elitebook 840 14 Inch G10 i7 1365U 16GB 512GB Laptop 2028 Onsite WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> HP</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-bolt"></i> HP</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 1365U</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 512GB</span>
@@ -814,7 +813,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749377397 -->
-          <div class="inventory-card" data-item-id="267749377397" data-category="Lenovo" data-price="3749.00" data-condition="Used" data-watchers="17" data-views="417" >
+          <div class="inventory-card" data-item-id="267749377397" data-brand="Lenovo" data-category="Lenovo" data-price="3749.00" data-condition="Used" data-watchers="17" data-views="417" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/PbIAAeSwnQxqdFjq/$_57.JPG?set_id=880000500F" alt="Lenovo Legion 9 18&quot; Ultra 9 275HX RTX 5090 64GB 4TB UHD+ 4K 240Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749377397.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="17 buyers watching on eBay">
@@ -833,7 +832,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo Legion 9 18&quot; Ultra 9 275HX RTX 5090 64GB 4TB UHD+ 4K 240Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 275HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -845,7 +844,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749434966 -->
-          <div class="inventory-card" data-item-id="267749434966" data-category="Lenovo" data-price="1849.00" data-condition="Used" data-watchers="13" data-views="200" >
+          <div class="inventory-card" data-item-id="267749434966" data-brand="Lenovo" data-category="Lenovo" data-price="1849.00" data-condition="Used" data-watchers="13" data-views="200" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/NJMAAeSwL8lqdG~M/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 7 Ultra 7 165H RTX 4060 32GB 1TB 4K OLED Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749434966.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="13 buyers watching on eBay">
@@ -864,7 +863,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 7 Ultra 7 165H RTX 4060 32GB 1TB 4K OLED Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 165H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4060</span>
@@ -876,7 +875,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749439592 -->
-          <div class="inventory-card" data-item-id="267749439592" data-category="Razer & MSI" data-price="2749.00" data-condition="Used" data-watchers="16" data-views="228" >
+          <div class="inventory-card" data-item-id="267749439592" data-brand="MSI" data-category="Other" data-price="2749.00" data-condition="Used" data-watchers="16" data-views="228" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/8KkAAeSwMCBqdHG5/$_57.JPG?set_id=880000500F" alt="MSI Titan 18 HX i9 14900HX RTX 4090 128GB RAM 6TB Raid 0 4K 120Hz MiniLED Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749439592.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="16 buyers watching on eBay">
@@ -895,7 +894,7 @@
               </div>
               <h3 class="inv-card-title">MSI Titan 18 HX i9 14900HX RTX 4090 128GB RAM 6TB Raid 0 4K 120Hz MiniLED Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Razer & MSI</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-dragon"></i> MSI</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 14900HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4090</span>
@@ -907,7 +906,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749453105 -->
-          <div class="inventory-card" data-item-id="267749453105" data-category="Other" data-price="1849.00" data-condition="Used" data-watchers="19" data-views="332" >
+          <div class="inventory-card" data-item-id="267749453105" data-brand="Acer" data-category="Other" data-price="1849.00" data-condition="Used" data-watchers="19" data-views="332" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/gpQAAeSwJHdqdHeV/$_57.JPG?set_id=880000500F" alt="Acer Predator Helios 18 i9 14900HX RTX 4090 32GB 3TB QHD+ 250Hz Mini LED Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749453105.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="19 buyers watching on eBay">
@@ -926,7 +925,7 @@
               </div>
               <h3 class="inv-card-title">Acer Predator Helios 18 i9 14900HX RTX 4090 32GB 3TB QHD+ 250Hz Mini LED Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Other</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-display"></i> Acer</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 14900HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4090</span>
@@ -938,7 +937,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749535331 -->
-          <div class="inventory-card" data-item-id="267749535331" data-category="HP" data-price="839.00" data-condition="Used" data-watchers="6" data-views="137" >
+          <div class="inventory-card" data-item-id="267749535331" data-brand="HP" data-category="HP" data-price="839.00" data-condition="Used" data-watchers="6" data-views="137" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/kowAAeSwtlZqdJJL/$_57.JPG?set_id=880000500F" alt="HP Spectre x360 14&quot; Ultra 7 155H 16GB 1TB 2.8K OLED 2-in-1 Ultrabook Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749535331.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="6 buyers watching on eBay">
@@ -957,7 +956,7 @@
               </div>
               <h3 class="inv-card-title">HP Spectre x360 14&quot; Ultra 7 155H 16GB 1TB 2.8K OLED 2-in-1 Ultrabook Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> HP</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-bolt"></i> HP</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 155H</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 1TB</span>
@@ -968,7 +967,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749540271 -->
-          <div class="inventory-card" data-item-id="267749540271" data-category="Lenovo" data-price="999.00" data-condition="New" data-watchers="9" data-views="208" >
+          <div class="inventory-card" data-item-id="267749540271" data-brand="Lenovo" data-category="Lenovo" data-price="999.00" data-condition="New" data-watchers="9" data-views="208" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/VzQAAeSwMCBqdJMh/$_57.JPG?set_id=880000500F" alt="NEW Lenovo Yoga 7 2-in-1 Aura 16&quot; Ultra 7 355 16GB 512GB OLED Laptop WTY VAT" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749540271.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="9 buyers watching on eBay">
@@ -987,7 +986,7 @@
               </div>
               <h3 class="inv-card-title">NEW Lenovo Yoga 7 2-in-1 Aura 16&quot; Ultra 7 355 16GB 512GB OLED Laptop WTY VAT</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 355</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 512GB</span>
@@ -998,7 +997,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749549365 -->
-          <div class="inventory-card" data-item-id="267749549365" data-category="Other" data-price="1449.00" data-condition="Used" data-watchers="29" data-views="447" >
+          <div class="inventory-card" data-item-id="267749549365" data-brand="PC Specialist" data-category="PC Specialist" data-price="1449.00" data-condition="Used" data-watchers="29" data-views="447" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/wR0AAeSw3BxqdJYt/$_57.JPG?set_id=880000500F" alt="PC Specialist Defiance II 16&quot; i7 14650HX RTX 5070 Ti 32GB 2TB QHD 240Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749549365.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="29 buyers watching on eBay">
@@ -1017,7 +1016,7 @@
               </div>
               <h3 class="inv-card-title">PC Specialist Defiance II 16&quot; i7 14650HX RTX 5070 Ti 32GB 2TB QHD 240Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Other</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gears"></i> PC Specialist</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 14650HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5070 Ti</span>
@@ -1029,7 +1028,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749815355 -->
-          <div class="inventory-card" data-item-id="267749815355" data-category="ASUS" data-price="1749.00" data-condition="Used" data-watchers="26" data-views="354" >
+          <div class="inventory-card" data-item-id="267749815355" data-brand="ASUS" data-category="ASUS" data-price="1749.00" data-condition="Used" data-watchers="26" data-views="354" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/jP4AAeSwSUhqdN9U/$_57.JPG?set_id=880000500F" alt="ASUS ROG Flow Z13 ACRNM i9 13900H RTX 4070 32GB 2TB QHD 165Hz Convertible Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749815355.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="26 buyers watching on eBay">
@@ -1048,7 +1047,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ROG Flow Z13 ACRNM i9 13900H RTX 4070 32GB 2TB QHD 165Hz Convertible Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13900H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4070</span>
@@ -1060,7 +1059,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749821800 -->
-          <div class="inventory-card" data-item-id="267749821800" data-category="Dell" data-price="749.00" data-condition="Used" data-watchers="13" data-views="248" >
+          <div class="inventory-card" data-item-id="267749821800" data-brand="Dell" data-category="Dell" data-price="749.00" data-condition="Used" data-watchers="13" data-views="248" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/u6QAAeSwlP5qdOH2/$_57.JPG?set_id=880000500F" alt="Dell G15 5530 i7 13650HX RTX 4060 8GB 1TB SSD 165Hz Gaming Laptop 3YR Onsite VAT" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749821800.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="13 buyers watching on eBay">
@@ -1079,7 +1078,7 @@
               </div>
               <h3 class="inv-card-title">Dell G15 5530 i7 13650HX RTX 4060 8GB 1TB SSD 165Hz Gaming Laptop 3YR Onsite VAT</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 13650HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4060</span>
@@ -1090,7 +1089,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749825193 -->
-          <div class="inventory-card" data-item-id="267749825193" data-category="Alienware" data-price="1549.00" data-condition="Opened - never used" data-watchers="7" data-views="179" >
+          <div class="inventory-card" data-item-id="267749825193" data-brand="Alienware" data-category="Alienware" data-price="1549.00" data-condition="Opened - never used" data-watchers="7" data-views="179" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/4FoAAeSwvFVqdOSl/$_57.JPG?set_id=880000500F" alt="Alienware 16 Area-51 Ultra 7 255HX RTX 5070 16GB 1TB QHD 240Hz Laptop 3YR Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749825193.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="7 buyers watching on eBay">
@@ -1109,7 +1108,7 @@
               </div>
               <h3 class="inv-card-title">Alienware 16 Area-51 Ultra 7 255HX RTX 5070 16GB 1TB QHD 240Hz Laptop 3YR Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Alienware</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gamepad"></i> Alienware</span>
                 <span><i class="fa-solid fa-box-open"></i> Opened - never used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 255HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5070</span>
@@ -1121,7 +1120,7 @@
               </a>
             </div>
           </div>          <!-- Item 267749826375 -->
-          <div class="inventory-card" data-item-id="267749826375" data-category="Alienware" data-price="1679.00" data-condition="Opened - never used" data-watchers="14" data-views="241" >
+          <div class="inventory-card" data-item-id="267749826375" data-brand="Alienware" data-category="Alienware" data-price="1679.00" data-condition="Opened - never used" data-watchers="14" data-views="241" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/8w8AAeSwCz5qdOVG/$_57.JPG?set_id=880000500F" alt="Alienware 18 Area-51 18&quot; U7 255HX 16GB 1TB RTX 5070 QHD 300Hz Laptop 3YR Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267749826375.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="14 buyers watching on eBay">
@@ -1140,7 +1139,7 @@
               </div>
               <h3 class="inv-card-title">Alienware 18 Area-51 18&quot; U7 255HX 16GB 1TB RTX 5070 QHD 300Hz Laptop 3YR Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Alienware</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gamepad"></i> Alienware</span>
                 <span><i class="fa-solid fa-box-open"></i> Opened - never used</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5070</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 1TB</span>
@@ -1151,7 +1150,7 @@
               </a>
             </div>
           </div>          <!-- Item 267693030846 -->
-          <div class="inventory-card" data-item-id="267693030846" data-category="Dell" data-price="999.00" data-condition="Used" data-watchers="34" data-views="326" >
+          <div class="inventory-card" data-item-id="267693030846" data-brand="Dell" data-category="Dell" data-price="999.00" data-condition="Used" data-watchers="34" data-views="326" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/JfIAAeSwspZqJmAi/$_57.JPG?set_id=880000500F" alt="Dell Precision 7680 16&quot; i7 13850HX 32GB RTX 2000 Ada 1TB 4K UHD+ OLED Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267693030846.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="34 buyers watching on eBay">
@@ -1170,7 +1169,7 @@
               </div>
               <h3 class="inv-card-title">Dell Precision 7680 16&quot; i7 13850HX 32GB RTX 2000 Ada 1TB 4K UHD+ OLED Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 13850HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2000 Ada</span>
@@ -1182,7 +1181,7 @@
               </a>
             </div>
           </div>          <!-- Item 267751001037 -->
-          <div class="inventory-card" data-item-id="267751001037" data-category="Alienware" data-price="1879.00" data-condition="Used" data-watchers="19" data-views="265" >
+          <div class="inventory-card" data-item-id="267751001037" data-brand="Alienware" data-category="Alienware" data-price="1879.00" data-condition="Used" data-watchers="19" data-views="265" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/tikAAeSwHdJqds6f/$_57.JPG?set_id=880000500F" alt="Alienware M18 R1 i9 13980HX RTX 4090 32GB 1TB QHD+ 165Hz CherryMX Gaming Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267751001037.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="19 buyers watching on eBay">
@@ -1201,7 +1200,7 @@
               </div>
               <h3 class="inv-card-title">Alienware M18 R1 i9 13980HX RTX 4090 32GB 1TB QHD+ 165Hz CherryMX Gaming Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Alienware</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gamepad"></i> Alienware</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13980HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4090</span>
@@ -1213,7 +1212,7 @@
               </a>
             </div>
           </div>          <!-- Item 267751010844 -->
-          <div class="inventory-card" data-item-id="267751010844" data-category="Lenovo" data-price="1999.00" data-condition="Used" data-watchers="8" data-views="146" >
+          <div class="inventory-card" data-item-id="267751010844" data-brand="Lenovo" data-category="Lenovo" data-price="1999.00" data-condition="Used" data-watchers="8" data-views="146" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/yLYAAeSwPd5qdtSq/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 7 Ultra 9 185H RTX 2000 Ada 64GB 1TB 4K OLED Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267751010844.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="8 buyers watching on eBay">
@@ -1232,7 +1231,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 7 Ultra 9 185H RTX 2000 Ada 64GB 1TB 4K OLED Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 185H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2000 Ada</span>
@@ -1244,7 +1243,7 @@
               </a>
             </div>
           </div>          <!-- Item 267751011916 -->
-          <div class="inventory-card" data-item-id="267751011916" data-category="Razer & MSI" data-price="1029.00" data-condition="Used" data-watchers="7" data-views="131" >
+          <div class="inventory-card" data-item-id="267751011916" data-brand="Other" data-category="Other" data-price="1029.00" data-condition="Used" data-watchers="7" data-views="131" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/FfcAAeSwPTdqdtVd/$_57.JPG?set_id=880000500F" alt="Medion Erazer Beast X30 17.3&quot; i7 12700H RTX 3080 Ti 175W 32GB 1TB QHD+ Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267751011916.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="7 buyers watching on eBay">
@@ -1263,7 +1262,7 @@
               </div>
               <h3 class="inv-card-title">Medion Erazer Beast X30 17.3&quot; i7 12700H RTX 3080 Ti 175W 32GB 1TB QHD+ Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Razer & MSI</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-boxes-stacked"></i> Specialty</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 12700H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 3080 Ti</span>
@@ -1275,7 +1274,7 @@
               </a>
             </div>
           </div>          <!-- Item 267430465802 -->
-          <div class="inventory-card" data-item-id="267430465802" data-category="Lenovo" data-price="3049.00" data-condition="New" data-watchers="106" data-views="1328" >
+          <div class="inventory-card" data-item-id="267430465802" data-brand="Lenovo" data-category="Lenovo" data-price="3049.00" data-condition="New" data-watchers="106" data-views="1328" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/VZsAAeSw5epqRV3o/$_57.JPG?set_id=880000500F" alt="Lenovo Legion Pro 7i U9 275HX RTX 5090 32GB 1TB QHD 240Hz OLED Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267430465802.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="106 buyers watching on eBay">
@@ -1294,7 +1293,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo Legion Pro 7i U9 275HX RTX 5090 32GB 1TB QHD 240Hz OLED Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 1TB</span>
@@ -1305,7 +1304,7 @@
               </a>
             </div>
           </div>          <!-- Item 267722455398 -->
-          <div class="inventory-card" data-item-id="267722455398" data-category="Lenovo" data-price="619.00" data-condition="Used" data-watchers="97" data-views="1279" >
+          <div class="inventory-card" data-item-id="267722455398" data-brand="Lenovo" data-category="Lenovo" data-price="619.00" data-condition="Used" data-watchers="97" data-views="1279" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/KB8AAeSwi2ZqT9Q2/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 4 16&quot; i7 11850H RTX A2000 64GB 512GB 4K HDR 5G Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267722455398.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="97 buyers watching on eBay">
@@ -1324,7 +1323,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 4 16&quot; i7 11850H RTX A2000 64GB 512GB 4K HDR 5G Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 11850H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX A2000</span>
@@ -1336,7 +1335,7 @@
               </a>
             </div>
           </div>          <!-- Item 267694603976 -->
-          <div class="inventory-card" data-item-id="267694603976" data-category="ASUS" data-price="3049.00" data-condition="Used" data-watchers="67" data-views="961" >
+          <div class="inventory-card" data-item-id="267694603976" data-brand="ASUS" data-category="ASUS" data-price="3049.00" data-condition="Used" data-watchers="67" data-views="961" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/j7MAAeSw9QJqKFGD/$_57.JPG?set_id=880000500F" alt="ASUS ROG Zephyrus G16 Ultra 9 285H 64GB 1TB RTX 5090 OLED 240Hz Gaming Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267694603976.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="67 buyers watching on eBay">
@@ -1355,7 +1354,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ROG Zephyrus G16 Ultra 9 285H 64GB 1TB RTX 5090 OLED 240Hz Gaming Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -1367,7 +1366,7 @@
               </a>
             </div>
           </div>          <!-- Item 267752334041 -->
-          <div class="inventory-card" data-item-id="267752334041" data-category="HP" data-price="949.00" data-condition="Used" data-watchers="2" data-views="116" >
+          <div class="inventory-card" data-item-id="267752334041" data-brand="HP" data-category="HP" data-price="949.00" data-condition="Used" data-watchers="2" data-views="116" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/VjgAAeSwfwBqeRld/$_57.JPG?set_id=880000500F" alt="HP ZBook Power 16 inch G11 Ultra 7 165H RTX 2000 Ada 32GB 1TB Touchscreen Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267752334041.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -1386,7 +1385,7 @@
               </div>
               <h3 class="inv-card-title">HP ZBook Power 16 inch G11 Ultra 7 165H RTX 2000 Ada 32GB 1TB Touchscreen Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> HP</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-bolt"></i> HP</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 165H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2000 Ada</span>
@@ -1398,7 +1397,7 @@
               </a>
             </div>
           </div>          <!-- Item 267752340040 -->
-          <div class="inventory-card" data-item-id="267752340040" data-category="Lenovo" data-price="699.00" data-condition="Used" data-watchers="2" data-views="0" >
+          <div class="inventory-card" data-item-id="267752340040" data-brand="Lenovo" data-category="Lenovo" data-price="699.00" data-condition="Used" data-watchers="2" data-views="0" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/4FAAAeSwXyBqeRwQ/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad T14s 2-in-1 Ultra 5 225U 16GB 256GB 4G Convertible Laptop WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267752340040.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -1417,7 +1416,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad T14s 2-in-1 Ultra 5 225U 16GB 256GB 4G Convertible Laptop WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 5 225U</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 256GB</span>
@@ -1428,7 +1427,7 @@
               </a>
             </div>
           </div>          <!-- Item 267752341737 -->
-          <div class="inventory-card" data-item-id="267752341737" data-category="Lenovo" data-price="379.00" data-condition="Used" data-watchers="2" data-views="75" >
+          <div class="inventory-card" data-item-id="267752341737" data-brand="Lenovo" data-category="Lenovo" data-price="379.00" data-condition="Used" data-watchers="2" data-views="75" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/GAMAAeSwAuVqeRzC/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad L13 Yoga Gen 3 i7 1255U 16GB 256GB 4G LTE 2-in-1 Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267752341737.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -1447,7 +1446,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad L13 Yoga Gen 3 i7 1255U 16GB 256GB 4G LTE 2-in-1 Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 1255U</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 256GB</span>
@@ -1458,7 +1457,7 @@
               </a>
             </div>
           </div>          <!-- Item 267724077386 -->
-          <div class="inventory-card" data-item-id="267724077386" data-category="Dell" data-price="1899.00" data-condition="Used" data-watchers="24" data-views="502" >
+          <div class="inventory-card" data-item-id="267724077386" data-brand="Dell" data-category="Dell" data-price="1899.00" data-condition="Used" data-watchers="24" data-views="502" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/jqMAAeSwkE9qUUeV/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 2000 64GB 1TB 4K OLED Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267724077386.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="24 buyers watching on eBay">
@@ -1477,7 +1476,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 2000 64GB 1TB 4K OLED Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 2000</span>
@@ -1489,7 +1488,7 @@
               </a>
             </div>
           </div>          <!-- Item 267724109322 -->
-          <div class="inventory-card" data-item-id="267724109322" data-category="Microsoft Surface" data-price="1279.00" data-condition="New" data-watchers="13" data-views="279" >
+          <div class="inventory-card" data-item-id="267724109322" data-brand="Microsoft" data-category="Microsoft" data-price="1279.00" data-condition="New" data-watchers="13" data-views="279" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/pVcAAeSw24RqUVCs/$_57.JPG?set_id=880000500F" alt="NEW Microsoft Surface Pro 12 2026 13&quot; Snapdragon X2 Elite 16GB 512GB OLED Tablet" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267724109322.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="13 buyers watching on eBay">
@@ -1508,7 +1507,7 @@
               </div>
               <h3 class="inv-card-title">NEW Microsoft Surface Pro 12 2026 13&quot; Snapdragon X2 Elite 16GB 512GB OLED Tablet</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Microsoft Surface</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tablet-screen-button"></i> Microsoft</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Snapdragon X2</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 512GB</span>
@@ -1519,7 +1518,7 @@
               </a>
             </div>
           </div>          <!-- Item 267724113981 -->
-          <div class="inventory-card" data-item-id="267724113981" data-category="Lenovo" data-price="1599.00" data-condition="Used" data-watchers="23" data-views="389" >
+          <div class="inventory-card" data-item-id="267724113981" data-brand="Lenovo" data-category="Lenovo" data-price="1599.00" data-condition="Used" data-watchers="23" data-views="389" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/-zAAAeSwgPtqUVG3/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad X1 2-in-1 Gen 10 Aura Ultra 7 258V 32GB 1TB 5G OLED Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267724113981.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="23 buyers watching on eBay">
@@ -1538,7 +1537,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad X1 2-in-1 Gen 10 Aura Ultra 7 258V 32GB 1TB 5G OLED Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 258V</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 1TB</span>
@@ -1549,7 +1548,7 @@
               </a>
             </div>
           </div>          <!-- Item 267724515696 -->
-          <div class="inventory-card" data-item-id="267724515696" data-category="ASUS" data-price="2269.00" data-condition="Used" data-watchers="65" data-views="971" >
+          <div class="inventory-card" data-item-id="267724515696" data-brand="ASUS" data-category="ASUS" data-price="2269.00" data-condition="Used" data-watchers="65" data-views="971" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/skQAAeSwdhFqUhjM/$_57.JPG?set_id=880000500F" alt="ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 RTX 5080 32GB 2TB 120Hz OLED Laptop WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267724515696.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="65 buyers watching on eBay">
@@ -1568,7 +1567,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 RTX 5080 32GB 2TB 120Hz OLED Laptop WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ryzen AI 9 HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5080</span>
@@ -1580,7 +1579,7 @@
               </a>
             </div>
           </div>          <!-- Item 267696116748 -->
-          <div class="inventory-card" data-item-id="267696116748" data-category="ASUS" data-price="1369.00" data-condition="Used" data-watchers="56" data-views="669" >
+          <div class="inventory-card" data-item-id="267696116748" data-brand="ASUS" data-category="ASUS" data-price="1369.00" data-condition="Used" data-watchers="56" data-views="669" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/g3EAAeSwc6VqKqRN/$_57.JPG?set_id=880000500F" alt="ASUS ROG Flow Z13 Ryzen AI MAX 390 8050S 32GB 1TB QHD 180Hz Convertible Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267696116748.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="56 buyers watching on eBay">
@@ -1599,7 +1598,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ROG Flow Z13 Ryzen AI MAX 390 8050S 32GB 1TB QHD 180Hz Convertible Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 1TB</span>
               </div>
@@ -1609,7 +1608,7 @@
               </a>
             </div>
           </div>          <!-- Item 267696126054 -->
-          <div class="inventory-card" data-item-id="267696126054" data-category="Dell" data-price="1449.00" data-condition="Used" data-watchers="33" data-views="513" >
+          <div class="inventory-card" data-item-id="267696126054" data-brand="Dell" data-category="Dell" data-price="1449.00" data-condition="Used" data-watchers="33" data-views="513" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/o0QAAeSw6HdqKqX1/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Premium Ultra 7 265H RTX PRO 2000 32GB 1TB FHD+ 120Hz VRR Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267696126054.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="33 buyers watching on eBay">
@@ -1628,7 +1627,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Premium Ultra 7 265H RTX PRO 2000 32GB 1TB FHD+ 120Hz VRR Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 2000</span>
@@ -1640,7 +1639,7 @@
               </a>
             </div>
           </div>          <!-- Item 267753890742 -->
-          <div class="inventory-card" data-item-id="267753890742" data-category="Lenovo" data-price="2599.00" data-condition="New" data-watchers="25" data-views="392" >
+          <div class="inventory-card" data-item-id="267753890742" data-brand="Lenovo" data-category="Lenovo" data-price="2599.00" data-condition="New" data-watchers="25" data-views="392" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/HlsAAeSwdh5qezif/$_57.JPG?set_id=880000500F" alt="NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267753890742.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="25 buyers watching on eBay">
@@ -1659,7 +1658,7 @@
               </div>
               <h3 class="inv-card-title">NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5080</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 2TB</span>
@@ -1670,7 +1669,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755927520 -->
-          <div class="inventory-card" data-item-id="267755927520" data-category="ASUS" data-price="3499.00" data-condition="Used" data-watchers="18" data-views="179" >
+          <div class="inventory-card" data-item-id="267755927520" data-brand="ASUS" data-category="ASUS" data-price="3499.00" data-condition="Used" data-watchers="18" data-views="179" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/dFMAAeSwpoNqfZkY/$_57.JPG?set_id=880000500F" alt="ASUS ProArt P16 Ryzen AI 9 HX 370 RTX 5090 64GB 4TB 4K 120Hz OLED Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755927520.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="18 buyers watching on eBay">
@@ -1689,7 +1688,7 @@
               </div>
               <h3 class="inv-card-title">ASUS ProArt P16 Ryzen AI 9 HX 370 RTX 5090 64GB 4TB 4K 120Hz OLED Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ryzen AI 9 HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -1701,7 +1700,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755928454 -->
-          <div class="inventory-card" data-item-id="267755928454" data-category="Dell" data-price="999.00" data-condition="Used" data-watchers="4" data-views="116" >
+          <div class="inventory-card" data-item-id="267755928454" data-brand="Dell" data-category="Dell" data-price="999.00" data-condition="Used" data-watchers="4" data-views="116" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/0gsAAeSwOcNqds~o/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 14 Ultra 7 265H RTX PRO 500 Blackwell 32GB 1TB Laptop 2028 WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755928454.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="4 buyers watching on eBay">
@@ -1720,7 +1719,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 14 Ultra 7 265H RTX PRO 500 Blackwell 32GB 1TB Laptop 2028 WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265H</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 1TB</span>
@@ -1731,7 +1730,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755933329 -->
-          <div class="inventory-card" data-item-id="267755933329" data-category="Dell" data-price="799.00" data-condition="Used" data-watchers="7" data-views="69" >
+          <div class="inventory-card" data-item-id="267755933329" data-brand="Dell" data-category="Dell" data-price="799.00" data-condition="Used" data-watchers="7" data-views="69" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/BEwAAeSwjSBqfZv2/$_57.JPG?set_id=880000500F" alt="Dell XPS 17 9700 17&quot; i9 10885H RTX 2060 64GB 2TB 4K UHD+ Touchscreen Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755933329.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="7 buyers watching on eBay">
@@ -1750,7 +1749,7 @@
               </div>
               <h3 class="inv-card-title">Dell XPS 17 9700 17&quot; i9 10885H RTX 2060 64GB 2TB 4K UHD+ Touchscreen Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 10885H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2060</span>
@@ -1762,7 +1761,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755939395 -->
-          <div class="inventory-card" data-item-id="267755939395" data-category="Dell" data-price="1099.00" data-condition="Used" data-watchers="2" data-views="44" >
+          <div class="inventory-card" data-item-id="267755939395" data-brand="Dell" data-category="Dell" data-price="1099.00" data-condition="Used" data-watchers="2" data-views="44" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/wT0AAeSwtH5qfZ2L/$_57.JPG?set_id=880000500F" alt="Dell XPS 17 9730 i7 13700H RTX 4050 16GB 1TB 4K UHD+ Touchscreen Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755939395.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -1781,7 +1780,7 @@
               </div>
               <h3 class="inv-card-title">Dell XPS 17 9730 i7 13700H RTX 4050 16GB 1TB 4K UHD+ Touchscreen Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 13700H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4050</span>
@@ -1793,7 +1792,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755943527 -->
-          <div class="inventory-card" data-item-id="267755943527" data-category="Dell" data-price="729.00" data-condition="Used" data-watchers="15" data-views="166" >
+          <div class="inventory-card" data-item-id="267755943527" data-brand="Dell" data-category="Dell" data-price="729.00" data-condition="Used" data-watchers="15" data-views="166" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/LtcAAeSwmE9qfZ8Y/$_57.JPG?set_id=880000500F" alt="Dell Precision 5570 i9 12900H RTX A2000 (8GB) 32GB 1TB 4K UHD+ Touch Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755943527.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="15 buyers watching on eBay">
@@ -1812,7 +1811,7 @@
               </div>
               <h3 class="inv-card-title">Dell Precision 5570 i9 12900H RTX A2000 (8GB) 32GB 1TB 4K UHD+ Touch Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 12900H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX A2000</span>
@@ -1824,7 +1823,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755952157 -->
-          <div class="inventory-card" data-item-id="267755952157" data-category="Dell" data-price="1099.00" data-condition="Used" data-watchers="16" data-views="167" >
+          <div class="inventory-card" data-item-id="267755952157" data-brand="Dell" data-category="Dell" data-price="1099.00" data-condition="Used" data-watchers="16" data-views="167" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/OmcAAeSwr-1qfaQY/$_57.JPG?set_id=880000500F" alt="Dell XPS 14 9440 Ultra 7 155H RTX 4050 32GB 1TB 3.2K OLED Touch Ultrabook Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755952157.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="16 buyers watching on eBay">
@@ -1843,7 +1842,7 @@
               </div>
               <h3 class="inv-card-title">Dell XPS 14 9440 Ultra 7 155H RTX 4050 32GB 1TB 3.2K OLED Touch Ultrabook Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 155H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4050</span>
@@ -1855,7 +1854,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755953364 -->
-          <div class="inventory-card" data-item-id="267755953364" data-category="Microsoft Surface" data-price="1029.00" data-condition="Used" data-watchers="6" data-views="0" >
+          <div class="inventory-card" data-item-id="267755953364" data-brand="Microsoft" data-category="Microsoft" data-price="1029.00" data-condition="Used" data-watchers="6" data-views="0" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/YgQAAeSwnu5qfaV9/$_57.JPG?set_id=880000500F" alt="Microsoft Surface Laptop 7 13.5&quot; Ultra 7 268V 32GB 512GB HDR 2030 WTY -10 Cycles" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755953364.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="6 buyers watching on eBay">
@@ -1874,7 +1873,7 @@
               </div>
               <h3 class="inv-card-title">Microsoft Surface Laptop 7 13.5&quot; Ultra 7 268V 32GB 512GB HDR 2030 WTY -10 Cycles</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Microsoft Surface</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tablet-screen-button"></i> Microsoft</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 268V</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 512GB</span>
@@ -1885,7 +1884,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755954889 -->
-          <div class="inventory-card" data-item-id="267755954889" data-category="Other" data-price="949.00" data-condition="Used" data-watchers="8" data-views="75" >
+          <div class="inventory-card" data-item-id="267755954889" data-brand="PC Specialist" data-category="PC Specialist" data-price="949.00" data-condition="Used" data-watchers="8" data-views="75" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/D14AAeSwE-hqfaYN/$_57.JPG?set_id=880000500F" alt="PC Specialist Defiance II 16&quot; i7 14650HX RTX 5060 32GB 512GB QHD 165Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755954889.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="8 buyers watching on eBay">
@@ -1904,7 +1903,7 @@
               </div>
               <h3 class="inv-card-title">PC Specialist Defiance II 16&quot; i7 14650HX RTX 5060 32GB 512GB QHD 165Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Other</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-gears"></i> PC Specialist</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i7 14650HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5060</span>
@@ -1916,7 +1915,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755968618 -->
-          <div class="inventory-card" data-item-id="267755968618" data-category="Lenovo" data-price="1469.00" data-condition="Used" data-watchers="4" data-views="64" >
+          <div class="inventory-card" data-item-id="267755968618" data-brand="Lenovo" data-category="Lenovo" data-price="1469.00" data-condition="Used" data-watchers="4" data-views="64" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/gqkAAeSwCz5qfarq/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 2000 Ada 64GB 1.25TB QHD 165Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755968618.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="4 buyers watching on eBay">
@@ -1935,7 +1934,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 2000 Ada 64GB 1.25TB QHD 165Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13900H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 2000 Ada</span>
@@ -1947,7 +1946,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755974090 -->
-          <div class="inventory-card" data-item-id="267755974090" data-category="Lenovo" data-price="1049.00" data-condition="Used" data-watchers="24" data-views="381" >
+          <div class="inventory-card" data-item-id="267755974090" data-brand="Lenovo" data-category="Lenovo" data-price="1049.00" data-condition="Used" data-watchers="24" data-views="381" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/yeEAAeSw3bJqfa3q/$_57.JPG?set_id=880000500F" alt="Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755974090.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="24 buyers watching on eBay">
@@ -1966,7 +1965,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ryzen 9 7945HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4070</span>
@@ -1978,7 +1977,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755994940 -->
-          <div class="inventory-card" data-item-id="267755994940" data-category="HP" data-price="569.00" data-condition="Used" data-watchers="8" data-views="0" >
+          <div class="inventory-card" data-item-id="267755994940" data-brand="HP" data-category="HP" data-price="569.00" data-condition="Used" data-watchers="8" data-views="0" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/TJcAAeSwls1qfbXw/$_57.JPG?set_id=880000500F" alt="HP OmniBook X Flip 14&quot; NGAI Ultra 5 226V 16GB 512GB 2-in-1 Convertible Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755994940.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="8 buyers watching on eBay">
@@ -1997,7 +1996,7 @@
               </div>
               <h3 class="inv-card-title">HP OmniBook X Flip 14&quot; NGAI Ultra 5 226V 16GB 512GB 2-in-1 Convertible Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> HP</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-bolt"></i> HP</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 5 226V</span>
                 <span><i class="fa-solid fa-memory"></i> 16GB &bull; 512GB</span>
@@ -2008,7 +2007,7 @@
               </a>
             </div>
           </div>          <!-- Item 267755999760 -->
-          <div class="inventory-card" data-item-id="267755999760" data-category="Lenovo" data-price="3549.00" data-condition="New" data-watchers="6" data-views="143" >
+          <div class="inventory-card" data-item-id="267755999760" data-brand="Lenovo" data-category="Lenovo" data-price="3549.00" data-condition="New" data-watchers="6" data-views="143" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/bMAAAeSwA9Fqfbhc/$_57.JPG?set_id=880000500F" alt="NEW Lenovo Legion 9 18&quot; Ultra 9 290HX Plus 32GB 1TB RTX 5090 UHD 4K 240Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267755999760.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="6 buyers watching on eBay">
@@ -2027,7 +2026,7 @@
               </div>
               <h3 class="inv-card-title">NEW Lenovo Legion 9 18&quot; Ultra 9 290HX Plus 32GB 1TB RTX 5090 UHD 4K 240Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 290HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5090</span>
@@ -2039,7 +2038,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727293251 -->
-          <div class="inventory-card" data-item-id="267727293251" data-category="Lenovo" data-price="1099.00" data-condition="New" data-watchers="19" data-views="258" >
+          <div class="inventory-card" data-item-id="267727293251" data-brand="Lenovo" data-category="Lenovo" data-price="1099.00" data-condition="New" data-watchers="19" data-views="258" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/OPEAAeSwiSdqGr2r/$_57.JPG?set_id=880000500F" alt="NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727293251.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="19 buyers watching on eBay">
@@ -2058,7 +2057,7 @@
               </div>
               <h3 class="inv-card-title">NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-memory"></i> 32GB &bull; 1TB</span>
               </div>
@@ -2068,7 +2067,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727321251 -->
-          <div class="inventory-card" data-item-id="267727321251" data-category="ASUS" data-price="2379.00" data-condition="New" data-watchers="89" data-views="1942" >
+          <div class="inventory-card" data-item-id="267727321251" data-brand="ASUS" data-category="ASUS" data-price="2379.00" data-condition="New" data-watchers="89" data-views="1942" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/nhAAAeSwYexqVg10/$_57.JPG?set_id=880000500F" alt="NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 32GB 2TB RTX 5080 OLED 120Hz Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727321251.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="89 buyers watching on eBay">
@@ -2087,7 +2086,7 @@
               </div>
               <h3 class="inv-card-title">NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 32GB 2TB RTX 5080 OLED 120Hz Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> ASUS</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-microchip"></i> ASUS</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> Ryzen AI 9 HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 5080</span>
@@ -2099,7 +2098,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727425956 -->
-          <div class="inventory-card" data-item-id="267727425956" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="2" data-views="61" >
+          <div class="inventory-card" data-item-id="267727425956" data-brand="Dell" data-category="Dell" data-price="2399.00" data-condition="Used" data-watchers="2" data-views="61" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/mnEAAeSwRydqVi43/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 64GB 1TB FHD 120Hz VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727425956.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -2118,7 +2117,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 64GB 1TB FHD 120Hz VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000</span>
@@ -2130,7 +2129,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727430252 -->
-          <div class="inventory-card" data-item-id="267727430252" data-category="Dell" data-price="2899.00" data-condition="Used" data-watchers="10" data-views="120" >
+          <div class="inventory-card" data-item-id="267727430252" data-brand="Dell" data-category="Dell" data-price="2899.00" data-condition="Used" data-watchers="10" data-views="120" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/TFIAAeSw459qVjES/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 4000 64GB 1T OLED Touch VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727430252.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="10 buyers watching on eBay">
@@ -2149,7 +2148,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 9 285HX RTX PRO 4000 64GB 1T OLED Touch VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 9 285HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000</span>
@@ -2161,7 +2160,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727449613 -->
-          <div class="inventory-card" data-item-id="267727449613" data-category="Dell" data-price="2049.00" data-condition="Opened - never used" data-watchers="9" data-views="141" >
+          <div class="inventory-card" data-item-id="267727449613" data-brand="Dell" data-category="Dell" data-price="2049.00" data-condition="Opened - never used" data-watchers="9" data-views="141" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/FGAAAeSwvTxqVjaF/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 3000 64GB 2TB FHD 60Hz VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727449613.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="9 buyers watching on eBay">
@@ -2180,7 +2179,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 3000 64GB 2TB FHD 60Hz VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-box-open"></i> Opened - never used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 3000</span>
@@ -2192,7 +2191,7 @@
               </a>
             </div>
           </div>          <!-- Item 267727463283 -->
-          <div class="inventory-card" data-item-id="267727463283" data-category="Dell" data-price="2349.00" data-condition="Used" data-watchers="2" data-views="56" >
+          <div class="inventory-card" data-item-id="267727463283" data-brand="Dell" data-category="Dell" data-price="2349.00" data-condition="Used" data-watchers="2" data-views="56" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/8r4AAeSwDCFqVjwW/$_57.JPG?set_id=880000500F" alt="Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 64GB 1TB Laptop VAT 3Y Onsite" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267727463283.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="2 buyers watching on eBay">
@@ -2211,7 +2210,7 @@
               </div>
               <h3 class="inv-card-title">Dell Pro Max 16 Plus Ultra 7 265HX RTX PRO 4000 64GB 1TB Laptop VAT 3Y Onsite</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Dell</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-desktop"></i> Dell</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 265HX</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX PRO 4000</span>
@@ -2223,7 +2222,7 @@
               </a>
             </div>
           </div>          <!-- Item 267700848730 -->
-          <div class="inventory-card" data-item-id="267700848730" data-category="HP" data-price="929.00" data-condition="Used" data-watchers="26" data-views="298" >
+          <div class="inventory-card" data-item-id="267700848730" data-brand="HP" data-category="HP" data-price="929.00" data-condition="Used" data-watchers="26" data-views="298" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/opYAAeSw1cZqMUop/$_57.JPG?set_id=880000500F" alt="HP Spectre x360 16&quot; Ultra 7 155H RTX 4050 16GB 512GB 2.8K OLED 2-in-1 Laptop" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267700848730.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="26 buyers watching on eBay">
@@ -2242,7 +2241,7 @@
               </div>
               <h3 class="inv-card-title">HP Spectre x360 16&quot; Ultra 7 155H RTX 4050 16GB 512GB 2.8K OLED 2-in-1 Laptop</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> HP</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-bolt"></i> HP</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> Ultra 7 155H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4050</span>
@@ -2254,7 +2253,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729651885 -->
-          <div class="inventory-card" data-item-id="267729651885" data-category="Lenovo" data-price="2299.00" data-condition="Used" data-watchers="21" data-views="457" >
+          <div class="inventory-card" data-item-id="267729651885" data-brand="Lenovo" data-category="Lenovo" data-price="2299.00" data-condition="Used" data-watchers="21" data-views="457" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/6XoAAeSw5oRqWOPw/$_57.JPG?set_id=880000500F" alt="Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 4090 64GB 1TB 4K OLED Touch Laptop WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729651885.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="21 buyers watching on eBay">
@@ -2273,7 +2272,7 @@
               </div>
               <h3 class="inv-card-title">Lenovo ThinkPad P1 Gen 6 i9 13900H RTX 4090 64GB 1TB 4K OLED Touch Laptop WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Lenovo</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-laptop"></i> Lenovo</span>
                 <span><i class="fa-solid fa-rotate-left"></i> Used</span>
                 <span><i class="fa-solid fa-microchip"></i> i9 13900H</span>
                 <span><i class="fa-solid fa-compact-disc"></i> RTX 4090</span>
@@ -2285,7 +2284,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729716060 -->
-          <div class="inventory-card" data-item-id="267729716060" data-category="Sony Cameras" data-price="1449.00" data-condition="New" data-watchers="34" data-views="588" >
+          <div class="inventory-card" data-item-id="267729716060" data-brand="Sony" data-category="Sony" data-price="1449.00" data-condition="New" data-watchers="34" data-views="588" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/fWcAAeSw4NdqWPcX/$_57.JPG?set_id=880000500F" alt="NEW Sony Alpha A7 IV 33MP Mirrorless Digital Camera -Body Only -ILCE-7M4 1YR WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729716060.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="34 buyers watching on eBay">
@@ -2304,7 +2303,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony Alpha A7 IV 33MP Mirrorless Digital Camera -Body Only -ILCE-7M4 1YR WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> M4 </span>
               </div>
@@ -2314,7 +2313,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729724182 -->
-          <div class="inventory-card" data-item-id="267729724182" data-category="Sony Cameras" data-price="1649.00" data-condition="New" data-watchers="30" data-views="431" >
+          <div class="inventory-card" data-item-id="267729724182" data-brand="Sony" data-category="Sony" data-price="1649.00" data-condition="New" data-watchers="30" data-views="431" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/YHYAAeSwHflqWPm2/$_57.JPG?set_id=880000500F" alt="NEW Sony Alpha A7 IV 33MP Mirrorless Camera with 28-70mm Lens -ILCE-7M4K 1YR WTY" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729724182.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="30 buyers watching on eBay">
@@ -2333,7 +2332,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony Alpha A7 IV 33MP Mirrorless Camera with 28-70mm Lens -ILCE-7M4K 1YR WTY</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
                 <span><i class="fa-solid fa-microchip"></i> M4</span>
               </div>
@@ -2343,7 +2342,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729734670 -->
-          <div class="inventory-card" data-item-id="267729734670" data-category="Sony Cameras" data-price="999.00" data-condition="New" data-watchers="133" data-views="2057" >
+          <div class="inventory-card" data-item-id="267729734670" data-brand="Sony" data-category="Sony" data-price="999.00" data-condition="New" data-watchers="133" data-views="2057" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/d-kAAeSwc5lqWPyi/$_57.JPG?set_id=880000500F" alt="NEW Sony Alpha A6700 26MP Mirrorless Camera - Body Only - 1YR Warranty" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729734670.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="133 buyers watching on eBay">
@@ -2362,7 +2361,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony Alpha A6700 26MP Mirrorless Camera - Body Only - 1YR Warranty</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729734670" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2371,7 +2370,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729753193 -->
-          <div class="inventory-card" data-item-id="267729753193" data-category="Sony Cameras" data-price="1249.00" data-condition="New" data-watchers="65" data-views="1009" >
+          <div class="inventory-card" data-item-id="267729753193" data-brand="Sony" data-category="Sony" data-price="1249.00" data-condition="New" data-watchers="65" data-views="1009" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/vkwAAeSwfCxqWQPI/$_57.JPG?set_id=880000500F" alt="NEW Sony Alpha A6700 26MP Mirrorless Camera with 18-135mm Lens - 1YR Warranty" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729753193.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="65 buyers watching on eBay">
@@ -2390,7 +2389,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony Alpha A6700 26MP Mirrorless Camera with 18-135mm Lens - 1YR Warranty</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729753193" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2399,7 +2398,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729802087 -->
-          <div class="inventory-card" data-item-id="267729802087" data-category="Sony Cameras" data-price="349.00" data-condition="New" data-watchers="9" data-views="150" >
+          <div class="inventory-card" data-item-id="267729802087" data-brand="Sony" data-category="Sony" data-price="349.00" data-condition="New" data-watchers="9" data-views="150" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/BQsAAeSw2VhqWRM9/$_57.JPG?set_id=880000500F" alt="NEW Sony E-mount 11mm f/1.8 Ultra Wide Angle Lens - SEL11F18" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729802087.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="9 buyers watching on eBay">
@@ -2418,7 +2417,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony E-mount 11mm f/1.8 Ultra Wide Angle Lens - SEL11F18</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729802087" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2427,7 +2426,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729833616 -->
-          <div class="inventory-card" data-item-id="267729833616" data-category="Sony Cameras" data-price="869.00" data-condition="New" data-watchers="10" data-views="185" >
+          <div class="inventory-card" data-item-id="267729833616" data-brand="Sony" data-category="Sony" data-price="869.00" data-condition="New" data-watchers="10" data-views="185" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/hPMAAeSwYG9qWR3T/$_57.JPG?set_id=880000500F" alt="NEW Sony FE 35mm f/1.4 GM Wide Angle Lens - SEL35F14GM" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729833616.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="10 buyers watching on eBay">
@@ -2446,7 +2445,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony FE 35mm f/1.4 GM Wide Angle Lens - SEL35F14GM</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729833616" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2455,7 +2454,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729862669 -->
-          <div class="inventory-card" data-item-id="267729862669" data-category="Sony Cameras" data-price="269.00" data-condition="New" data-watchers="52" data-views="669" >
+          <div class="inventory-card" data-item-id="267729862669" data-brand="Sony" data-category="Sony" data-price="269.00" data-condition="New" data-watchers="52" data-views="669" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/WVoAAeSw3yhqWSjB/$_57.JPG?set_id=880000500F" alt="NEW Sony FE 85mm F/1.8 E-Mount Full Frame Lens - SEL85F18" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729862669.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="52 buyers watching on eBay">
@@ -2474,7 +2473,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony FE 85mm F/1.8 E-Mount Full Frame Lens - SEL85F18</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729862669" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2483,7 +2482,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729872766 -->
-          <div class="inventory-card" data-item-id="267729872766" data-category="Sony Cameras" data-price="769.00" data-condition="New" data-watchers="14" data-views="283" >
+          <div class="inventory-card" data-item-id="267729872766" data-brand="Sony" data-category="Sony" data-price="769.00" data-condition="New" data-watchers="14" data-views="283" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/9ZIAAeSwPAZqWSyQ/$_57.JPG?set_id=880000500F" alt="NEW Sony FE 16-25mm F2.8 G Lens - SEL1625G" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729872766.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="14 buyers watching on eBay">
@@ -2502,7 +2501,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony FE 16-25mm F2.8 G Lens - SEL1625G</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729872766" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2511,7 +2510,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729953043 -->
-          <div class="inventory-card" data-item-id="267729953043" data-category="Sony Cameras" data-price="1299.00" data-condition="New" data-watchers="13" data-views="279" >
+          <div class="inventory-card" data-item-id="267729953043" data-brand="Sony" data-category="Sony" data-price="1299.00" data-condition="New" data-watchers="13" data-views="279" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/zTkAAeSwtPhqWUaH/$_57.JPG?set_id=880000500F" alt="NEW Sony FE 70-200mm f/2.8 GM OSS Full-Frame Telephoto Zoom Lens -SEL70200GM" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729953043.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="13 buyers watching on eBay">
@@ -2530,7 +2529,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony FE 70-200mm f/2.8 GM OSS Full-Frame Telephoto Zoom Lens -SEL70200GM</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729953043" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2539,7 +2538,7 @@
               </a>
             </div>
           </div>          <!-- Item 267729965028 -->
-          <div class="inventory-card" data-item-id="267729965028" data-category="Sony Cameras" data-price="309.00" data-condition="New" data-watchers="14" data-views="269" >
+          <div class="inventory-card" data-item-id="267729965028" data-brand="Sony" data-category="Sony" data-price="309.00" data-condition="New" data-watchers="14" data-views="269" >
             <div class="inv-card-img-wrap">
               <img src="https://i.ebayimg.com/00/s/MTIwMFgxNjAw/z/NJQAAeSwnxdqWUuL/$_57.JPG?set_id=880000500F" alt="NEW Sony E PZ 18-105mm f/4 G E-Mount OSS Lens - SELP18105G" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_267729965028.jpg';}">
               <div class="inv-card-photo-watcher-badge" title="14 buyers watching on eBay">
@@ -2558,7 +2557,7 @@
               </div>
               <h3 class="inv-card-title">NEW Sony E PZ 18-105mm f/4 G E-Mount OSS Lens - SELP18105G</h3>
               <div class="inv-card-features">
-                <span class="inv-card-pill category-pill"><i class="fa-solid fa-tag"></i> Sony Cameras</span>
+                <span class="inv-card-pill category-pill"><i class="fa-solid fa-camera"></i> Sony</span>
                 <span><i class="fa-solid fa-sparkles"></i> New</span>
               </div>
               <a href="https://www.ebay.co.uk/itm/267729965028" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
@@ -2614,17 +2613,159 @@
     </div>
   </footer>
 
-  <!-- Instant Filtering, Search & Sorting Logic -->
+  <!-- Instant Filtering, Real-Time Dynamic Filter Sync & Sorting Logic -->
   <script>
   (function() {
+    var BRAND_RULES = [
+      { name: 'Alienware', icon: 'fa-gamepad', pattern: /\bAlienware\b/i },
+      { name: 'Dell', icon: 'fa-desktop', pattern: /\b(Dell|XPS|Precision|Latitude|Inspiron)\b/i },
+      { name: 'Lenovo', icon: 'fa-laptop', pattern: /\b(Lenovo|Legion|ThinkPad|LOQ|Yoga|IdeaPad)\b/i },
+      { name: 'ASUS', icon: 'fa-microchip', pattern: /\b(ASUS|ROG|Zephyrus|Strix|SCAR|TUF|ZenBook|Flow|ProArt)\b/i },
+      { name: 'HP', icon: 'fa-bolt', pattern: /\b(HP|Omen|Victus|ZBook|EliteBook|Envy|Pavilion|Spectre)\b/i },
+      { name: 'Sony', icon: 'fa-camera', pattern: /\b(Sony|Alpha\s*A\d+|SEL\d+|ILCE)\b/i },
+      { name: 'Microsoft', icon: 'fa-tablet-screen-button', pattern: /\b(Surface|Microsoft)\b/i },
+      { name: 'MacBook', icon: 'fa-brands fa-apple', pattern: /\b(MacBook|Apple|iMac|Mac\s*Mini)\b/i },
+      { name: 'Razer', icon: 'fa-shield-halved', pattern: /\b(Razer|Blade)\b/i },
+      { name: 'MSI', icon: 'fa-dragon', pattern: /\b(MSI|Titan|Raider|Stealth|Vector|Katana|Pulse|Creator)\b/i },
+      { name: 'Acer', icon: 'fa-display', pattern: /\b(Acer|Predator|Helios|Nitro|Swift|Triton)\b/i },
+      { name: 'PC Specialist', icon: 'fa-gears', pattern: /\b(PC\s*Specialist|Defiance|Recoil|Elimina)\b/i },
+      { name: 'Samsung', icon: 'fa-mobile-screen', pattern: /\b(Samsung|Galaxy\s*Book)\b/i },
+      { name: 'Gigabyte', icon: 'fa-server', pattern: /\b(Gigabyte|AORUS|Aero)\b/i },
+      { name: 'Framework', icon: 'fa-screwdriver-wrench', pattern: /\bFramework\b/i }
+    ];
+
+    function detectCardBrand(title) {
+      for (var i = 0; i < BRAND_RULES.length; i++) {
+        if (BRAND_RULES[i].pattern.test(title)) return BRAND_RULES[i];
+      }
+      return { name: 'Other', icon: 'fa-boxes-stacked' };
+    }
+
     function initInventoryControls() {
       var grid = document.getElementById('inventoryGrid');
       var searchInput = document.getElementById('inventorySearchInput');
       var sortSelect = document.getElementById('inventorySortSelect');
+      var categoryRow = document.getElementById('categoryFilterRow');
+      var conditionRow = document.getElementById('conditionFilterRow');
       if (!grid) return;
 
       var activeCategory = 'all';
       var activeCondition = 'all';
+
+      // Dynamically rebuild category & condition pills from live cards in real time
+      function refreshLiveFilterPills() {
+        var cards = Array.from(grid.querySelectorAll('.inventory-card'));
+        if (!cards.length) return;
+
+        var brandCounts = {};
+        var condCounts = { 'New': 0, 'Opened - never used': 0, 'Used': 0, 'For parts or not working': 0, 'coupon': 0 };
+
+        cards.forEach(function(card) {
+          var title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+          var detected = detectCardBrand(title);
+          var bName = detected.name;
+          brandCounts[bName] = (brandCounts[bName] || 0) + 1;
+
+          var cond = (card.getAttribute('data-condition') || '').trim();
+          if (condCounts.hasOwnProperty(cond)) condCounts[cond]++;
+          if (card.getAttribute('data-coupon') === 'true') condCounts['coupon']++;
+        });
+
+        // Determine qualifying categories (>= 2 listings), consolidate others (< 2) into 'Other'
+        var qualifying = [];
+        var otherCount = 0;
+
+        BRAND_RULES.forEach(function(rule) {
+          var count = brandCounts[rule.name] || 0;
+          if (count >= 2) {
+            qualifying.push({ name: rule.name, icon: rule.icon, count: count });
+          } else if (count > 0) {
+            otherCount += count;
+          }
+        });
+        if (brandCounts['Other']) otherCount += brandCounts['Other'];
+
+        // Sort qualifying categories by count descending
+        qualifying.sort(function(a, b) { return b.count - a.count; });
+
+        // Update card data-category in real time based on active qualifying categories
+        cards.forEach(function(card) {
+          var title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+          var detected = detectCardBrand(title);
+          var isQual = qualifying.some(function(q) { return q.name.toLowerCase() === detected.name.toLowerCase(); });
+          card.setAttribute('data-category', isQual ? detected.name : 'Other');
+        });
+
+        // Render Category Pills HTML
+        if (categoryRow) {
+          var catHtml = '<div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>';
+          catHtml += '<button class="category-pill-btn' + (activeCategory === 'all' ? ' active' : '') + '" data-category="all"><i class="fa-solid fa-border-all"></i> All (' + cards.length + ')</button>';
+          
+          qualifying.forEach(function(q) {
+            var isActive = (activeCategory.toLowerCase() === q.name.toLowerCase());
+            catHtml += '<button class="category-pill-btn' + (isActive ? ' active' : '') + '" data-category="' + q.name + '"><i class="fa-solid ' + q.icon + '"></i> ' + q.name + ' (' + q.count + ')</button>';
+          });
+
+          if (otherCount > 0) {
+            var isOtherActive = (activeCategory.toLowerCase() === 'other');
+            catHtml += '<button class="category-pill-btn' + (isOtherActive ? ' active' : '') + '" data-category="Other"><i class="fa-solid fa-boxes-stacked"></i> Other (' + otherCount + ')</button>';
+          }
+
+          categoryRow.innerHTML = catHtml;
+          bindCategoryListeners();
+        }
+
+        // Render Condition Pills HTML (Never render 0 count pills)
+        if (conditionRow) {
+          var condHtml = '<div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>';
+          condHtml += '<button class="condition-pill-btn' + (activeCondition === 'all' ? ' active' : '') + '" data-condition="all"><i class="fa-solid fa-border-all"></i> All Conditions (' + cards.length + ')</button>';
+          
+          if (condCounts['New'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'New' ? ' active' : '') + '" data-condition="New"><i class="fa-solid fa-sparkles"></i> New (' + condCounts['New'] + ')</button>';
+          }
+          if (condCounts['Opened - never used'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'Opened - never used' ? ' active' : '') + '" data-condition="Opened - never used"><i class="fa-solid fa-box-open"></i> Opened - never used (' + condCounts['Opened - never used'] + ')</button>';
+          }
+          if (condCounts['Used'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'Used' ? ' active' : '') + '" data-condition="Used"><i class="fa-solid fa-rotate-left"></i> Used (' + condCounts['Used'] + ')</button>';
+          }
+          if (condCounts['For parts or not working'] > 0) {
+            condHtml += '<button class="condition-pill-btn' + (activeCondition === 'For parts or not working' ? ' active' : '') + '" data-condition="For parts or not working"><i class="fa-solid fa-wrench"></i> For Parts (' + condCounts['For parts or not working'] + ')</button>';
+          }
+          if (condCounts['coupon'] > 0) {
+            condHtml += '<button class="condition-pill-btn coupon-pill-btn' + (activeCondition === 'coupon' ? ' active' : '') + '" data-condition="coupon"><i class="fa-solid fa-tag"></i> eBay Coupons (' + condCounts['coupon'] + ')</button>';
+          }
+
+          conditionRow.innerHTML = condHtml;
+          bindConditionListeners();
+        }
+      }
+
+      function bindCategoryListeners() {
+        if (!categoryRow) return;
+        categoryRow.querySelectorAll('.category-pill-btn').forEach(function(btn) {
+          btn.onclick = function(e) {
+            if (e) e.preventDefault();
+            categoryRow.querySelectorAll('.category-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            activeCategory = btn.getAttribute('data-category') || 'all';
+            filterGrid();
+          };
+        });
+      }
+
+      function bindConditionListeners() {
+        if (!conditionRow) return;
+        conditionRow.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
+          btn.onclick = function(e) {
+            if (e) e.preventDefault();
+            conditionRow.querySelectorAll('.condition-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            activeCondition = btn.getAttribute('data-condition') || 'all';
+            filterGrid();
+          };
+        });
+      }
 
       function getCardPrice(card) {
         var attr = card.getAttribute('data-price');
@@ -2733,27 +2874,7 @@
         }
       }
 
-      // Direct onclick binding for category buttons
-      document.querySelectorAll('.category-pill-btn').forEach(function(btn) {
-        btn.onclick = function(e) {
-          if (e) e.preventDefault();
-          document.querySelectorAll('.category-pill-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          activeCategory = btn.getAttribute('data-category') || 'all';
-          filterGrid();
-        };
-      });
-
-      // Direct onclick binding for condition buttons
-      document.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
-        btn.onclick = function(e) {
-          if (e) e.preventDefault();
-          document.querySelectorAll('.condition-pill-btn').forEach(function(b) { b.classList.remove('active'); });
-          btn.classList.add('active');
-          activeCondition = btn.getAttribute('data-condition') || 'all';
-          filterGrid();
-        };
-      });
+      refreshLiveFilterPills();
 
       if (searchInput) {
         searchInput.oninput = filterGrid;

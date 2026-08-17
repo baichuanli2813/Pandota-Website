@@ -620,16 +620,124 @@ async function syncLiveEbayInventory() {
   }
 }
 
-// Controls for inventory.html filtering & sorting
+// Controls for inventory.html filtering & sorting with real-time dynamic category threshold (>= 2)
 function setupInventoryPageControls() {
   const searchInput = document.getElementById('inventorySearchInput');
   const sortSelect = document.getElementById('inventorySortSelect');
   const grid = document.getElementById('inventoryGrid') || document.getElementById('fullInventoryGrid');
+  const categoryRow = document.getElementById('categoryFilterRow');
+  const conditionRow = document.getElementById('conditionFilterRow');
 
   if (!grid) return;
 
+  const BRAND_RULES = [
+    { name: 'Alienware', icon: 'fa-gamepad', pattern: /\bAlienware\b/i },
+    { name: 'Dell', icon: 'fa-desktop', pattern: /\b(Dell|XPS|Precision|Latitude|Inspiron)\b/i },
+    { name: 'Lenovo', icon: 'fa-laptop', pattern: /\b(Lenovo|Legion|ThinkPad|LOQ|Yoga|IdeaPad)\b/i },
+    { name: 'ASUS', icon: 'fa-microchip', pattern: /\b(ASUS|ROG|Zephyrus|Strix|SCAR|TUF|ZenBook|Flow|ProArt)\b/i },
+    { name: 'HP', icon: 'fa-bolt', pattern: /\b(HP|Omen|Victus|ZBook|EliteBook|Envy|Pavilion|Spectre)\b/i },
+    { name: 'Sony', icon: 'fa-camera', pattern: /\b(Sony|Alpha\s*A\d+|SEL\d+|ILCE)\b/i },
+    { name: 'Microsoft', icon: 'fa-tablet-screen-button', pattern: /\b(Surface|Microsoft)\b/i },
+    { name: 'MacBook', icon: 'fa-brands fa-apple', pattern: /\b(MacBook|Apple|iMac|Mac\s*Mini)\b/i },
+    { name: 'Razer', icon: 'fa-shield-halved', pattern: /\b(Razer|Blade)\b/i },
+    { name: 'MSI', icon: 'fa-dragon', pattern: /\b(MSI|Titan|Raider|Stealth|Vector|Katana|Pulse|Creator)\b/i },
+    { name: 'Acer', icon: 'fa-display', pattern: /\b(Acer|Predator|Helios|Nitro|Swift|Triton)\b/i },
+    { name: 'PC Specialist', icon: 'fa-gears', pattern: /\b(PC\s*Specialist|Defiance|Recoil|Elimina)\b/i },
+    { name: 'Samsung', icon: 'fa-mobile-screen', pattern: /\b(Samsung|Galaxy\s*Book)\b/i },
+    { name: 'Gigabyte', icon: 'fa-server', pattern: /\b(Gigabyte|AORUS|Aero)\b/i },
+    { name: 'Framework', icon: 'fa-screwdriver-wrench', pattern: /\bFramework\b/i }
+  ];
+
+  function detectCardBrand(title) {
+    for (let i = 0; i < BRAND_RULES.length; i++) {
+      if (BRAND_RULES[i].pattern.test(title)) return BRAND_RULES[i];
+    }
+    return { name: 'Other', icon: 'fa-boxes-stacked' };
+  }
+
   let activeCategoryFilter = 'all';
   let activeConditionFilter = 'all';
+
+  function refreshLiveFilterPills() {
+    const cards = Array.from(grid.querySelectorAll('.inventory-card'));
+    if (!cards.length) return;
+
+    const brandCounts = {};
+    const condCounts = { 'New': 0, 'Opened - never used': 0, 'Used': 0, 'For parts or not working': 0, 'coupon': 0 };
+
+    cards.forEach(card => {
+      const title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+      const detected = detectCardBrand(title);
+      const bName = detected.name;
+      brandCounts[bName] = (brandCounts[bName] || 0) + 1;
+
+      const cond = (card.getAttribute('data-condition') || '').trim();
+      if (condCounts.hasOwnProperty(cond)) condCounts[cond]++;
+      if (card.getAttribute('data-coupon') === 'true') condCounts['coupon']++;
+    });
+
+    const qualifying = [];
+    let otherCount = 0;
+
+    BRAND_RULES.forEach(rule => {
+      const count = brandCounts[rule.name] || 0;
+      if (count >= 2) {
+        qualifying.push({ name: rule.name, icon: rule.icon, count: count });
+      } else if (count > 0) {
+        otherCount += count;
+      }
+    });
+    if (brandCounts['Other']) otherCount += brandCounts['Other'];
+
+    qualifying.sort((a, b) => b.count - a.count);
+
+    cards.forEach(card => {
+      const title = (card.querySelector('.inv-card-title')?.textContent || '').trim();
+      const detected = detectCardBrand(title);
+      const isQual = qualifying.some(q => q.name.toLowerCase() === detected.name.toLowerCase());
+      card.setAttribute('data-category', isQual ? detected.name : 'Other');
+    });
+
+    if (categoryRow) {
+      let catHtml = '<div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>';
+      catHtml += `<button class="category-pill-btn${activeCategoryFilter === 'all' ? ' active' : ''}" data-category="all"><i class="fa-solid fa-border-all"></i> All (${cards.length})</button>`;
+      
+      qualifying.forEach(q => {
+        const isActive = (activeCategoryFilter.toLowerCase() === q.name.toLowerCase());
+        catHtml += `<button class="category-pill-btn${isActive ? ' active' : ''}" data-category="${q.name}"><i class="fa-solid ${q.icon}"></i> ${q.name} (${q.count})</button>`;
+      });
+
+      if (otherCount > 0) {
+        const isOtherActive = (activeCategoryFilter.toLowerCase() === 'other');
+        catHtml += `<button class="category-pill-btn${isOtherActive ? ' active' : ''}" data-category="Other"><i class="fa-solid fa-boxes-stacked"></i> Other (${otherCount})</button>`;
+      }
+
+      categoryRow.innerHTML = catHtml;
+    }
+
+    if (conditionRow) {
+      let condHtml = '<div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>';
+      condHtml += `<button class="condition-pill-btn${activeConditionFilter === 'all' ? ' active' : ''}" data-condition="all"><i class="fa-solid fa-border-all"></i> All Conditions (${cards.length})</button>`;
+      
+      if (condCounts['New'] > 0) {
+        condHtml += `<button class="condition-pill-btn${activeConditionFilter === 'New' ? ' active' : ''}" data-condition="New"><i class="fa-solid fa-sparkles"></i> New (${condCounts['New']})</button>`;
+      }
+      if (condCounts['Opened - never used'] > 0) {
+        condHtml += `<button class="condition-pill-btn${activeConditionFilter === 'Opened - never used' ? ' active' : ''}" data-condition="Opened - never used"><i class="fa-solid fa-box-open"></i> Opened - never used (${condCounts['Opened - never used']})</button>`;
+      }
+      if (condCounts['Used'] > 0) {
+        condHtml += `<button class="condition-pill-btn${activeConditionFilter === 'Used' ? ' active' : ''}" data-condition="Used"><i class="fa-solid fa-rotate-left"></i> Used (${condCounts['Used']})</button>`;
+      }
+      if (condCounts['For parts or not working'] > 0) {
+        condHtml += `<button class="condition-pill-btn${activeConditionFilter === 'For parts or not working' ? ' active' : ''}" data-condition="For parts or not working"><i class="fa-solid fa-wrench"></i> For Parts (${condCounts['For parts or not working']})</button>`;
+      }
+      if (condCounts['coupon'] > 0) {
+        condHtml += `<button class="condition-pill-btn coupon-pill-btn${activeConditionFilter === 'coupon' ? ' active' : ''}" data-condition="coupon"><i class="fa-solid fa-tag"></i> eBay Coupons (${condCounts['coupon']})</button>`;
+      }
+
+      conditionRow.innerHTML = condHtml;
+    }
+  }
 
   function filterCards() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -721,6 +829,8 @@ function setupInventoryPageControls() {
     activeConditionFilter = pill.getAttribute('data-condition') || 'all';
     filterCards();
   });
+
+  refreshLiveFilterPills();
 
   function getCardPrice(card) {
     const attr = card.getAttribute('data-price');

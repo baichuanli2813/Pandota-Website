@@ -2621,7 +2621,8 @@ a.feedback-card {
    ========================================================================== */
 
 .sell-page-hero {
-  padding: 60px 0 50px;
+  padding: 70px 0 65px;
+  border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
 }
@@ -2714,7 +2715,8 @@ a.feedback-card {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  margin-bottom: 60px;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .sell-guarantee-card {

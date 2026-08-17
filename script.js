@@ -920,17 +920,25 @@ function setupLiveWatcherFetcher() {
   }
 
   function applyWatcherBadge(card, watchers) {
-    if (!watchers || watchers <= 0) return;
-    const priceRow = card.querySelector('.inv-card-price-row') || card.querySelector('.inv-card-body');
-    if (!priceRow) return;
-
     let badge = card.querySelector('.inv-card-watcher-badge');
     if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'inv-card-watcher-badge';
-      priceRow.appendChild(badge);
+      const priceRow = card.querySelector('.inv-card-price-row') || card.querySelector('.inv-card-body');
+      if (priceRow) {
+        badge = document.createElement('div');
+        badge.className = 'inv-card-watcher-badge';
+        priceRow.appendChild(badge);
+      }
     }
-    badge.innerHTML = `<i class="fa-solid fa-eye"></i> ${watchers} watching`;
+    if (badge) {
+      if (watchers && watchers > 0) {
+        badge.innerHTML = `<i class="fa-solid fa-heart" style="color: #ef4444;"></i> <span class="watcher-count">${watchers} watching</span>`;
+        badge.style.color = '#ef4444';
+        badge.style.background = 'rgba(239, 68, 68, 0.08)';
+        badge.style.borderColor = 'rgba(239, 68, 68, 0.2)';
+      } else {
+        badge.innerHTML = `<i class="fa-regular fa-heart" style="color: #94a3b8;"></i> <span class="watcher-count">Active</span>`;
+      }
+    }
   }
 
   // IntersectionObserver to fetch as items scroll into view

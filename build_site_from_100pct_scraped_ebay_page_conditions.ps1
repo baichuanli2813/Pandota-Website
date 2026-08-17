@@ -122,6 +122,10 @@ foreach ($it in $items) {
             <div class="inv-card-body">
               <div class="inv-card-price-row">
                 <div class="inv-card-price">$price</div>
+                <div class="inv-card-watcher-badge" title="Live eBay Interest">
+                  <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+                  <span class="watcher-count" data-item-id="$itemId">Watching</span>
+                </div>
               </div>
               <h3 class="inv-card-title">$title</h3>
               <div class="inv-card-features">

@@ -703,40 +703,11 @@ $cardsHtml
 
 [System.IO.File]::WriteAllText("$pwd\inventory.html", $fullHtml, [System.Text.Encoding]::UTF8)
 
-# Update count references and featured items in index.html
+# Update count references in index.html safely
 if (Test-Path "index.html") {
     $indexHtml = Get-Content "index.html" -Raw -Encoding utf8
     $indexHtml = $indexHtml -replace 'View All \(\d+\)', "View All ($totalCount)"
     $indexHtml = $indexHtml -replace '\b\d+\+\s*Laptops\b', "$totalCount+ Laptops"
-    $indexHtml = $indexHtml -replace 'id="heroCardCounter"[^>]*>(\d+\s*/\s*)\d+', "id=`"heroCardCounter`" style=`"font-size: 0.8rem; color: var(--text-sub); font-weight: 600; min-width: 44px; text-align: center;`">1 / 8"
-
-    # Generate Top 8 active in-stock featured items array
-    $featuredList = @()
-    $topItems = $items | Where-Object { $_.NumPrice -ge 500 } | Sort-Object -Property NumPrice -Descending | Select-Object -First 8
-    if (-not $topItems -or $topItems.Count -eq 0) {
-        $topItems = $items | Select-Object -First 8
-    }
-
-    foreach ($topIt in $topItems) {
-        $tImg = if ($topIt.Img -match '\.webp') { $topIt.Img -replace '\.webp', '.jpg' } else { $topIt.Img }
-        $tWatch = if ($topIt.Watchers) { [int]$topIt.Watchers } else { 0 }
-        $tViews = if ($topIt.Views) { [int]$topIt.Views } else { 0 }
-        $tTitleEscaped = $topIt.Title -replace '"', '\"'
-        $featuredList += @"
-      {
-        title: "$tTitleEscaped",
-        price: "$($topIt.Price)",
-        img: "$tImg",
-        url: "$($topIt.Url)",
-        watchers: $tWatch,
-        views: $tViews
-      }
-"@
-    }
-
-    $featuredArrayJs = "var featuredItems = [`n" + ($featuredList -join ",`n") + "`n    ];"
-    $indexHtml = [regex]::Replace($indexHtml, '(?s)var featuredItems = \[.*?\];', $featuredArrayJs)
-
     [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
 }
 

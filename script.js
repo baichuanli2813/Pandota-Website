@@ -242,8 +242,8 @@ function setupHeroStockCarousel() {
     {
       title: "Razer Blade 16 i9 13950HX RTX 4080 32GB 1TB QHD+ 240Hz Laptop",
       price: "£949.00",
-      img: "https://i.ebayimg.com/images/g/vCIAAeSwbXZqT130/s-l500.webp",
-      url: "https://www.ebay.co.uk/itm/267713401569",
+      img: "https://i.ebayimg.com/images/g/OiIAAeSwHjVqZJkq/s-l500.jpg",
+      url: "https://www.ebay.co.uk/itm/267738488721",
       watchers: 82,
       views: 2411
     }

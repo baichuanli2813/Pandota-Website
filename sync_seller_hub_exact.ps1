@@ -218,8 +218,8 @@ if ($oauthToken) {
     Write-Host "`nFetching official live views from eBay Seller Analytics API..."
     try {
         $now = [DateTime]::UtcNow
-        $startDate = $now.AddDays(-30).ToString("yyyyMMdd")
-        $endDate = $now.AddDays(-1).ToString("yyyyMMdd")
+        $startDate = $now.AddDays(-28).ToString("yyyyMMdd")
+        $endDate = $now.ToString("yyyyMMdd")
         $filterParam = [System.Uri]::EscapeDataString("marketplace_ids:{EBAY_GB},date_range:[$startDate..$endDate]")
         $analyticsUrl = "https://api.ebay.com/sell/analytics/v1/traffic_report?dimension=LISTING&metric=LISTING_VIEWS_TOTAL&filter=$filterParam"
         $analyticsHeaders = @{

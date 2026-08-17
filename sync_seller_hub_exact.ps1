@@ -7,25 +7,26 @@ Write-Host "====================================================="
 Write-Host "  PANDOTA LTD - DIRECT SELLER HUB SYNCHRONIZER       "
 Write-Host "====================================================="
 
-# 1. Load Credentials
-$credsPath = Join-Path $PSScriptRoot "ebay_credentials.json"
-if (-not (Test-Path $credsPath)) {
-    $credsPath = ".\ebay_credentials.json"
-}
+# 1. Load Credentials (from GitHub Actions Environment Variables or local ebay_credentials.json)
+$appId = $env:EBAY_APP_ID
+$devId = $env:EBAY_DEV_ID
+$certId = $env:EBAY_CERT_ID
+$token = $env:EBAY_USER_TOKEN
 
-if (-not (Test-Path $credsPath)) {
-    Write-Host "Error: ebay_credentials.json not found."
-    exit 1
+if (-not $token -or -not $appId) {
+    $credsPath = Join-Path $PSScriptRoot "ebay_credentials.json"
+    if (-not (Test-Path $credsPath)) { $credsPath = ".\ebay_credentials.json" }
+    if (Test-Path $credsPath) {
+        $creds = Get-Content $credsPath -Raw | ConvertFrom-Json
+        if (-not $appId) { $appId = $creds.AppId }
+        if (-not $devId) { $devId = $creds.DevId }
+        if (-not $certId) { $certId = $creds.CertId }
+        if (-not $token) { $token = $creds.UserToken }
+    }
 }
-
-$creds = Get-Content $credsPath -Raw | ConvertFrom-Json
-$appId = if ($env:EBAY_APP_ID) { $env:EBAY_APP_ID } else { $creds.AppId }
-$devId = if ($env:EBAY_DEV_ID) { $env:EBAY_DEV_ID } else { $creds.DevId }
-$certId = if ($env:EBAY_CERT_ID) { $env:EBAY_CERT_ID } else { $creds.CertId }
-$token = if ($env:EBAY_USER_TOKEN) { $env:EBAY_USER_TOKEN } else { $creds.UserToken }
 
 if (-not $token) {
-    Write-Host "Error: User Token not available in credentials."
+    Write-Host "Error: eBay User Token not available in environment variables or ebay_credentials.json."
     exit 1
 }
 

@@ -490,24 +490,31 @@
   box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.05);
 }
 
-[data-theme="light"] .condition-pill-btn {
+[data-theme="light"] .condition-pill-btn,
+[data-theme="light"] .category-pill-btn {
   background: #ffffff;
   color: #334155;
   border-color: rgba(15, 23, 42, 0.14);
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
 }
 
-[data-theme="light"] .condition-pill-btn:hover {
+[data-theme="light"] .condition-pill-btn:hover,
+[data-theme="light"] .category-pill-btn:hover {
   background: #f1f5f9;
   color: #0f172a;
   border-color: rgba(15, 23, 42, 0.3);
 }
 
-[data-theme="light"] .condition-pill-btn.active {
+[data-theme="light"] .condition-pill-btn.active,
+[data-theme="light"] .category-pill-btn.active {
   background: #0f172a;
   color: #ffffff;
   border-color: #0f172a;
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+[data-theme="light"] .filter-group-label {
+  color: #64748b;
 }
 
 [data-theme="light"] .inventory-card {
@@ -1670,44 +1677,74 @@ a.feedback-card {
   font-size: 0.75rem;
 }
 
+.category-filter-row,
 .condition-filter-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  margin-bottom: 8px;
 }
 
-.condition-pill-btn {
+.filter-group-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.condition-pill-btn,
+.category-pill-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 7px 14px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-full);
   color: var(--text-sub);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.condition-pill-btn:hover {
+.condition-pill-btn:hover,
+.category-pill-btn:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-active);
   color: #ffffff;
 }
 
-.condition-pill-btn.active {
+.condition-pill-btn.active,
+.category-pill-btn.active {
   background: #ffffff;
   color: #09090b;
   border-color: #ffffff;
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
-.condition-pill-btn i {
-  font-size: 0.85rem;
+.condition-pill-btn i,
+.category-pill-btn i {
+  font-size: 0.82rem;
+}
+
+.inv-card-pill.category-pill {
+  background: rgba(0, 100, 210, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  font-weight: 600;
+}
+
+[data-theme="light"] .inv-card-pill.category-pill {
+  background: rgba(0, 100, 210, 0.08);
+  color: #0064d2;
+  border-color: rgba(0, 100, 210, 0.2);
 }
 
 .coupon-pill-btn {
@@ -3151,6 +3188,7 @@ html, body {
     border-radius: 8px;
   }
 
+  .category-filter-row,
   .condition-filter-row {
     display: flex;
     overflow-x: auto;
@@ -3161,10 +3199,12 @@ html, body {
     scrollbar-width: none;
   }
 
+  .category-filter-row::-webkit-scrollbar,
   .condition-filter-row::-webkit-scrollbar {
     display: none;
   }
 
+  .category-pill-btn,
   .condition-pill-btn {
     white-space: nowrap;
     padding: 5px 10px !important;

@@ -628,6 +628,7 @@ function setupInventoryPageControls() {
 
   if (!grid) return;
 
+  let activeCategoryFilter = 'all';
   let activeConditionFilter = 'all';
 
   function filterCards() {
@@ -640,8 +641,10 @@ function setupInventoryPageControls() {
       const title = (card.querySelector('.inv-card-title')?.textContent || '').toLowerCase();
       const featuresText = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
       const cardCond = (card.getAttribute('data-condition') || '').trim();
+      const cardCat = (card.getAttribute('data-category') || '').trim();
       
       const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.includes(searchTerm);
+      const matchesCategory = (activeCategoryFilter === 'all') || (cardCat.toLowerCase() === activeCategoryFilter.toLowerCase());
       
       let matchesCondition = true;
       if (activeConditionFilter && activeConditionFilter !== 'all') {
@@ -660,7 +663,7 @@ function setupInventoryPageControls() {
         }
       }
 
-      if (matchesSearch && matchesCondition) {
+      if (matchesSearch && matchesCondition && matchesCategory) {
         card.style.display = 'flex';
         card.style.opacity = '1';
         card.classList.add('is-visible');
@@ -684,13 +687,29 @@ function setupInventoryPageControls() {
 
     const filteredResultsEl = document.getElementById('filteredResultsCount');
     if (filteredResultsEl) {
-      if (activeConditionFilter !== 'all' || searchTerm) {
-        filteredResultsEl.innerHTML = `<i class="fa-solid fa-filter"></i> Showing <strong>${visibleCount}</strong> of <strong>${totalCount}</strong> active listings`;
+      const activeFilters = [];
+      if (activeCategoryFilter !== 'all') activeFilters.push(`Category: ${activeCategoryFilter}`);
+      if (activeConditionFilter !== 'all') activeFilters.push(`Condition: ${activeConditionFilter}`);
+      if (searchTerm) activeFilters.push(`Search: "${searchTerm}"`);
+
+      if (activeFilters.length > 0) {
+        filteredResultsEl.innerHTML = `<i class="fa-solid fa-filter"></i> Showing <strong>${visibleCount}</strong> of <strong>${totalCount}</strong> active listings (${activeFilters.join(' &bull; ')})`;
       } else {
         filteredResultsEl.innerHTML = `Showing <span id="visibleCount" style="font-weight: 700; color: var(--text-main);">${totalCount}</span> of ${totalCount} items in stock`;
       }
     }
   }
+
+  // Delegated click handler on category buttons
+  document.addEventListener('click', (e) => {
+    const pill = e.target.closest('.category-pill-btn');
+    if (!pill) return;
+    e.preventDefault();
+    document.querySelectorAll('.category-pill-btn').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeCategoryFilter = pill.getAttribute('data-category') || 'all';
+    filterCards();
+  });
 
   // Delegated click handler on condition buttons
   document.addEventListener('click', (e) => {

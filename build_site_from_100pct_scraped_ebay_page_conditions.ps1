@@ -1,6 +1,6 @@
 # ==============================================================================
-# Pandota Ltd - Official Catalog & Inventory Builder (81 Active Listings)
-# Direct High-Speed eBay CDN Images, Exact Scraped Conditions & Clean Encodings
+# Pandota Ltd - Official Catalog & Inventory Builder
+# Direct High-Speed eBay CDN Images, Exact Scraped Conditions, Category Filtering & Clean Encodings
 # ==============================================================================
 
 $items = Get-Content -Path "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
@@ -13,7 +13,29 @@ foreach ($sl in $storeListings) {
 }
 
 $totalCount = $items.Count
-Write-Host "Building inventory.html with exact $totalCount active live listings and direct eBay CDN images..."
+Write-Host "Building inventory.html with exact $totalCount active live listings, category badges and direct eBay CDN images..."
+
+function Get-ItemCategory($title) {
+    if ($title -match '(?i)Alienware') {
+        return "Alienware"
+    } elseif ($title -match '(?i)Dell|XPS|Precision|Latitude') {
+        return "Dell"
+    } elseif ($title -match '(?i)Lenovo|Legion|ThinkPad|LOQ|Yoga') {
+        return "Lenovo"
+    } elseif ($title -match '(?i)ASUS|ROG|Zephyrus|Strix|TUF|ZenBook|Flow') {
+        return "ASUS"
+    } elseif ($title -match '(?i)HP|Omen|Victus|ZBook|EliteBook|Envy') {
+        return "HP"
+    } elseif ($title -match '(?i)Sony Alpha|Sony E-|Sony FE|Lens|Camera') {
+        return "Sony Cameras"
+    } elseif ($title -match '(?i)Surface|Microsoft') {
+        return "Microsoft Surface"
+    } elseif ($title -match '(?i)Razer|Blade|MSI|Titan|Raider|Stealth|Vector|Katana') {
+        return "Razer & MSI"
+    } else {
+        return "Other"
+    }
+}
 
 $cardsHtml = ""
 
@@ -31,6 +53,16 @@ $countUsed = 0
 $countParts = 0
 $countCoupons = 0
 
+$countLenovo = 0
+$countDell = 0
+$countAlienware = 0
+$countAsus = 0
+$countHp = 0
+$countSony = 0
+$countSurface = 0
+$countRazerMsi = 0
+$countOther = 0
+
 # Count active coupons across items
 foreach ($it in $items) {
     if ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "") {
@@ -47,6 +79,18 @@ foreach ($it in $items) {
     if (-not $numPrice) { $numPrice = "0" }
     $url = $it.Url
     $img = $it.Img
+
+    # Category matching eBay Store Categories
+    $cat = Get-ItemCategory $titleRaw
+    if ($cat -eq "Lenovo") { $countLenovo++ }
+    elseif ($cat -eq "Dell") { $countDell++ }
+    elseif ($cat -eq "Alienware") { $countAlienware++ }
+    elseif ($cat -eq "ASUS") { $countAsus++ }
+    elseif ($cat -eq "HP") { $countHp++ }
+    elseif ($cat -eq "Sony Cameras") { $countSony++ }
+    elseif ($cat -eq "Microsoft Surface") { $countSurface++ }
+    elseif ($cat -eq "Razer & MSI") { $countRazerMsi++ }
+    else { $countOther++ }
 
     # Condition is determined directly from official eBay listing condition
     $cond = if ($it.PSObject.Properties['Condition'] -and $it.Condition) {
@@ -96,8 +140,10 @@ foreach ($it in $items) {
         $storageStr = $matches[1]
     }
 
-    # Build condition badge matching official eBay status
+    # Build feature pills with Category badge first
     $pills = @()
+    $pills += "<span class=`"inv-card-pill category-pill`"><i class=`"fa-solid fa-tag`"></i> $cat</span>"
+
     if ($cond -eq "New") {
         $pills += '<span><i class="fa-solid fa-sparkles"></i> New</span>'
     } elseif ($cond -eq "Opened - never used") {
@@ -128,23 +174,35 @@ foreach ($it in $items) {
     }
     
     $pillsHtml = $pills -join "`n                "
-    $rawImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
-    $cdnImg = if ($rawImg -match '\.webp') { $rawImg -replace '\.webp', '.jpg' } else { $rawImg }
 
-    # Coupon Check
-    $hasCoupon = ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "")
-    $couponAttr = if ($hasCoupon) { 'data-coupon="true"' } else { 'data-coupon="false"' }
-    $couponBadgeHtml = if ($hasCoupon) {
-        @"
-                <div class="inv-card-coupon-badge" title="Active eBay Promotion">
-                  <i class="fa-solid fa-tag"></i> $($it.Coupon)
-                </div>
-"@
+    # Direct high-speed eBay CDN Image URL with universal .jpg fallback
+    $cdnImg = if ($cdnMap.ContainsKey($itemId) -and $cdnMap[$itemId]) {
+        $cdnMap[$itemId]
+    } elseif ($img) {
+        $img
     } else {
-        ""
+        "images/ebay_item_$itemId.jpg"
     }
 
-    # Views Badge (Prominent in price row)
+    if ($cdnImg -match '\.webp') {
+        $cdnImg = $cdnImg -replace '\.webp', '.jpg'
+    }
+
+    # Dynamic eBay Coupon Badge
+    $couponBadgeHtml = ""
+    $couponAttr = ""
+    if ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "") {
+        $couponCode = [System.Net.WebUtility]::HtmlEncode($it.Coupon.ToString().Trim())
+        $couponAttr = "data-coupon=`"true`""
+        $couponBadgeHtml = @"
+                <div class="inv-card-coupon-badge" title="eBay Promo Code: $couponCode">
+                  <i class="fa-solid fa-ticket"></i>
+                  <span>$couponCode</span>
+                </div>
+"@
+    }
+
+    # 24h Views Badge (Exact eBay Analytics data)
     $viewsBadgeHtml = if ($viewsCount -gt 0) {
         @"
                 <div class="inv-card-views-prominent-badge" title="$viewsCount views in the last 24 hours on eBay">
@@ -186,7 +244,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
+          <div class="inventory-card" data-item-id="$itemId" data-category="$cat" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_$itemId.jpg';}">
 $watchOverlayHtml
@@ -268,16 +326,18 @@ $fullHtml = @"
         }
       },
       {
-        "@type": "WebSite",
-        "@id": "https://pandota.co.uk/#website",
-        "url": "https://pandota.co.uk",
-        "name": "Pandota",
-        "publisher": { "@id": "https://pandota.co.uk/#organization" }
+        "@type": "CollectionPage",
+        "@id": "https://pandota.co.uk/inventory.html#webpage",
+        "url": "https://pandota.co.uk/inventory.html",
+        "name": "Complete Store Inventory - Pandota Ltd",
+        "isPartOf": { "@id": "https://pandota.co.uk/#website" },
+        "about": { "@id": "https://pandota.co.uk/#organization" }
       }
     ]
   }
   </script>
 
+  <!-- Immediate Theme Engine -->
   <script>
     (function() {
       window.applyPandotaTheme = function(theme) {
@@ -289,10 +349,12 @@ $fullHtml = @"
         }
         try { localStorage.setItem('pandota_theme', theme); } catch(e) {}
         
-        var btns = document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn');
-        btns.forEach(function(btn) {
-          btn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-          btn.setAttribute('title', theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode');
+        var toggleBtns = document.querySelectorAll('#themeToggleBtn');
+        toggleBtns.forEach(function(btn) {
+          var icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+          }
         });
       };
 
@@ -413,24 +475,60 @@ $fullHtml = @"
     <!-- Inventory Page Hero Header -->
     <section class="inventory-hero">
       <div class="container">
-        <div class="section-title-area" style="margin-bottom: 30px;">
-          <div class="pill-badge" style="margin-bottom: 16px;">
+        <div class="section-title-area" style="margin-bottom: 24px;">
+          <div class="pill-badge" style="margin-bottom: 14px;">
             <span class="live-pulse-dot"></span>
             <span>Live Sync with eBay Store</span>
           </div>
           <h1 class="section-heading inventory-main-heading">Complete Store Inventory (<span id="inventoryHeaderCount">$totalCount</span> Listings)</h1>
           <p class="section-desc">
-            Filter by condition or search below!
+            Filter by category, condition, or search below!
           </p>
         </div>
 
-        <!-- Filter Controls Bar with Search by Condition Pills -->
-        <div class="inventory-controls-bar" style="flex-direction: column; align-items: stretch; gap: 16px;">
+        <!-- Filter Controls Bar with Category & Condition Pills -->
+        <div class="inventory-controls-bar" style="flex-direction: column; align-items: stretch; gap: 14px;">
           
+          <!-- Category Filter Pills Bar -->
+          <div class="category-filter-row" id="categoryFilterRow">
+            <div class="filter-group-label"><i class="fa-solid fa-layer-group"></i> Category:</div>
+            <button class="category-pill-btn active" data-category="all">
+              <i class="fa-solid fa-border-all"></i> All ($totalCount)
+            </button>
+            <button class="category-pill-btn" data-category="Lenovo">
+              <i class="fa-solid fa-laptop"></i> Lenovo ($countLenovo)
+            </button>
+            <button class="category-pill-btn" data-category="Dell">
+              <i class="fa-solid fa-desktop"></i> Dell ($countDell)
+            </button>
+            <button class="category-pill-btn" data-category="Alienware">
+              <i class="fa-solid fa-gamepad"></i> Alienware ($countAlienware)
+            </button>
+            <button class="category-pill-btn" data-category="ASUS">
+              <i class="fa-solid fa-microchip"></i> ASUS ($countAsus)
+            </button>
+            <button class="category-pill-btn" data-category="HP">
+              <i class="fa-solid fa-bolt"></i> HP ($countHp)
+            </button>
+            <button class="category-pill-btn" data-category="Sony Cameras">
+              <i class="fa-solid fa-camera"></i> Sony ($countSony)
+            </button>
+            <button class="category-pill-btn" data-category="Microsoft Surface">
+              <i class="fa-solid fa-tablet-screen-button"></i> Surface ($countSurface)
+            </button>
+            <button class="category-pill-btn" data-category="Razer & MSI">
+              <i class="fa-solid fa-shield-halved"></i> Razer &amp; MSI ($countRazerMsi)
+            </button>
+            <button class="category-pill-btn" data-category="Other">
+              <i class="fa-solid fa-boxes-stacked"></i> Other ($countOther)
+            </button>
+          </div>
+
           <!-- Condition Filter Pills Bar -->
           <div class="condition-filter-row" id="conditionFilterRow">
+            <div class="filter-group-label"><i class="fa-solid fa-filter"></i> Condition:</div>
             <button class="condition-pill-btn active" data-condition="all">
-              <i class="fa-solid fa-border-all"></i> All Items ($totalCount)
+              <i class="fa-solid fa-border-all"></i> All Conditions ($totalCount)
             </button>
             <button class="condition-pill-btn" data-condition="New">
               <i class="fa-solid fa-sparkles"></i> New ($countNew)
@@ -519,55 +617,45 @@ $cardsHtml
         </div>
       </div>
 
-      <div class="footer-bottom" style="justify-content: center; text-align: center;">
+      <div class="footer-bottom">
         <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved.</p>
+        <p>Official eBay Store: <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">geoffscuriosities</a> &bull; VAT Reg: GB 444 3804 05</p>
       </div>
     </div>
   </footer>
 
-  <script src="script.js?v=2.0"></script>
-  
+  <!-- Instant Filtering, Search & Sorting Logic -->
   <script>
   (function() {
     function initInventoryControls() {
+      var grid = document.getElementById('inventoryGrid');
       var searchInput = document.getElementById('inventorySearchInput');
       var sortSelect = document.getElementById('inventorySortSelect');
-      var grid = document.getElementById('inventoryGrid');
       if (!grid) return;
 
+      var activeCategory = 'all';
       var activeCondition = 'all';
 
       function getCardPrice(card) {
         var attr = card.getAttribute('data-price');
-        if (attr && !isNaN(parseFloat(attr)) && parseFloat(attr) > 0) {
-          return parseFloat(attr);
-        }
+        if (attr && !isNaN(parseFloat(attr)) && parseFloat(attr) > 0) return parseFloat(attr);
         var priceEl = card.querySelector('.inv-card-price');
         if (priceEl) {
-          var parsed = parseFloat(priceEl.textContent.replace(/[^\d.]/g, ''));
-          if (!isNaN(parsed)) return parsed;
+          var p = parseFloat(priceEl.textContent.replace(/[^\d.]/g, ''));
+          if (!isNaN(p)) return p;
         }
         return 0;
       }
 
       function getCardWatchers(card) {
         var attr = card.getAttribute('data-watchers');
-        if (attr && !isNaN(parseInt(attr, 10))) {
-          return parseInt(attr, 10);
-        }
-        var watcherCountEl = card.querySelector('.watcher-count');
-        if (watcherCountEl) {
-          var parsed = parseInt(watcherCountEl.textContent.replace(/[^\d]/g, ''), 10);
-          if (!isNaN(parsed)) return parsed;
-        }
+        if (attr && !isNaN(parseInt(attr, 10))) return parseInt(attr, 10);
         return 0;
       }
 
       function getCardViews(card) {
         var attr = card.getAttribute('data-views');
-        if (attr && !isNaN(parseInt(attr, 10))) {
-          return parseInt(attr, 10);
-        }
+        if (attr && !isNaN(parseInt(attr, 10))) return parseInt(attr, 10);
         return 0;
       }
 
@@ -575,27 +663,22 @@ $cardsHtml
         var cards = Array.from(grid.querySelectorAll('.inventory-card'));
         cards.sort(function(a, b) {
           if (mode === 'watchers-desc') {
-            var wA = getCardWatchers(a);
-            var wB = getCardWatchers(b);
-            if (wB !== wA) return wB - wA;
-            return getCardPrice(b) - getCardPrice(a);
+            var wDiff = getCardWatchers(b) - getCardWatchers(a);
+            return wDiff !== 0 ? wDiff : getCardPrice(b) - getCardPrice(a);
           }
           if (mode === 'watchers-asc') {
-            var wA = getCardWatchers(a);
-            var wB = getCardWatchers(b);
-            if (wA !== wB) return wA - wB;
-            return getCardPrice(a) - getCardPrice(b);
+            var wDiff = getCardWatchers(a) - getCardWatchers(b);
+            return wDiff !== 0 ? wDiff : getCardPrice(a) - getCardPrice(b);
           }
           if (mode === 'views-desc') {
-            var vA = getCardViews(a);
-            var vB = getCardViews(b);
-            if (vB !== vA) return vB - vA;
-            return getCardPrice(b) - getCardPrice(a);
+            var vDiff = getCardViews(b) - getCardViews(a);
+            return vDiff !== 0 ? vDiff : getCardPrice(b) - getCardPrice(a);
           }
           var pA = getCardPrice(a);
           var pB = getCardPrice(b);
           return mode === 'price-asc' ? (pA - pB) : (pB - pA);
         });
+
         cards.forEach(function(card) {
           grid.appendChild(card);
         });
@@ -611,8 +694,10 @@ $cardsHtml
           var title = (card.querySelector('.inv-card-title')?.textContent || '').toLowerCase();
           var features = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
           var cond = (card.getAttribute('data-condition') || '').trim();
+          var cat = (card.getAttribute('data-category') || '').trim();
 
           var matchesSearch = !query || title.indexOf(query) !== -1 || features.indexOf(query) !== -1;
+          var matchesCategory = (activeCategory === 'all') || (cat.toLowerCase() === activeCategory.toLowerCase());
           var matchesCond = true;
 
           if (activeCondition !== 'all') {
@@ -631,7 +716,7 @@ $cardsHtml
             }
           }
 
-          if (matchesSearch && matchesCond) {
+          if (matchesSearch && matchesCond && matchesCategory) {
             card.style.setProperty('display', 'flex', 'important');
             card.style.setProperty('opacity', '1', 'important');
             visible++;
@@ -645,13 +730,29 @@ $cardsHtml
 
         var subtext = document.getElementById('filteredResultsCount');
         if (subtext) {
-          if (activeCondition !== 'all' || query) {
-            subtext.innerHTML = '<i class="fa-solid fa-filter"></i> Showing <strong>' + visible + '</strong> of <strong>' + total + '</strong> active listings';
+          var activeFilters = [];
+          if (activeCategory !== 'all') activeFilters.push('Category: ' + activeCategory);
+          if (activeCondition !== 'all') activeFilters.push('Condition: ' + activeCondition);
+          if (query) activeFilters.push('Search: "' + query + '"');
+
+          if (activeFilters.length > 0) {
+            subtext.innerHTML = '<i class="fa-solid fa-filter"></i> Showing <strong>' + visible + '</strong> of <strong>' + total + '</strong> active listings (' + activeFilters.join(' &bull; ') + ')';
           } else {
             subtext.innerHTML = 'Showing <span id="visibleCount" style="font-weight: 700; color: var(--text-main);">' + total + '</span> of ' + total + ' items in stock';
           }
         }
       }
+
+      // Direct onclick binding for category buttons
+      document.querySelectorAll('.category-pill-btn').forEach(function(btn) {
+        btn.onclick = function(e) {
+          if (e) e.preventDefault();
+          document.querySelectorAll('.category-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeCategory = btn.getAttribute('data-category') || 'all';
+          filterGrid();
+        };
+      });
 
       // Direct onclick binding for condition buttons
       document.querySelectorAll('.condition-pill-btn').forEach(function(btn) {
@@ -711,19 +812,4 @@ if (Test-Path "index.html") {
     [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
 }
 
-Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings!"
-
-# Automatically copy all updated files to Pandota Website repo if folder exists
-$targetRepo = "C:\Users\User\Desktop\PANDOTA ACOUNTS\Pandota Website"
-if (Test-Path $targetRepo) {
-    Copy-Item -Path "$pwd\style.css" -Destination "$targetRepo\style.css" -Force
-    Copy-Item -Path "$pwd\index.html" -Destination "$targetRepo\index.html" -Force
-    Copy-Item -Path "$pwd\inventory.html" -Destination "$targetRepo\inventory.html" -Force
-    Copy-Item -Path "$pwd\script.js" -Destination "$targetRepo\script.js" -Force
-    Copy-Item -Path "$pwd\build_site_from_100pct_scraped_ebay_page_conditions.ps1" -Destination "$targetRepo\build_site_from_100pct_scraped_ebay_page_conditions.ps1" -Force
-    if (Test-Path "$pwd\sync_now.ps1") { Copy-Item -Path "$pwd\sync_now.ps1" -Destination "$targetRepo\sync_now.ps1" -Force }
-    if (Test-Path "$pwd\official_scraped_ebay_conditions.json") { Copy-Item -Path "$pwd\official_scraped_ebay_conditions.json" -Destination "$targetRepo\official_scraped_ebay_conditions.json" -Force }
-    if (Test-Path "$pwd\all_82_with_exact_scraped_prices.json") { Copy-Item -Path "$pwd\all_82_with_exact_scraped_prices.json" -Destination "$targetRepo\all_82_with_exact_scraped_prices.json" -Force }
-    if (Test-Path "$pwd\all_store_listings.json") { Copy-Item -Path "$pwd\all_store_listings.json" -Destination "$targetRepo\all_store_listings.json" -Force }
-    Write-Host "Automatically synchronized all updated files to Pandota Website repository!"
-}
+Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings and category filters!"

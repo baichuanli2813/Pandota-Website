@@ -35,8 +35,8 @@ jobs:
           EBAY_USER_TOKEN: ${{ secrets.EBAY_USER_TOKEN }}
           EBAY_OAUTH_TOKEN: ${{ secrets.EBAY_OAUTH_TOKEN }}
         run: |
-          # Run direct Seller Hub sync pipeline for 100% exact quantities, conditions and watchers
-          .\sync_seller_hub_exact.ps1
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+          pwsh -ExecutionPolicy Bypass -File .\sync_seller_hub_exact.ps1
 
       - name: Commit & Push Changes (if inventory changed)
         shell: pwsh

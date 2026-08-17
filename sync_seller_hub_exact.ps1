@@ -254,15 +254,15 @@ $condsMap | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditi
 # 2. Build inventory.html and update index.html
 $scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
 Write-Host "`nRebuilding inventory.html with exact in-stock listings, conditions and watchers..."
-& "$scriptDir\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
+powershell -ExecutionPolicy Bypass -File "$scriptDir\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
 
 # 3. Sync Feedback Ratings
 Write-Host "`nSyncing live eBay feedback ratings..."
-& "$scriptDir\sync_ebay_feedbacks.ps1"
+powershell -ExecutionPolicy Bypass -File "$scriptDir\sync_ebay_feedbacks.ps1"
 
 # 4. Clean Encodings
 Write-Host "`nCleaning character encodings..."
-& "$scriptDir\fix_both_encodings.ps1"
+powershell -ExecutionPolicy Bypass -File "$scriptDir\fix_both_encodings.ps1"
 
 # 5. Copy to Pandota Website repo
 $targetDir = "C:\Users\User\Desktop\PANDOTA ACOUNTS\Pandota Website"

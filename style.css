@@ -868,12 +868,13 @@ a {
   display: inline-flex !important;
   align-items: center;
   gap: 7px;
-  background: rgba(0, 100, 210, 0.12);
-  border: 1px solid rgba(0, 100, 210, 0.35);
-  padding: 6px 14px;
+  background: rgba(0, 100, 210, 0.1);
+  border: 1px solid rgba(0, 100, 210, 0.28);
+  padding: 5px 12px;
   border-radius: var(--radius-full);
   color: #60a5fa !important;
   font-weight: 600 !important;
+  font-size: 0.92rem;
   transition: all 0.25s ease;
 }
 
@@ -886,20 +887,28 @@ a {
 }
 
 .nav-hot-badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  background: #10b981;
-  color: #ffffff;
-  padding: 2px 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: none;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  padding: 1px 7px;
   border-radius: 9999px;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
   margin-left: 2px;
+  transition: all 0.2s ease;
+}
+
+.nav-sell-highlight:hover .nav-hot-badge {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
 }
 
 [data-theme="light"] .nav-sell-highlight {
-  background: rgba(0, 100, 210, 0.08);
-  border-color: rgba(0, 100, 210, 0.25);
+  background: rgba(0, 100, 210, 0.06);
+  border-color: rgba(0, 100, 210, 0.22);
   color: #0064d2 !important;
 }
 
@@ -907,6 +916,18 @@ a {
   background: #0064d2;
   border-color: #0064d2;
   color: #ffffff !important;
+}
+
+[data-theme="light"] .nav-hot-badge {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: #059669;
+}
+
+[data-theme="light"] .nav-sell-highlight:hover .nav-hot-badge {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
 }
 
 .nav-actions {

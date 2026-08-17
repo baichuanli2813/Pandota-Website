@@ -28,6 +28,9 @@ jobs:
 
       - name: Run Official eBay API Sync & Site Build
         shell: pwsh
+        env:
+          EBAY_APP_ID: ${{ secrets.EBAY_APP_ID }}
+          EBAY_CERT_ID: ${{ secrets.EBAY_CERT_ID }}
         run: |
           # Run official eBay REST API sync pipeline
           .\sync_ebay_api.ps1

@@ -220,13 +220,14 @@ if ($oauthToken) {
         $now = [DateTime]::UtcNow
         $startDate = $now.AddDays(-30).ToString("yyyyMMdd")
         $endDate = $now.AddDays(-1).ToString("yyyyMMdd")
-        $analyticsUrl = "https://api.ebay.com/sell/analytics/v1/traffic_report?dimension=LISTING&metric=LISTING_VIEWS_TOTAL&filter=marketplace_ids:{EBAY_GB},date_range:[$startDate..$endDate]"
+        $filterParam = [System.Uri]::EscapeDataString("marketplace_ids:{EBAY_GB},date_range:[$startDate..$endDate]")
+        $analyticsUrl = "https://api.ebay.com/sell/analytics/v1/traffic_report?dimension=LISTING&metric=LISTING_VIEWS_TOTAL&filter=$filterParam"
         $analyticsHeaders = @{
             "Authorization" = "Bearer $oauthToken"
             "Accept"        = "application/json"
         }
         $analyticsResp = Invoke-RestMethod -Uri $analyticsUrl -Method Get -Headers $analyticsHeaders -TimeoutSec 15
-        if ($analyticsResp.records) {
+        if ($analyticsResp -and $analyticsResp.records) {
             foreach ($rec in $analyticsResp.records) {
                 $recItemId = $rec.dimensionValues[0].value
                 $recViews = [int]$rec.metricValues[0].value

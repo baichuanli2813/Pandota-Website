@@ -126,10 +126,6 @@ foreach ($it in $items) {
     } else {
         0
     }
-
-    if ($viewsCount -gt 0) {
-        $pills += '<span><i class="fa-solid fa-eye" style="color: #06b6d4;"></i> ' + $viewsCount.ToString("N0") + ' views (24h)</span>'
-    }
     
     $pillsHtml = $pills -join "`n                "
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
@@ -147,26 +143,38 @@ foreach ($it in $items) {
         ""
     }
 
-    # Use 100% exact Seller Hub Watchers directly from item
+    # Views Badge (Prominent in price row)
+    $viewsBadgeHtml = if ($viewsCount -gt 0) {
+        @"
+                <div class="inv-card-views-prominent-badge" title="$viewsCount views in the last 24 hours on eBay">
+                  <i class="fa-solid fa-eye"></i>
+                  <span class="views-count">$($viewsCount.ToString("N0")) views (24h)</span>
+                </div>
+"@
+    } else {
+        ""
+    }
+
+    # Watchers Badge (Top right overlay on photo)
     $watchCount = if ($it.PSObject.Properties['Watchers'] -and $it.Watchers -ne $null) {
         [int]$it.Watchers
     } else {
         0
     }
 
-    $watchBadgeHtml = if ($watchCount -gt 0) {
+    $watchOverlayHtml = if ($watchCount -gt 0) {
         @"
-                <div class="inv-card-watcher-badge" title="$watchCount buyers watching on eBay">
-                  <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-                  <span class="watcher-count" data-item-id="$itemId">$watchCount watching</span>
-                </div>
+              <div class="inv-card-photo-watcher-badge" title="$watchCount buyers watching on eBay">
+                <i class="fa-solid fa-heart"></i>
+                <span class="watcher-count" data-item-id="$itemId">$watchCount watching</span>
+              </div>
 "@
     } else {
         @"
-                <div class="inv-card-watcher-badge" title="Active listing on eBay">
-                  <i class="fa-regular fa-heart" style="color: #94a3b8;"></i>
-                  <span class="watcher-count" data-item-id="$itemId">Active</span>
-                </div>
+              <div class="inv-card-photo-watcher-badge" title="Active listing on eBay">
+                <i class="fa-regular fa-heart" style="color: #94a3b8;"></i>
+                <span class="watcher-count" data-item-id="$itemId">Active</span>
+              </div>
 "@
     }
 
@@ -175,12 +183,13 @@ foreach ($it in $items) {
           <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
+$watchOverlayHtml
             </div>
             <div class="inv-card-body">
               <div class="inv-card-price-row">
                 <div class="inv-card-price">$price</div>
 $couponBadgeHtml
-$watchBadgeHtml
+$viewsBadgeHtml
               </div>
               <h3 class="inv-card-title">$title</h3>
               <div class="inv-card-features">
@@ -192,7 +201,6 @@ $watchBadgeHtml
               </a>
             </div>
           </div>
-
 "@
 }
 

@@ -1531,33 +1531,67 @@ a.feedback-card {
   color: #ffffff;
 }
 
-.inv-card-watcher-badge {
+.inv-card-photo-watcher-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(9, 9, 11, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 5px 11px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  pointer-events: none;
+  letter-spacing: -0.2px;
+}
+
+.inv-card-photo-watcher-badge i {
+  color: #ef4444;
+  font-size: 0.8rem;
+}
+
+[data-theme="light"] .inv-card-photo-watcher-badge {
+  background: rgba(255, 255, 255, 0.94);
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.inv-card-views-prominent-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--text-sub);
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.09);
+  border: 1px solid rgba(6, 182, 212, 0.25);
   padding: 4px 10px;
   border-radius: var(--radius-full);
   letter-spacing: -0.2px;
 }
 
-.inv-card-watcher-badge i {
-  color: var(--ebay-blue);
+.inv-card-views-prominent-badge i {
+  color: #06b6d4;
   font-size: 0.85rem;
 }
 
-[data-theme="light"] .inv-card-watcher-badge {
-  color: #334155;
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+[data-theme="light"] .inv-card-views-prominent-badge {
+  background: rgba(6, 182, 212, 0.1);
+  color: #0891b2;
+  border-color: rgba(6, 182, 212, 0.28);
 }
 
-[data-theme="light"] .inv-card-watcher-badge i {
-  color: #0064d2;
+[data-theme="light"] .inv-card-views-prominent-badge i {
+  color: #0891b2;
 }
 
 .inv-card-title {

@@ -33,6 +33,7 @@ jobs:
           EBAY_DEV_ID: ${{ secrets.EBAY_DEV_ID }}
           EBAY_CERT_ID: ${{ secrets.EBAY_CERT_ID }}
           EBAY_USER_TOKEN: ${{ secrets.EBAY_USER_TOKEN }}
+          EBAY_OAUTH_TOKEN: ${{ secrets.EBAY_OAUTH_TOKEN }}
         run: |
           # Run direct Seller Hub sync pipeline for 100% exact quantities, conditions and watchers
           .\sync_seller_hub_exact.ps1

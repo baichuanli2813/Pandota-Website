@@ -706,6 +706,14 @@ function setupInventoryPageControls() {
     return 0;
   }
 
+  function getCardViews(card) {
+    const attr = card.getAttribute('data-views');
+    if (attr && !isNaN(parseInt(attr, 10))) {
+      return parseInt(attr, 10);
+    }
+    return 0;
+  }
+
   function applySorting(mode) {
     const cardsArray = Array.from(grid.querySelectorAll('.inventory-card'));
 
@@ -721,6 +729,12 @@ function setupInventoryPageControls() {
         const wB = getCardWatchers(b);
         if (wA !== wB) return wA - wB;
         return getCardPrice(a) - getCardPrice(b);
+      }
+      if (mode === 'views-desc') {
+        const vA = getCardViews(a);
+        const vB = getCardViews(b);
+        if (vB !== vA) return vB - vA;
+        return getCardPrice(b) - getCardPrice(a);
       }
       const pA = getCardPrice(a);
       const pB = getCardPrice(b);

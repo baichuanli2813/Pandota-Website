@@ -199,7 +199,45 @@ foreach ($it in $allInStockItems) {
 
 Write-Host "Finished fetching exact conditions for all $($allInStockItems.Count) items!"
 
-# Save exact in-stock catalog with exact Watchers and Conditions
+# Fetch live view counts from eBay Analytics API
+$oauthToken = $env:EBAY_OAUTH_TOKEN
+if (-not $oauthToken -and $creds -and $creds.OAuthUserToken) {
+    $oauthToken = $creds.OAuthUserToken
+}
+
+$viewsLookup = @{}
+if ($oauthToken) {
+    Write-Host "`nFetching official live views from eBay Seller Analytics API..."
+    try {
+        $now = [DateTime]::UtcNow
+        $startDate = $now.AddDays(-30).ToString("yyyyMMdd")
+        $endDate = $now.AddDays(-1).ToString("yyyyMMdd")
+        $analyticsUrl = "https://api.ebay.com/sell/analytics/v1/traffic_report?dimension=LISTING&metric=LISTING_VIEWS_TOTAL&filter=marketplace_ids:{EBAY_GB},date_range:[$startDate..$endDate]"
+        $analyticsHeaders = @{
+            "Authorization" = "Bearer $oauthToken"
+            "Accept"        = "application/json"
+        }
+        $analyticsResp = Invoke-RestMethod -Uri $analyticsUrl -Method Get -Headers $analyticsHeaders -TimeoutSec 15
+        if ($analyticsResp.records) {
+            foreach ($rec in $analyticsResp.records) {
+                $recItemId = $rec.dimensionValues[0].value
+                $recViews = [int]$rec.metricValues[0].value
+                $viewsLookup[$recItemId] = $recViews
+            }
+            Write-Host "Successfully loaded live page view counts for $($viewsLookup.Count) listings!"
+        }
+    } catch {
+        Write-Host "Analytics view fetch note: $($_.Exception.Message)"
+    }
+}
+
+foreach ($it in $allInStockItems) {
+    $id = $it.ItemId
+    $v = if ($viewsLookup.ContainsKey($id)) { $viewsLookup[$id] } else { 0 }
+    $it | Add-Member -MemberType NoteProperty -Name "Views" -Value $v -Force
+}
+
+# Save exact in-stock catalog with exact Watchers, Views and Conditions
 $allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
 $allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
 $condsMap | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditions.json" -Encoding utf8

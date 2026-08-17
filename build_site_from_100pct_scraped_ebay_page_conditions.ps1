@@ -119,6 +119,17 @@ foreach ($it in $items) {
     } elseif ($ramStr) {
         $pills += '<span><i class="fa-solid fa-memory"></i> ' + $ramStr + '</span>'
     }
+
+    # Extract Views from eBay Seller Analytics
+    $viewsCount = if ($it.PSObject.Properties['Views'] -and $it.Views -ne $null) {
+        [int]$it.Views
+    } else {
+        0
+    }
+
+    if ($viewsCount -gt 0) {
+        $pills += '<span><i class="fa-solid fa-eye" style="color: #06b6d4;"></i> ' + $viewsCount.ToString("N0") + ' views (24h)</span>'
+    }
     
     $pillsHtml = $pills -join "`n                "
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
@@ -161,7 +172,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" $couponAttr>
+          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>
@@ -435,6 +446,7 @@ $couponPillHtml
                 <option value="price-desc" selected>Price: High to Low</option>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="watchers-desc">Most Watchers</option>
+                <option value="views-desc">Most Viewed</option>
                 <option value="watchers-asc">Fewest Watchers</option>
               </select>
             </div>
@@ -537,6 +549,14 @@ $cardsHtml
         return 0;
       }
 
+      function getCardViews(card) {
+        var attr = card.getAttribute('data-views');
+        if (attr && !isNaN(parseInt(attr, 10))) {
+          return parseInt(attr, 10);
+        }
+        return 0;
+      }
+
       function sortGrid(mode) {
         var cards = Array.from(grid.querySelectorAll('.inventory-card'));
         cards.sort(function(a, b) {
@@ -551,6 +571,12 @@ $cardsHtml
             var wB = getCardWatchers(b);
             if (wA !== wB) return wA - wB;
             return getCardPrice(a) - getCardPrice(b);
+          }
+          if (mode === 'views-desc') {
+            var vA = getCardViews(a);
+            var vB = getCardViews(b);
+            if (vB !== vA) return vB - vA;
+            return getCardPrice(b) - getCardPrice(a);
           }
           var pA = getCardPrice(a);
           var pB = getCardPrice(b);

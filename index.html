@@ -1230,7 +1230,182 @@
     </div>
   </footer>
 
-  <script src="script.js?v=2.0"></script>
+  <script src="script.js?v=3.0"></script>
+
+  <!-- Self-Contained Hero Showcase Controller -->
+  <script>
+  (function() {
+    var featuredItems = [
+      {
+        title: "NEW Lenovo Legion 9 18\" Ultra 9 275HX 64GB 2TB RTX 5090 UHD+ 4K 240Hz Laptop",
+        price: "£3,799.00",
+        img: "https://i.ebayimg.com/images/g/CXoAAeSw-MdqfbfC/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267755998578",
+        watchers: 6,
+        views: 0
+      },
+      {
+        title: "Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop",
+        price: "£2,599.00",
+        img: "https://i.ebayimg.com/images/g/IMQAAeSwqhxqRVu-/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267745470208",
+        watchers: 44,
+        views: 729
+      },
+      {
+        title: "NEW HP Omen MAX 16 Ultra 9 275HX RTX 5090 64GB 2TB QHD 240Hz OLED Gaming Laptop",
+        price: "£2,899.00",
+        img: "https://i.ebayimg.com/images/g/2HwAAeSwSKxqfZrP/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267755930402",
+        watchers: 8,
+        views: 0
+      },
+      {
+        title: "NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY",
+        price: "£2,599.00",
+        img: "https://i.ebayimg.com/images/g/HlsAAeSwdh5qezif/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267753890742",
+        watchers: 12,
+        views: 284
+      },
+      {
+        title: "NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 32GB 2TB RTX 5080 OLED 120Hz Laptop",
+        price: "£2,699.00",
+        img: "https://i.ebayimg.com/images/g/nhAAAeSwYexqVg10/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267727321251",
+        watchers: 45,
+        views: 1968
+      },
+      {
+        title: "NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console",
+        price: "£1,099.00",
+        img: "https://i.ebayimg.com/images/g/OPEAAeSwiSdqGr2r/s-l500.jpg",
+        url: "https://www.ebay.co.uk/itm/267727293251",
+        watchers: 24,
+        views: 890
+      },
+      {
+        title: "Razer Blade 16 i9 13950HX RTX 4080 32GB 1TB QHD+ 240Hz Laptop",
+        price: "£949.00",
+        img: "https://i.ebayimg.com/images/g/vCIAAeSwbXZqT130/s-l500.webp",
+        url: "https://www.ebay.co.uk/itm/267713401569",
+        watchers: 82,
+        views: 2411
+      }
+    ];
+
+    var currIdx = 0;
+    var timer = null;
+
+    function showItem(idx) {
+      if (!featuredItems || featuredItems.length === 0) return;
+      var item = featuredItems[idx];
+      if (!item) return;
+
+      var img = document.getElementById('heroStockImg');
+      var title = document.getElementById('heroStockTitle');
+      var price = document.getElementById('heroStockPrice');
+      var link = document.getElementById('heroStockLink');
+      var counter = document.getElementById('heroCardCounter');
+      var watcherText = document.getElementById('heroStockWatcherText');
+      var viewsEl = document.getElementById('heroStockViews');
+      var viewsText = document.getElementById('heroStockViewsText');
+
+      if (img) { img.src = item.img; img.alt = item.title; }
+      if (title) title.textContent = item.title;
+      if (price) price.textContent = item.price;
+      if (link) link.href = item.url;
+      if (counter) counter.textContent = (idx + 1) + ' / ' + featuredItems.length;
+
+      if (watcherText) {
+        watcherText.textContent = (item.watchers > 0) ? (item.watchers + ' watching') : 'Active';
+      }
+
+      if (viewsEl && viewsText) {
+        if (item.views > 0) {
+          viewsEl.className = 'inv-card-views-prominent-badge';
+          viewsText.textContent = Number(item.views).toLocaleString() + ' views (24h)';
+          var icon = viewsEl.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-eye';
+        } else {
+          viewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
+          viewsText.textContent = 'Just Listed';
+          var icon = viewsEl.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-bolt';
+        }
+      }
+    }
+
+    function next() {
+      currIdx = (currIdx + 1) % featuredItems.length;
+      showItem(currIdx);
+      resetTimer();
+    }
+
+    function prev() {
+      currIdx = (currIdx - 1 + featuredItems.length) % featuredItems.length;
+      showItem(currIdx);
+      resetTimer();
+    }
+
+    function resetTimer() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(next, 5000);
+    }
+
+    window.heroPrevItem = function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      prev();
+    };
+
+    window.heroNextItem = function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      next();
+    };
+
+    function init() {
+      var pBtn = document.getElementById('heroPrevBtn');
+      var nBtn = document.getElementById('heroNextBtn');
+      var box = document.getElementById('heroLiveStockContainer');
+
+      if (pBtn) pBtn.onclick = function(e) { if (e) e.preventDefault(); prev(); };
+      if (nBtn) nBtn.onclick = function(e) { if (e) e.preventDefault(); next(); };
+      if (box) {
+        box.onmouseenter = function() { if (timer) clearInterval(timer); };
+        box.onmouseleave = function() { resetTimer(); };
+      }
+
+      showItem(0);
+      resetTimer();
+
+      try {
+        fetch('all_82_with_exact_scraped_prices.json?v=' + Date.now())
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (Array.isArray(data) && data.length > 0) {
+              featuredItems = data.slice(0, 10).map(function(it) {
+                return {
+                  title: it.Title || it.title || '',
+                  price: it.Price || it.price || '',
+                  img: it.Img || it.img || '',
+                  url: it.Url || it.url || '',
+                  watchers: parseInt(it.Watchers || it.watchers || 0, 10),
+                  views: parseInt(it.Views || it.views || 0, 10)
+                };
+              });
+              showItem(currIdx);
+            }
+          }).catch(function() {});
+      } catch(e) {}
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
 </body>
 </html>
 

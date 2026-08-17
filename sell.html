@@ -386,17 +386,7 @@
               <!-- Brand -->
               <div class="sell-form-field">
                 <label for="laptopBrand"><i class="fa-solid fa-tag"></i> Brand / Manufacturer:</label>
-                <select id="laptopBrand" required>
-                  <option value="Lenovo" selected>Lenovo (Legion, ThinkPad, LOQ)</option>
-                  <option value="Dell / Alienware">Dell / Alienware (Area-51, XPS, Precision)</option>
-                  <option value="ASUS">ASUS (ROG Zephyrus, Strix, SCAR, TUF)</option>
-                  <option value="Apple">Apple (MacBook Pro, MacBook Air, M-Series)</option>
-                  <option value="HP">HP (OMEN, Victus, ZBook)</option>
-                  <option value="Razer">Razer (Blade 14, 16, 18)</option>
-                  <option value="MSI">MSI (Titan, Raider, Stealth, Vector)</option>
-                  <option value="Sony">Sony (Alpha Cameras, Lenses)</option>
-                  <option value="Other Brand">Other Brand / Custom Rig</option>
-                </select>
+                <input type="text" id="laptopBrand" placeholder="e.g. Lenovo, Dell, ASUS, Apple, HP, Razer, MSI" required>
               </div>
 
               <!-- Model / Exact Series -->
@@ -589,7 +579,7 @@
     e.preventDefault();
 
     var sellerType = document.getElementById('sellerType').value;
-    var brand = document.getElementById('laptopBrand').value;
+    var brand = document.getElementById('laptopBrand').value.trim();
     var model = document.getElementById('laptopModel').value.trim();
     var cpu = document.getElementById('laptopCpu').value.trim();
     var gpu = document.getElementById('laptopGpu').value.trim();

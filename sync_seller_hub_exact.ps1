@@ -109,10 +109,10 @@ do {
             $img = ""
             if ($item.PictureDetails.GalleryURL) {
                 $img = [string]$item.PictureDetails.GalleryURL
-                $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.webp'
+                $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.jpg'
             } elseif ($item.PictureDetails.PictureURL) {
                 $img = [string]($item.PictureDetails.PictureURL[0])
-                $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.webp'
+                $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.jpg'
             }
 
             $allInStockItems += [PSCustomObject]@{
@@ -135,8 +135,8 @@ do {
 
 Write-Host "`nSuccessfully retrieved $($allInStockItems.Count) currently active, in-stock items from Seller Hub!"
 
-# Fetch exact ConditionDisplayName for each in-stock item using GetItem
-Write-Host "Fetching official eBay condition for each in-stock listing..."
+# Fetch exact ConditionDisplayName and latest high-res photo for each in-stock item using GetItem
+Write-Host "Fetching official eBay condition and live photos for each in-stock listing..."
 
 $condsMap = @{}
 $itemIndex = 0
@@ -190,6 +190,14 @@ foreach ($it in $allInStockItems) {
             $cond = "For parts or not working"
         } else {
             $cond = "Used"
+        }
+
+        # Auto-update to latest high-resolution cover photo from eBay listing
+        if ($itemObj.PictureDetails -and $itemObj.PictureDetails.PictureURL) {
+            $livePic = [string]($itemObj.PictureDetails.PictureURL[0])
+            if ($livePic -and $livePic.Trim() -ne "") {
+                $it.Img = $livePic -replace 's-l\d+\.(jpg|webp|png)', 's-l500.jpg'
+            }
         }
     }
     

@@ -268,14 +268,24 @@
 
           <!-- Dynamic Hero Stock Card Showcase -->
           <div id="heroLiveStockContainer" class="hero-stock-card">
-            <div class="hero-stock-price-tag" id="heroStockPrice">£3,799.00</div>
-            <div class="hero-stock-img-wrap">
-              <img id="heroStockImg" src="https://i.ebayimg.com/images/g/CXoAAeSw-MdqfbfC/s-l500.jpg" alt="NEW Lenovo Legion 9 18&quot; Ultra 9 275HX 64GB 2TB RTX 5090 UHD+ 4K 240Hz Laptop" loading="lazy" referrerpolicy="no-referrer">
+            <div class="hero-stock-img-wrap" style="position: relative;">
+              <img id="heroStockImg" src="https://i.ebayimg.com/images/g/CXoAAeSw-MdqfbfC/s-l500.jpg" alt="Lenovo Legion 9" loading="lazy" referrerpolicy="no-referrer">
+              <div class="inv-card-photo-watcher-badge" id="heroStockWatcher">
+                <i class="fa-solid fa-heart"></i>
+                <span id="heroStockWatcherText">6 watching</span>
+              </div>
             </div>
             <div class="hero-stock-info">
+              <div class="hero-stock-price-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div class="hero-stock-price" id="heroStockPrice" style="font-family: var(--font-heading); font-weight: 800; font-size: 1.35rem; color: var(--text-main);">£3,799.00</div>
+                <div class="inv-card-views-prominent-badge new-listing-views-badge" id="heroStockViews">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span id="heroStockViewsText">Just Listed</span>
+                </div>
+              </div>
               <div class="hero-stock-badge"><i class="fa-solid fa-truck-fast"></i> DPD Next-Day Delivery</div>
               <h3 class="hero-stock-title" id="heroStockTitle">NEW Lenovo Legion 9 18" Ultra 9 275HX 64GB 2TB RTX 5090 UHD+ 4K 240Hz Laptop</h3>
-              <a id="heroStockLink" href="https://www.ebay.co.uk/itm/267755998578" target="_blank" rel="noopener" class="btn btn-ebay btn-sm" style="width: 100%; margin-top: 10px;">
+              <a id="heroStockLink" href="https://www.ebay.co.uk/itm/267755998578" target="_blank" rel="noopener" class="btn btn-ebay btn-sm" style="width: 100%; margin-top: auto;">
                 <span>View Listing on eBay</span>
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
               </a>

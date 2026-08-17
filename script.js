@@ -189,49 +189,63 @@ function setupHeroStockCarousel() {
 
   if (!container) return;
 
-  // Active flagship listings with direct high-speed eBay CDN images
+  // Active flagship listings with direct high-speed eBay CDN images, watchers, and views
   let liveListings = [
     {
       title: "NEW Lenovo Legion 9 18\" Ultra 9 275HX 64GB 2TB RTX 5090 UHD+ 4K 240Hz Laptop",
       price: "£3,799.00",
       img: "https://i.ebayimg.com/images/g/CXoAAeSw-MdqfbfC/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267755998578"
+      url: "https://www.ebay.co.uk/itm/267755998578",
+      watchers: 6,
+      views: 0
     },
     {
       title: "Alienware 18 Area-51 Ultra 9 275HX RTX 5080 32GB 2TB QHD+ 300Hz Gaming Laptop",
       price: "£2,599.00",
       img: "https://i.ebayimg.com/images/g/IMQAAeSwqhxqRVu-/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267745470208"
+      url: "https://www.ebay.co.uk/itm/267745470208",
+      watchers: 44,
+      views: 729
     },
     {
       title: "NEW HP Omen MAX 16 Ultra 9 275HX RTX 5090 64GB 2TB QHD 240Hz OLED Gaming Laptop",
       price: "£2,899.00",
       img: "https://i.ebayimg.com/images/g/2HwAAeSwSKxqfZrP/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267755930402"
+      url: "https://www.ebay.co.uk/itm/267755930402",
+      watchers: 8,
+      views: 0
     },
     {
       title: "NEW Lenovo Legion Pro 7i U9 275HX RTX 5080 32GB 2TB 240Hz OLED Laptop W11Pro WTY",
       price: "£2,599.00",
       img: "https://i.ebayimg.com/images/g/HlsAAeSwdh5qezif/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267753890742"
+      url: "https://www.ebay.co.uk/itm/267753890742",
+      watchers: 12,
+      views: 284
     },
     {
       title: "NEW ASUS ROG Zephyrus G14 Ryzen AI 9 HX 370 32GB 2TB RTX 5080 OLED 120Hz Laptop",
       price: "£2,699.00",
       img: "https://i.ebayimg.com/images/g/nhAAAeSwYexqVg10/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267727321251"
+      url: "https://www.ebay.co.uk/itm/267727321251",
+      watchers: 45,
+      views: 1968
     },
     {
       title: "NEW Lenovo Legion Go 2 - Z2 Extreme 32GB 1TB OLED 144Hz Portable Mini PC Console",
       price: "£1,099.00",
       img: "https://i.ebayimg.com/images/g/OPEAAeSwiSdqGr2r/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267727293251"
+      url: "https://www.ebay.co.uk/itm/267727293251",
+      watchers: 24,
+      views: 890
     },
     {
-      title: "Lenovo Legion Pro 5 Ryzen 9 7945HX RTX 4070 16GB 512GB QHD+ 240Hz Gaming Laptop",
-      price: "£1,049.00",
-      img: "https://i.ebayimg.com/images/g/yeEAAeSw3bJqfa3q/s-l500.jpg",
-      url: "https://www.ebay.co.uk/itm/267755974090"
+      title: "Razer Blade 16 i9 13950HX RTX 4080 32GB 1TB QHD+ 240Hz Laptop",
+      price: "£949.00",
+      img: "https://i.ebayimg.com/images/g/vCIAAeSwbXZqT130/s-l500.webp",
+      url: "https://www.ebay.co.uk/itm/267713401569",
+      watchers: 82,
+      views: 2411
     }
   ];
 
@@ -252,6 +266,38 @@ function setupHeroStockCarousel() {
     if (linkEl) linkEl.href = item.url;
     if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
 
+    // Watchers Overlay Badge (Top Right of Photo)
+    const heroWatcherEl = document.getElementById('heroStockWatcher');
+    const heroWatcherTextEl = document.getElementById('heroStockWatcherText');
+    if (heroWatcherEl && heroWatcherTextEl) {
+      const wCount = typeof item.watchers === 'number' ? item.watchers : 0;
+      if (wCount > 0) {
+        heroWatcherEl.style.display = 'inline-flex';
+        heroWatcherTextEl.textContent = `${wCount} watching`;
+      } else {
+        heroWatcherEl.style.display = 'inline-flex';
+        heroWatcherTextEl.textContent = 'Active';
+      }
+    }
+
+    // Views Badge (Prominent beside price)
+    const heroViewsEl = document.getElementById('heroStockViews');
+    const heroViewsTextEl = document.getElementById('heroStockViewsText');
+    if (heroViewsEl && heroViewsTextEl) {
+      const vCount = typeof item.views === 'number' ? item.views : 0;
+      if (vCount > 0) {
+        heroViewsEl.className = 'inv-card-views-prominent-badge';
+        heroViewsTextEl.textContent = `${vCount.toLocaleString()} views (24h)`;
+        const icon = heroViewsEl.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-eye';
+      } else {
+        heroViewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
+        heroViewsTextEl.textContent = 'Just Listed';
+        const icon = heroViewsEl.querySelector('i');
+        if (icon) icon.className = 'fa-solid fa-bolt';
+      }
+    }
+
     // Dynamic eBay Coupon Badge for Hero Card
     let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
     if (item.coupon) {
@@ -264,23 +310,6 @@ function setupHeroStockCarousel() {
       couponBadgeEl.style.display = 'inline-flex';
     } else {
       if (couponBadgeEl) couponBadgeEl.remove();
-    }
-
-    // Dynamic Live In-Browser Watcher Counter for Hero Card
-    const heroIdMatch = item.url ? item.url.match(/itm\/(\d+)/) : null;
-    let heroWatcherEl = document.getElementById('heroStockWatcher');
-    if (heroIdMatch && typeof window.fetchLiveItemWatchers === 'function') {
-      window.fetchLiveItemWatchers(heroIdMatch[1], (count) => {
-        if (!heroWatcherEl) heroWatcherEl = document.getElementById('heroStockWatcher');
-        if (heroWatcherEl) {
-          if (count > 0) {
-            heroWatcherEl.style.display = 'inline-flex';
-            heroWatcherEl.innerHTML = `<i class="fa-solid fa-eye"></i> ${count} watching`;
-          } else {
-            heroWatcherEl.style.display = 'none';
-          }
-        }
-      });
     }
   }
 

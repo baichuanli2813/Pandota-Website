@@ -128,7 +128,8 @@ foreach ($it in $items) {
     }
     
     $pillsHtml = $pills -join "`n                "
-    $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
+    $rawImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
+    $cdnImg = if ($rawImg -match '\.webp') { $rawImg -replace '\.webp', '.jpg' } else { $rawImg }
 
     # Coupon Check
     $hasCoupon = ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "")
@@ -187,7 +188,7 @@ foreach ($it in $items) {
           <!-- Item $itemId -->
           <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
             <div class="inv-card-img-wrap">
-              <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
+              <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='images/ebay_item_$itemId.jpg';}">
 $watchOverlayHtml
             </div>
             <div class="inv-card-body">

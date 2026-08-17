@@ -411,7 +411,26 @@ function makeAllCardsVisible() {
 
 // Live Fetch eBay Feedback, Items Sold, and Followers
 async function fetchEbayLiveStats() {
-  const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
+  // 1. Try instantaneous load from auto-synced dataset
+  try {
+    const localRes = await fetch('live_store_stats.json?v=' + Date.now());
+    if (localRes.ok) {
+      const stats = await localRes.json();
+      if (stats) {
+        const feedbackEl = document.getElementById('stat-feedback');
+        const itemsEl = document.getElementById('stat-items-sold');
+        const followersEl = document.getElementById('stat-followers');
+
+        if (feedbackEl && stats.positive_feedback) feedbackEl.textContent = stats.positive_feedback;
+        if (itemsEl && stats.items_sold) itemsEl.textContent = stats.items_sold;
+        if (followersEl && stats.followers) followersEl.textContent = stats.followers;
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // 2. Direct fallback proxy to live eBay profile
+  const storeUrl = 'https://www.ebay.co.uk/usr/geoff_lee367';
   const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}`;
 
   try {

@@ -29,6 +29,14 @@ $countNew = 0
 $countOpened = 0
 $countUsed = 0
 $countParts = 0
+$countCoupons = 0
+
+# Count active coupons across items
+foreach ($it in $items) {
+    if ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "") {
+        $countCoupons++
+    }
+}
 
 foreach ($it in $items) {
     $itemId = $it.ItemId
@@ -115,6 +123,19 @@ foreach ($it in $items) {
     $pillsHtml = $pills -join "`n                "
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
 
+    # Coupon Check
+    $hasCoupon = ($it.PSObject.Properties['Coupon'] -and $it.Coupon -and $it.Coupon.ToString().Trim() -ne "")
+    $couponAttr = if ($hasCoupon) { 'data-coupon="true"' } else { 'data-coupon="false"' }
+    $couponBadgeHtml = if ($hasCoupon) {
+        @"
+                <div class="inv-card-coupon-badge" title="Active eBay Promotion">
+                  <i class="fa-solid fa-tag"></i> $($it.Coupon)
+                </div>
+"@
+    } else {
+        ""
+    }
+
     # Use 100% exact Seller Hub Watchers directly from item
     $watchCount = if ($it.PSObject.Properties['Watchers'] -and $it.Watchers -ne $null) {
         [int]$it.Watchers
@@ -140,13 +161,14 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond">
+          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>
             <div class="inv-card-body">
               <div class="inv-card-price-row">
                 <div class="inv-card-price">$price</div>
+$couponBadgeHtml
 $watchBadgeHtml
               </div>
               <h3 class="inv-card-title">$title</h3>
@@ -161,6 +183,16 @@ $watchBadgeHtml
           </div>
 
 "@
+}
+
+$couponPillHtml = if ($countCoupons -gt 0) {
+    @"
+            <button class="condition-pill-btn coupon-pill-btn" data-condition="coupon" id="couponFilterPill">
+              <i class="fa-solid fa-tag"></i> eBay Coupons ($countCoupons)
+            </button>
+"@
+} else {
+    ""
 }
 
 $fullHtml = @"
@@ -387,6 +419,7 @@ $fullHtml = @"
             <button class="condition-pill-btn" data-condition="For parts or not working">
               <i class="fa-solid fa-wrench"></i> For Parts ($countParts)
             </button>
+$couponPillHtml
           </div>
 
           <!-- Search & Sort Row -->
@@ -516,7 +549,9 @@ $cardsHtml
           var matchesCond = true;
 
           if (activeCondition !== 'all') {
-            if (activeCondition === 'New') {
+            if (activeCondition === 'coupon') {
+              matchesCond = (card.getAttribute('data-coupon') === 'true');
+            } else if (activeCondition === 'New') {
               matchesCond = (cond === 'New');
             } else if (activeCondition === 'Opened - never used') {
               matchesCond = (cond === 'Opened - never used');

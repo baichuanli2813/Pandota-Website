@@ -622,7 +622,9 @@ function setupInventoryPageControls() {
       
       let matchesCondition = true;
       if (activeConditionFilter && activeConditionFilter !== 'all') {
-        if (activeConditionFilter === 'New') {
+        if (activeConditionFilter === 'coupon') {
+          matchesCondition = (card.getAttribute('data-coupon') === 'true');
+        } else if (activeConditionFilter === 'New') {
           matchesCondition = (cardCond === 'New');
         } else if (activeConditionFilter === 'Opened - never used') {
           matchesCondition = (cardCond === 'Opened - never used');

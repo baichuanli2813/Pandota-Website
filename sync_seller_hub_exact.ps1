@@ -1,5 +1,5 @@
 # ==============================================================================
-# Pandota Ltd - Direct eBay Seller Hub Synchronizer
+# Pandota Ltd - Direct eBay Seller Hub Synchronizer (In-Stock Only: Qty >= 1)
 # Uses authorized Seller User Token to fetch 100% exact listings & watcher counts
 # ==============================================================================
 
@@ -29,9 +29,9 @@ if (-not $token) {
     exit 1
 }
 
-Write-Host "Fetching active listings directly from eBay Seller Hub database..."
+Write-Host "Fetching active in-stock listings directly from eBay Seller Hub database..."
 
-$allSellerItems = @()
+$allInStockItems = @()
 $page = 1
 $totalPages = 1
 
@@ -84,6 +84,15 @@ do {
     $itemsOnPage = $activeList.ItemArray.Item
     if ($itemsOnPage) {
         foreach ($item in $itemsOnPage) {
+            # Filter strictly for available quantity >= 1
+            $qtyTotal = [int]$item.Quantity
+            $qtySold = [int]$item.SellingStatus.QuantitySold
+            $qtyAvail = $qtyTotal - $qtySold
+
+            if ($qtyAvail -lt 1) {
+                continue # Skip out-of-stock / sold items
+            }
+
             $itemId = [string]$item.ItemID
             $title = [string]$item.Title
             
@@ -119,43 +128,39 @@ do {
                 "Used"
             }
 
-            $allSellerItems += [PSCustomObject]@{
-                ItemId    = $itemId
-                Title     = $title
-                Price     = $priceStr
-                NumPrice  = $priceNum
-                Url       = "https://www.ebay.co.uk/itm/$itemId"
-                Img       = $img
-                Watchers  = $watchers
-                Condition = $cond
+            $allInStockItems += [PSCustomObject]@{
+                ItemId       = $itemId
+                Title        = $title
+                Price        = $priceStr
+                NumPrice     = $priceNum
+                AvailableQty = $qtyAvail
+                Url          = "https://www.ebay.co.uk/itm/$itemId"
+                Img          = $img
+                Watchers     = $watchers
+                Condition    = $cond
             }
         }
     }
 
-    Write-Host "Page $page of $totalPages loaded ($($allSellerItems.Count) items total)"
+    Write-Host "Page $page of $totalPages checked ($($allInStockItems.Count) in-stock items found so far)"
     $page++
 } while ($page -le $totalPages -and $page -le 5)
 
-Write-Host "`nSuccessfully retrieved $($allSellerItems.Count) active listings from your eBay Seller Hub!"
+Write-Host "`nSuccessfully retrieved $($allInStockItems.Count) currently active, in-stock items (Qty >= 1) from Seller Hub!"
 
-# Filter to the active standalone laptop and high performance computing listings (exclude test/bundle listings)
-$validLaptopListings = $allSellerItems | Where-Object { $_.NumPrice -ge 100 -and $_.Title -notmatch 'bundle listing' }
-
-Write-Host "Found $($validLaptopListings.Count) active laptop & workstation listings with 100% exact watch counts!"
-
-# Save exact catalog with Watchers
-$validLaptopListings | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
-$validLaptopListings | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
+# Save exact in-stock catalog with exact Watchers
+$allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
+$allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
 
 # Save conditions mapping
 $condsMap = @{}
-foreach ($it in $validLaptopListings) {
+foreach ($it in $allInStockItems) {
     $condsMap[$it.ItemId] = $it.Condition
 }
 $condsMap | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditions.json" -Encoding utf8
 
 # 2. Build inventory.html and update index.html
-Write-Host "`nRebuilding inventory.html with exact Seller Hub watchers..."
+Write-Host "`nRebuilding inventory.html with exact in-stock listings and watchers..."
 & ".\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
 
 # 3. Sync Feedback Ratings
@@ -188,5 +193,5 @@ if (Test-Path $targetDir) {
 }
 
 Write-Host "`n====================================================="
-Write-Host "  SELLER HUB EXACT SYNC COMPLETE!                    "
+Write-Host "  IN-STOCK (QTY >= 1) SYNC COMPLETE!                 "
 Write-Host "====================================================="

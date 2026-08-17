@@ -252,64 +252,76 @@ function setupHeroStockCarousel() {
   let currentIndex = 0;
   let autoCycleTimer = null;
 
-  function renderHeroItem(idx) {
+  function renderHeroItem(idx, animate = true) {
     if (!liveListings || liveListings.length === 0) return;
     const item = liveListings[idx];
     if (!item) return;
 
-    if (imgEl) {
-      imgEl.src = item.img;
-      imgEl.alt = item.title;
-    }
-    if (titleEl) titleEl.textContent = item.title;
-    if (priceEl) priceEl.textContent = item.price;
-    if (linkEl) linkEl.href = item.url;
-    if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
+    function updateDOM() {
+      if (imgEl) {
+        imgEl.src = item.img;
+        imgEl.alt = item.title;
+      }
+      if (titleEl) titleEl.textContent = item.title;
+      if (priceEl) priceEl.textContent = item.price;
+      if (linkEl) linkEl.href = item.url;
+      if (counterEl) counterEl.textContent = `${idx + 1} / ${liveListings.length}`;
 
-    // Watchers Overlay Badge (Top Right of Photo)
-    const heroWatcherEl = document.getElementById('heroStockWatcher');
-    const heroWatcherTextEl = document.getElementById('heroStockWatcherText');
-    if (heroWatcherEl && heroWatcherTextEl) {
-      const wCount = typeof item.watchers === 'number' ? item.watchers : 0;
-      if (wCount > 0) {
-        heroWatcherEl.style.display = 'inline-flex';
-        heroWatcherTextEl.textContent = `${wCount} watching`;
+      // Watchers Overlay Badge (Top Right of Photo)
+      const heroWatcherEl = document.getElementById('heroStockWatcher');
+      const heroWatcherTextEl = document.getElementById('heroStockWatcherText');
+      if (heroWatcherEl && heroWatcherTextEl) {
+        const wCount = typeof item.watchers === 'number' ? item.watchers : 0;
+        if (wCount > 0) {
+          heroWatcherEl.style.display = 'inline-flex';
+          heroWatcherTextEl.textContent = `${wCount} watching`;
+        } else {
+          heroWatcherEl.style.display = 'inline-flex';
+          heroWatcherTextEl.textContent = 'Active';
+        }
+      }
+
+      // Views Badge (Prominent beside price)
+      const heroViewsEl = document.getElementById('heroStockViews');
+      const heroViewsTextEl = document.getElementById('heroStockViewsText');
+      if (heroViewsEl && heroViewsTextEl) {
+        const vCount = typeof item.views === 'number' ? item.views : 0;
+        if (vCount > 0) {
+          heroViewsEl.className = 'inv-card-views-prominent-badge';
+          heroViewsTextEl.textContent = `${vCount.toLocaleString()} views (24h)`;
+          const icon = heroViewsEl.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-eye';
+        } else {
+          heroViewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
+          heroViewsTextEl.textContent = 'Just Listed';
+          const icon = heroViewsEl.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-bolt';
+        }
+      }
+
+      // Dynamic eBay Coupon Badge for Hero Card
+      let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
+      if (item.coupon) {
+        if (!couponBadgeEl) {
+          couponBadgeEl = document.createElement('div');
+          couponBadgeEl.className = 'hero-stock-coupon-badge';
+          if (titleEl) titleEl.parentNode.insertBefore(couponBadgeEl, titleEl);
+        }
+        couponBadgeEl.innerHTML = `<i class="fa-solid fa-ticket"></i> ${item.coupon}`;
+        couponBadgeEl.style.display = 'inline-flex';
       } else {
-        heroWatcherEl.style.display = 'inline-flex';
-        heroWatcherTextEl.textContent = 'Active';
+        if (couponBadgeEl) couponBadgeEl.remove();
       }
     }
 
-    // Views Badge (Prominent beside price)
-    const heroViewsEl = document.getElementById('heroStockViews');
-    const heroViewsTextEl = document.getElementById('heroStockViewsText');
-    if (heroViewsEl && heroViewsTextEl) {
-      const vCount = typeof item.views === 'number' ? item.views : 0;
-      if (vCount > 0) {
-        heroViewsEl.className = 'inv-card-views-prominent-badge';
-        heroViewsTextEl.textContent = `${vCount.toLocaleString()} views (24h)`;
-        const icon = heroViewsEl.querySelector('i');
-        if (icon) icon.className = 'fa-solid fa-eye';
-      } else {
-        heroViewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
-        heroViewsTextEl.textContent = 'Just Listed';
-        const icon = heroViewsEl.querySelector('i');
-        if (icon) icon.className = 'fa-solid fa-bolt';
-      }
-    }
-
-    // Dynamic eBay Coupon Badge for Hero Card
-    let couponBadgeEl = container.querySelector('.hero-stock-coupon-badge');
-    if (item.coupon) {
-      if (!couponBadgeEl) {
-        couponBadgeEl = document.createElement('div');
-        couponBadgeEl.className = 'hero-stock-coupon-badge';
-        if (titleEl) titleEl.parentNode.insertBefore(couponBadgeEl, titleEl);
-      }
-      couponBadgeEl.innerHTML = `<i class="fa-solid fa-ticket"></i> ${item.coupon}`;
-      couponBadgeEl.style.display = 'inline-flex';
+    if (animate && container) {
+      container.classList.add('is-transitioning');
+      setTimeout(() => {
+        updateDOM();
+        container.classList.remove('is-transitioning');
+      }, 120);
     } else {
-      if (couponBadgeEl) couponBadgeEl.remove();
+      updateDOM();
     }
   }
 
@@ -318,7 +330,7 @@ function setupHeroStockCarousel() {
     autoCycleTimer = setInterval(() => {
       if (liveListings.length > 1) {
         currentIndex = (currentIndex + 1) % liveListings.length;
-        renderHeroItem(currentIndex);
+        renderHeroItem(currentIndex, true);
       }
     }, 5000); // Auto-update to next item every 5 seconds
   }
@@ -330,14 +342,14 @@ function setupHeroStockCarousel() {
   window.heroPrevItem = function() {
     if (!liveListings || liveListings.length === 0) return;
     currentIndex = (currentIndex - 1 + liveListings.length) % liveListings.length;
-    renderHeroItem(currentIndex);
+    renderHeroItem(currentIndex, true);
     startAutoCycle();
   };
 
   window.heroNextItem = function() {
     if (!liveListings || liveListings.length === 0) return;
     currentIndex = (currentIndex + 1) % liveListings.length;
-    renderHeroItem(currentIndex);
+    renderHeroItem(currentIndex, true);
     startAutoCycle();
   };
 

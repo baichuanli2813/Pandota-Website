@@ -1297,11 +1297,12 @@
     var currIdx = 0;
     var timer = null;
 
-    function showItem(idx) {
+    function showItem(idx, animate) {
       if (!featuredItems || featuredItems.length === 0) return;
       var item = featuredItems[idx];
       if (!item) return;
 
+      var card = document.getElementById('heroLiveStockContainer');
       var img = document.getElementById('heroStockImg');
       var title = document.getElementById('heroStockTitle');
       var price = document.getElementById('heroStockPrice');
@@ -1311,40 +1312,52 @@
       var viewsEl = document.getElementById('heroStockViews');
       var viewsText = document.getElementById('heroStockViewsText');
 
-      if (img) { img.src = item.img; img.alt = item.title; }
-      if (title) title.textContent = item.title;
-      if (price) price.textContent = item.price;
-      if (link) link.href = item.url;
-      if (counter) counter.textContent = (idx + 1) + ' / ' + featuredItems.length;
+      function updateDOM() {
+        if (img) { img.src = item.img; img.alt = item.title; }
+        if (title) title.textContent = item.title;
+        if (price) price.textContent = item.price;
+        if (link) link.href = item.url;
+        if (counter) counter.textContent = (idx + 1) + ' / ' + featuredItems.length;
 
-      if (watcherText) {
-        watcherText.textContent = (item.watchers > 0) ? (item.watchers + ' watching') : 'Active';
+        if (watcherText) {
+          watcherText.textContent = (item.watchers > 0) ? (item.watchers + ' watching') : 'Active';
+        }
+
+        if (viewsEl && viewsText) {
+          if (item.views > 0) {
+            viewsEl.className = 'inv-card-views-prominent-badge';
+            viewsText.textContent = Number(item.views).toLocaleString() + ' views (24h)';
+            var icon = viewsEl.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-eye';
+          } else {
+            viewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
+            viewsText.textContent = 'Just Listed';
+            var icon = viewsEl.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-bolt';
+          }
+        }
       }
 
-      if (viewsEl && viewsText) {
-        if (item.views > 0) {
-          viewsEl.className = 'inv-card-views-prominent-badge';
-          viewsText.textContent = Number(item.views).toLocaleString() + ' views (24h)';
-          var icon = viewsEl.querySelector('i');
-          if (icon) icon.className = 'fa-solid fa-eye';
-        } else {
-          viewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
-          viewsText.textContent = 'Just Listed';
-          var icon = viewsEl.querySelector('i');
-          if (icon) icon.className = 'fa-solid fa-bolt';
-        }
+      if (animate && card) {
+        card.classList.add('is-transitioning');
+        setTimeout(function() {
+          updateDOM();
+          card.classList.remove('is-transitioning');
+        }, 120);
+      } else {
+        updateDOM();
       }
     }
 
     function next() {
       currIdx = (currIdx + 1) % featuredItems.length;
-      showItem(currIdx);
+      showItem(currIdx, true);
       resetTimer();
     }
 
     function prev() {
       currIdx = (currIdx - 1 + featuredItems.length) % featuredItems.length;
-      showItem(currIdx);
+      showItem(currIdx, true);
       resetTimer();
     }
 

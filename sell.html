@@ -590,71 +590,104 @@
     var contact = document.getElementById('sellerContact').value.trim();
     var notes = document.getElementById('extraNotes').value.trim();
 
-    var subject = encodeURIComponent('Valuation Request: ' + brand + ' ' + (model || 'Laptop') + ' (' + condition + ')');
+    var submitBtn = document.getElementById('submitValuationBtn');
+    var form = document.getElementById('valuationForm');
+    var formWrapper = document.querySelector('.sell-form-wrapper');
 
-    var bodyLines = [
-      'Hello Pandota Purchasing Team,',
-      '',
-      'I would like to request a valuation quote for the following hardware:',
-      '',
-      '--- HARDWARE SPECIFICATIONS ---',
-      'Seller Type: ' + sellerType,
-      'Brand: ' + brand,
-      'Model: ' + model,
-      'Processor (CPU): ' + (cpu || 'N/A'),
-      'Graphics (GPU): ' + (gpu || 'N/A'),
-      'RAM & Storage: ' + (specs || 'N/A'),
-      'Condition: ' + condition,
-      'Included Accessories: ' + (packaging || 'Standard Charger'),
-      'Target / Asking Price: ' + (targetPrice ? '£' + targetPrice.replace(/[^\d.]/g, '') : 'Best Market Offer'),
-      '',
-      '--- CONTACT & NOTES ---',
-      'Seller Email: ' + contact,
-      'Additional Notes: ' + (notes || 'None'),
-      '',
-      'Looking forward to your quote valuation!'
-    ];
+    if (!contact) {
+      alert('Please provide your email address so we can send your valuation quote.');
+      return;
+    }
 
-    var body = encodeURIComponent(bodyLines.join('\n'));
-    var email = 'purchasing@pandota.co.uk';
-    var mailtoUrl = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
+    // Disable button and show sending indicator
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Sending Valuation Request...</span>';
+    }
 
-    // Copy formatted request to clipboard
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(bodyLines.join('\n'));
+    var payload = {
+      "Seller Type": sellerType,
+      "Brand / Manufacturer": brand || 'Not specified',
+      "Model / Series": model || 'Not specified',
+      "Processor (CPU)": cpu || 'N/A',
+      "Graphics (GPU)": gpu || 'N/A',
+      "RAM & Storage": specs || 'N/A',
+      "Condition": condition,
+      "Included Accessories": packaging || 'Standard Charger / Box',
+      "Target Price (£)": targetPrice ? ('£' + targetPrice.replace(/[^\d.]/g, '')) : 'Best Market Offer',
+      "Seller Contact Email": contact,
+      "Additional Notes / Manifest": notes || 'None',
+      "_subject": 'New Hardware Valuation Request: ' + (brand ? brand + ' ' : '') + (model || 'Hardware') + ' (' + condition + ')',
+      "_replyto": contact,
+      "_template": 'table',
+      "_captcha": 'false'
+    };
+
+    fetch('https://formsubmit.co/ajax/purchasing@pandota.co.uk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      // Success: render confirmation card
+      var successHtml = '' +
+        '<div class="valuation-success-card" id="valuationSuccessCard">' +
+          '<div class="valuation-success-icon"><i class="fa-solid fa-circle-check"></i></div>' +
+          '<h3>Valuation Request Sent Successfully!</h3>' +
+          '<p>Thank you! Your hardware specifications have been sent directly to our purchasing team at <strong>purchasing@pandota.co.uk</strong>. We will review your details and email you our valuation offer at <strong>' + contact + '</strong> promptly.</p>' +
+          '<div class="valuation-success-details">' +
+            '<p><strong>Item:</strong> ' + (brand ? brand + ' ' : '') + (model || 'Hardware') + '</p>' +
+            '<p><strong>Condition:</strong> ' + condition + '</p>' +
+            (cpu ? '<p><strong>CPU:</strong> ' + cpu + '</p>' : '') +
+            (gpu ? '<p><strong>GPU:</strong> ' + gpu + '</p>' : '') +
+            (targetPrice ? '<p><strong>Asking Target:</strong> £' + targetPrice.replace(/[^\d.]/g, '') + '</p>' : '') +
+          '</div>' +
+          '<button type="button" class="btn-reset-valuation" onclick="resetValuationForm()">' +
+            '<i class="fa-solid fa-rotate-left"></i> <span>Submit Another Valuation</span>' +
+          '</button>' +
+        '</div>';
+
+      form.style.display = 'none';
+      var header = formWrapper ? formWrapper.querySelector('.sell-form-header') : null;
+      if (header) header.style.display = 'none';
+      
+      var existingSuccess = document.getElementById('valuationSuccessCard');
+      if (existingSuccess) existingSuccess.remove();
+      
+      if (formWrapper) formWrapper.insertAdjacentHTML('beforeend', successHtml);
+    })
+    .catch(function(err) {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Submit Valuation Request</span> <i class="fa-solid fa-arrow-right"></i>';
       }
-    } catch(err) {}
+      alert('Unable to send automatically due to a network issue. Please check your connection or email purchasing@pandota.co.uk directly.');
+    });
+  }
 
-    // Show toast notification
-    var toast = document.getElementById('emailToast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'emailToast';
-      toast.className = 'email-copy-toast';
-      document.body.appendChild(toast);
+  function resetValuationForm() {
+    var form = document.getElementById('valuationForm');
+    var formWrapper = document.querySelector('.sell-form-wrapper');
+    var successCard = document.getElementById('valuationSuccessCard');
+    if (successCard) successCard.remove();
+
+    if (form) {
+      form.reset();
+      form.style.display = '';
     }
-    toast.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Valuation details copied! Opening your email client to send...</span>';
-    toast.classList.add('show');
-    setTimeout(function() {
-      toast.classList.remove('show');
-    }, 4500);
+    var header = formWrapper ? formWrapper.querySelector('.sell-form-header') : null;
+    if (header) header.style.display = '';
 
-    // Update button text temporarily
-    var btn = document.getElementById('submitValuationBtn');
-    if (btn) {
-      var origHtml = btn.innerHTML;
-      btn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Opening Email Client...</span>';
-      btn.style.background = '#10b981';
-      setTimeout(function() {
-        btn.innerHTML = origHtml;
-        btn.style.background = '';
-      }, 4000);
+    var submitBtn = document.getElementById('submitValuationBtn');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Submit Valuation Request</span> <i class="fa-solid fa-arrow-right"></i>';
+      submitBtn.style.background = '';
     }
-
-    setTimeout(function() {
-      window.location.href = mailtoUrl;
-    }, 300);
   }
   </script>
 </body>

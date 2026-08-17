@@ -880,6 +880,7 @@ $cardsHtml
 
       function filterGrid() {
         var query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        var queryWords = query ? query.split(/\s+/).filter(function(w) { return w.length > 0; }) : [];
         var cards = grid.querySelectorAll('.inventory-card');
         var visible = 0;
         var total = cards.length;
@@ -889,8 +890,11 @@ $cardsHtml
           var features = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
           var cond = (card.getAttribute('data-condition') || '').trim();
           var cat = (card.getAttribute('data-category') || '').trim();
+          var combinedText = (title + ' ' + features + ' ' + cond + ' ' + cat).toLowerCase();
 
-          var matchesSearch = !query || title.indexOf(query) !== -1 || features.indexOf(query) !== -1;
+          var matchesSearch = queryWords.length === 0 || queryWords.every(function(word) {
+            return combinedText.indexOf(word) !== -1;
+          });
           var matchesCategory = (activeCategory === 'all') || (cat.toLowerCase() === activeCategory.toLowerCase());
           var matchesCond = true;
 

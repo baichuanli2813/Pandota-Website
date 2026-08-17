@@ -741,6 +741,7 @@ function setupInventoryPageControls() {
 
   function filterCards() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const searchWords = searchTerm ? searchTerm.split(/\s+/).filter(w => w.length > 0) : [];
     const cards = grid.querySelectorAll('.inventory-card');
     let visibleCount = 0;
     const totalCount = cards.length;
@@ -750,8 +751,9 @@ function setupInventoryPageControls() {
       const featuresText = (card.querySelector('.inv-card-features')?.textContent || '').toLowerCase();
       const cardCond = (card.getAttribute('data-condition') || '').trim();
       const cardCat = (card.getAttribute('data-category') || '').trim();
+      const combinedText = `${title} ${featuresText} ${cardCond} ${cardCat}`.toLowerCase();
       
-      const matchesSearch = !searchTerm || title.includes(searchTerm) || featuresText.includes(searchTerm);
+      const matchesSearch = searchWords.length === 0 || searchWords.every(word => combinedText.includes(word));
       const matchesCategory = (activeCategoryFilter === 'all') || (cardCat.toLowerCase() === activeCategoryFilter.toLowerCase());
       
       let matchesCondition = true;

@@ -328,29 +328,29 @@ function setupHeroStockCarousel() {
   }
 
   window.heroPrevItem = function() {
-    if (liveListings.length === 0) return;
+    if (!liveListings || liveListings.length === 0) return;
     currentIndex = (currentIndex - 1 + liveListings.length) % liveListings.length;
     renderHeroItem(currentIndex);
     startAutoCycle();
   };
 
   window.heroNextItem = function() {
-    if (liveListings.length === 0) return;
+    if (!liveListings || liveListings.length === 0) return;
     currentIndex = (currentIndex + 1) % liveListings.length;
     renderHeroItem(currentIndex);
     startAutoCycle();
   };
 
   if (prevBtn) {
-    prevBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+    prevBtn.addEventListener('click', function(e) {
+      if (e) e.preventDefault();
       window.heroPrevItem();
     });
   }
 
   if (nextBtn) {
-    nextBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+    nextBtn.addEventListener('click', function(e) {
+      if (e) e.preventDefault();
       window.heroNextItem();
     });
   }
@@ -358,80 +358,32 @@ function setupHeroStockCarousel() {
   container.addEventListener('mouseenter', stopAutoCycle);
   container.addEventListener('mouseleave', startAutoCycle);
 
-  // Live Fetch Active eBay Store Listings so sold items are automatically replaced
-  async function fetchLiveStoreItems() {
-    const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}&disableCache=true`;
-
+  // Load fresh items from our in-stock JSON dataset
+  async function loadFreshStoreListings() {
     try {
-      const response = await fetch(proxyUrl);
+      const response = await fetch('all_82_with_exact_scraped_prices.json?v=' + Date.now());
       if (!response.ok) return;
-
       const data = await response.json();
-      if (!data || !data.contents) return;
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data.contents, 'text/html');
-
-      const cardEls = doc.querySelectorAll('article.str-item-card, div.str-item-card');
-      const scrapedLiveItems = [];
-
-      cardEls.forEach(card => {
-        const linkEl = card.querySelector('a.str-item-card__link, a[href*="/itm/"]');
-        if (!linkEl) return;
-
-        const href = linkEl.getAttribute('href') || '';
-        const idMatch = href.match(/itm\/(\d+)/);
-        if (!idMatch) return;
-
-        const id = idMatch[1];
-        const titleEl = card.querySelector('.str-item-card__property-title, .str-card-title, h3');
-        const priceEl = card.querySelector('.str-item-card__property-displayPrice, .str-item-card__primary span');
-        const imgEl = card.querySelector('img');
-
-        // Extract active eBay coupon if present
-        const couponEl = card.querySelector('.str-item-card__coupon, .str-item-card__promotion, .ux-textspans--RED, [class*="coupon"]');
-        let couponText = '';
-        if (couponEl) {
-          couponText = couponEl.textContent.trim();
-        } else {
-          const cardText = card.textContent || '';
-          const match = cardText.match(/(\d+%\s+off|save\s+£\d+|coupon|code:\s*[A-Z0-9]+)/i);
-          if (match) couponText = match[0];
-        }
-
-        let imgSrc = '';
-        if (imgEl) {
-          imgSrc = imgEl.getAttribute('data-src') || imgEl.getAttribute('src') || '';
-          if (imgSrc.startsWith('data:image') && imgEl.getAttribute('data-src')) {
-            imgSrc = imgEl.getAttribute('data-src');
-          }
-        }
-        if (!imgSrc || imgSrc.startsWith('data:image')) {
-          imgSrc = `https://i.ebayimg.com/images/g/ebay_item_${id}/s-l500.jpg`;
-        }
-
-        scrapedLiveItems.push({
-          title: titleText,
-          price: priceText,
-          img: imgSrc,
-          url: `https://www.ebay.co.uk/itm/${id}`,
-          coupon: couponText
-        });
-      });
-
-      if (scrapedLiveItems.length > 0) {
-        liveListings = scrapedLiveItems;
-        currentIndex = 0;
-        renderHeroItem(0);
-        console.log(`Hero Viewing Window: Successfully synced ${liveListings.length} active live eBay store listings!`);
+      if (Array.isArray(data) && data.length > 0) {
+        liveListings = data.slice(0, 10).map(item => ({
+          title: item.Title || item.title || '',
+          price: item.Price || item.price || '',
+          img: item.Img || item.img || '',
+          url: item.Url || item.url || '',
+          watchers: parseInt(item.Watchers || item.watchers || 0, 10),
+          views: parseInt(item.Views || item.views || 0, 10),
+          coupon: item.Coupon || item.coupon || ''
+        }));
+        if (counterEl) counterEl.textContent = `${currentIndex + 1} / ${liveListings.length}`;
+        renderHeroItem(currentIndex);
       }
     } catch (err) {
-      console.log('Hero live store sync fallback:', err);
+      console.log('Hero store items load note:', err);
     }
   }
 
-  fetchLiveStoreItems();
+  loadFreshStoreListings();
+  renderHeroItem(0);
   startAutoCycle();
 }
 

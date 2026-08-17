@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -258,9 +258,9 @@
 
             <!-- Left & Right Arrow Navigation for Hero Showcase -->
             <div class="hero-carousel-controls">
-              <button class="hero-nav-arrow" id="heroPrevBtn" aria-label="Previous laptop item"><i class="fa-solid fa-chevron-left"></i></button>
+              <button type="button" class="hero-nav-arrow" id="heroPrevBtn" aria-label="Previous laptop item" onclick="if(typeof window.heroPrevItem === 'function') window.heroPrevItem();"><i class="fa-solid fa-chevron-left"></i></button>
               <span id="heroCardCounter" style="font-size: 0.8rem; color: var(--text-sub); font-weight: 600; min-width: 44px; text-align: center;">1 / 7</span>
-              <button class="hero-nav-arrow" id="heroNextBtn" aria-label="Next laptop item"><i class="fa-solid fa-chevron-right"></i></button>
+              <button type="button" class="hero-nav-arrow" id="heroNextBtn" aria-label="Next laptop item" onclick="if(typeof window.heroNextItem === 'function') window.heroNextItem();"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
             <a href="inventory.html" class="hero-inv-view-all">View All (76) &rarr;</a>

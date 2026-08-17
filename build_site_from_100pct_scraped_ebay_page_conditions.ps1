@@ -40,8 +40,10 @@ foreach ($it in $items) {
     $url = $it.Url
     $img = $it.Img
 
-    # Condition is determined ONLY by official eBay listing page condition
-    $cond = if ($officialConds.PSObject.Properties[$itemId]) {
+    # Condition is determined directly from official eBay listing condition
+    $cond = if ($it.PSObject.Properties['Condition'] -and $it.Condition) {
+        $it.Condition
+    } elseif ($officialConds.PSObject.Properties[$itemId]) {
         $officialConds.$itemId
     } else {
         "Used"
@@ -113,16 +115,27 @@ foreach ($it in $items) {
     $pillsHtml = $pills -join "`n                "
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
 
-    # Use 100% exact Seller Hub Watchers if available
-    $watchCount = if ($item.PSObject.Properties['Watchers'] -and $item.Watchers -ne $null) {
-        [int]$item.Watchers
+    # Use 100% exact Seller Hub Watchers directly from item
+    $watchCount = if ($it.PSObject.Properties['Watchers'] -and $it.Watchers -ne $null) {
+        [int]$it.Watchers
     } else {
-        $hash = 0
-        foreach ($char in $itemId.ToCharArray()) { $hash = ($hash * 31 + [int]$char) % 1000 }
-        if ($numPrice -ge 2500) { 24 + ($hash % 24) }
-        elseif ($numPrice -ge 1200) { 15 + ($hash % 16) }
-        elseif ($numPrice -ge 600) { 9 + ($hash % 11) }
-        else { 5 + ($hash % 7) }
+        0
+    }
+
+    $watchBadgeHtml = if ($watchCount -gt 0) {
+        @"
+                <div class="inv-card-watcher-badge" title="$watchCount buyers watching on eBay">
+                  <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
+                  <span class="watcher-count" data-item-id="$itemId">$watchCount watching</span>
+                </div>
+"@
+    } else {
+        @"
+                <div class="inv-card-watcher-badge" title="Active listing on eBay">
+                  <i class="fa-regular fa-heart" style="color: #94a3b8;"></i>
+                  <span class="watcher-count" data-item-id="$itemId">Active</span>
+                </div>
+"@
     }
 
     $cardsHtml += @"
@@ -134,10 +147,7 @@ foreach ($it in $items) {
             <div class="inv-card-body">
               <div class="inv-card-price-row">
                 <div class="inv-card-price">$price</div>
-                <div class="inv-card-watcher-badge" title="$watchCount buyers watching on eBay">
-                  <i class="fa-solid fa-heart" style="color: #ef4444;"></i>
-                  <span class="watcher-count" data-item-id="$itemId">$watchCount watching</span>
-                </div>
+$watchBadgeHtml
               </div>
               <h3 class="inv-card-title">$title</h3>
               <div class="inv-card-features">

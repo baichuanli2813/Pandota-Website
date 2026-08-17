@@ -1,6 +1,6 @@
 # ==============================================================================
 # Pandota Ltd - Direct eBay Seller Hub Synchronizer (In-Stock Only: Qty >= 1)
-# Uses authorized Seller User Token to fetch 100% exact listings & watcher counts
+# Uses authorized Seller User Token to fetch 100% exact listings, conditions & watcher counts
 # ==============================================================================
 
 Write-Host "====================================================="
@@ -85,10 +85,7 @@ do {
     if ($itemsOnPage) {
         foreach ($item in $itemsOnPage) {
             # Filter strictly for available quantity >= 1
-            $qtyTotal = [int]$item.Quantity
-            $qtySold = [int]$item.SellingStatus.QuantitySold
-            $qtyAvail = $qtyTotal - $qtySold
-
+            $qtyAvail = [int]$item.QuantityAvailable
             if ($qtyAvail -lt 1) {
                 continue # Skip out-of-stock / sold items
             }
@@ -102,7 +99,7 @@ do {
             [double]::TryParse($rawPrice, [ref]$priceNum) | Out-Null
             $priceStr = "£" + [string]::Format("{0:N2}", $priceNum)
             
-            # Watchers
+            # Watchers (100% exact from Seller Hub)
             $rawWatch = [string]$item.WatchCount
             $watchers = 0
             if ($rawWatch) { [int]::TryParse($rawWatch, [ref]$watchers) | Out-Null }
@@ -117,17 +114,6 @@ do {
                 $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.webp'
             }
 
-            # Condition
-            $cond = if ($item.ConditionDisplayName) {
-                $cd = [string]$item.ConditionDisplayName
-                if ($cd -match "New") { "New" }
-                elseif ($cd -match "Opened|Open Box|Never Used") { "Opened - never used" }
-                elseif ($cd -match "Parts") { "For parts or not working" }
-                else { "Used" }
-            } else {
-                "Used"
-            }
-
             $allInStockItems += [PSCustomObject]@{
                 ItemId       = $itemId
                 Title        = $title
@@ -137,7 +123,7 @@ do {
                 Url          = "https://www.ebay.co.uk/itm/$itemId"
                 Img          = $img
                 Watchers     = $watchers
-                Condition    = $cond
+                Condition    = "Used" # Default, will fetch exact ConditionID next
             }
         }
     }
@@ -146,21 +132,79 @@ do {
     $page++
 } while ($page -le $totalPages -and $page -le 5)
 
-Write-Host "`nSuccessfully retrieved $($allInStockItems.Count) currently active, in-stock items (Qty >= 1) from Seller Hub!"
+Write-Host "`nSuccessfully retrieved $($allInStockItems.Count) currently active, in-stock items from Seller Hub!"
 
-# Save exact in-stock catalog with exact Watchers
+# Fetch exact ConditionDisplayName for each in-stock item using GetItem
+Write-Host "Fetching official eBay condition for each in-stock listing..."
+
+$condsMap = @{}
+$itemIndex = 0
+
+foreach ($it in $allInStockItems) {
+    $itemIndex++
+    $id = $it.ItemId
+    
+    $xmlReq = @"
+<?xml version="1.0" encoding="utf-8"?>
+<GetItemRequest xmlns="urn:ebay:apis:eBLBaseComponents">
+  <RequesterCredentials>
+    <eBayAuthToken>$token</eBayAuthToken>
+  </RequesterCredentials>
+  <ItemID>$id</ItemID>
+  <DetailLevel>ItemReturnAttributes</DetailLevel>
+</GetItemRequest>
+"@
+
+    $reqFile = [System.IO.Path]::GetTempFileName()
+    $respFile = [System.IO.Path]::GetTempFileName()
+    [System.IO.File]::WriteAllText($reqFile, $xmlReq, [System.Text.Encoding]::UTF8)
+
+    curl.exe -s -X POST "https://api.ebay.com/ws/api.dll" `
+      -H "X-EBAY-API-COMPATIBILITY-LEVEL: 967" `
+      -H "X-EBAY-API-DEV-NAME: $devId" `
+      -H "X-EBAY-API-APP-NAME: $appId" `
+      -H "X-EBAY-API-CERT-NAME: $certId" `
+      -H "X-EBAY-API-CALL-NAME: GetItem" `
+      -H "X-EBAY-API-SITEID: 3" `
+      -H "Content-Type: text/xml" `
+      -d "@$reqFile" `
+      -o "$respFile"
+
+    $rawResp = Get-Content $respFile -Raw -Encoding utf8
+    Remove-Item $reqFile, $respFile -Force -ErrorAction SilentlyContinue
+
+    [xml]$doc = $rawResp
+    $itemObj = $doc.GetItemResponse.Item
+
+    $cond = "Used"
+    if ($itemObj) {
+        $cId = [string]$itemObj.ConditionID
+        $cName = [string]$itemObj.ConditionDisplayName
+        
+        if ($cId -eq "1000" -or $cName -match "Brand New|New$") {
+            $cond = "New"
+        } elseif ($cId -eq "1500" -or $cName -match "Opened|Open Box|Never Used|New other") {
+            $cond = "Opened - never used"
+        } elseif ($cId -eq "7000" -or $cName -match "Parts|Faulty|not working") {
+            $cond = "For parts or not working"
+        } else {
+            $cond = "Used"
+        }
+    }
+    
+    $it.Condition = $cond
+    $condsMap[$id] = $cond
+}
+
+Write-Host "Finished fetching exact conditions for all $($allInStockItems.Count) items!"
+
+# Save exact in-stock catalog with exact Watchers and Conditions
 $allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_82_with_exact_scraped_prices.json" -Encoding utf8
 $allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.json" -Encoding utf8
-
-# Save conditions mapping
-$condsMap = @{}
-foreach ($it in $allInStockItems) {
-    $condsMap[$it.ItemId] = $it.Condition
-}
 $condsMap | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditions.json" -Encoding utf8
 
 # 2. Build inventory.html and update index.html
-Write-Host "`nRebuilding inventory.html with exact in-stock listings and watchers..."
+Write-Host "`nRebuilding inventory.html with exact in-stock listings, conditions and watchers..."
 & ".\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
 
 # 3. Sync Feedback Ratings
@@ -193,5 +237,5 @@ if (Test-Path $targetDir) {
 }
 
 Write-Host "`n====================================================="
-Write-Host "  IN-STOCK (QTY >= 1) SYNC COMPLETE!                 "
+Write-Host "  IN-STOCK (QTY >= 1) EXACT SYNC COMPLETE!           "
 Write-Host "====================================================="

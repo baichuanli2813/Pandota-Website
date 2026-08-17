@@ -152,7 +152,12 @@ foreach ($it in $items) {
                 </div>
 "@
     } else {
-        ""
+        @"
+                <div class="inv-card-views-prominent-badge new-listing-views-badge" title="Brand new listing on eBay">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span class="views-count">Just Listed</span>
+                </div>
+"@
     }
 
     # Watchers Badge (Top right overlay on photo)

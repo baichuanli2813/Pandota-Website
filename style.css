@@ -1594,6 +1594,26 @@ a.feedback-card {
   color: #0891b2;
 }
 
+.new-listing-views-badge {
+  color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.09) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+.new-listing-views-badge i {
+  color: #f59e0b !important;
+}
+
+[data-theme="light"] .new-listing-views-badge {
+  color: #d97706 !important;
+  background: rgba(245, 158, 11, 0.1) !important;
+  border-color: rgba(245, 158, 11, 0.28) !important;
+}
+
+[data-theme="light"] .new-listing-views-badge i {
+  color: #d97706 !important;
+}
+
 .inv-card-title {
   font-size: 1.025rem;
   line-height: 1.4;

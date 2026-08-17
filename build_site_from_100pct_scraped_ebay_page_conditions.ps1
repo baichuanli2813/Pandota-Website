@@ -432,9 +432,9 @@ $couponPillHtml
             <div class="sort-select-wrap">
               <label for="inventorySortSelect" style="font-size: 0.875rem; color: var(--text-muted);">Sort:</label>
               <select id="inventorySortSelect" class="inventory-sort-select">
-                <option value="watchers-desc">Most Watchers</option>
                 <option value="price-desc" selected>Price: High to Low</option>
                 <option value="price-asc">Price: Low to High</option>
+                <option value="watchers-desc">Most Watchers</option>
                 <option value="watchers-asc">Fewest Watchers</option>
               </select>
             </div>

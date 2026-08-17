@@ -1505,12 +1505,15 @@ a.feedback-card {
   padding: 22px;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
   gap: 12px;
 }
 
-.inv-card-body a.btn-ebay {
-  margin-top: auto;
+.inv-card-body a.btn-ebay,
+.inv-card-body .btn-ebay,
+.inventory-card .btn-ebay {
+  margin-top: auto !important;
+  width: 100%;
 }
 
 .inv-card-price-row {
@@ -1570,6 +1573,7 @@ a.feedback-card {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 4px;
+  margin-bottom: auto;
 }
 
 .inv-card-features span {

@@ -175,7 +175,7 @@ $watchBadgeHtml
               <div class="inv-card-features">
                 $pillsHtml
               </div>
-              <a href="$url" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: 14px;">
+              <a href="$url" target="_blank" rel="noopener" class="btn btn-ebay" style="width: 100%; margin-top: auto;">
                 <span>View Listing on eBay</span>
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
               </a>

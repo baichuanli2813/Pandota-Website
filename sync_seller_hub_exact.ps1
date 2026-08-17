@@ -252,16 +252,17 @@ $allInStockItems | ConvertTo-Json -Depth 5 | Set-Content "all_store_listings.jso
 $condsMap | ConvertTo-Json -Depth 5 | Set-Content "official_scraped_ebay_conditions.json" -Encoding utf8
 
 # 2. Build inventory.html and update index.html
+$scriptDir = if ($PSScriptRoot) { $PSScriptRoot } else { "." }
 Write-Host "`nRebuilding inventory.html with exact in-stock listings, conditions and watchers..."
-& ".\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
+& "$scriptDir\build_site_from_100pct_scraped_ebay_page_conditions.ps1"
 
 # 3. Sync Feedback Ratings
 Write-Host "`nSyncing live eBay feedback ratings..."
-& ".\sync_ebay_feedbacks.ps1"
+& "$scriptDir\sync_ebay_feedbacks.ps1"
 
 # 4. Clean Encodings
 Write-Host "`nCleaning character encodings..."
-& ".\fix_both_encodings.ps1"
+& "$scriptDir\fix_both_encodings.ps1"
 
 # 5. Copy to Pandota Website repo
 $targetDir = "C:\Users\User\Desktop\PANDOTA ACOUNTS\Pandota Website"

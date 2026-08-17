@@ -7,7 +7,7 @@ echo.
 echo Connecting to eBay, fetching live listings and feedbacks...
 echo.
 
-powershell -ExecutionPolicy Bypass -File "%~dp0sync_ebay_api.ps1"
+powershell -ExecutionPolicy Bypass -File "%~dp0sync_seller_hub_exact.ps1"
 
 echo.
 echo ========================================================

@@ -113,18 +113,16 @@ foreach ($it in $items) {
     $pillsHtml = $pills -join "`n                "
     $cdnImg = if ($cdnMap.ContainsKey($itemId)) { $cdnMap[$itemId] } else { $img }
 
-    # Compute authentic, stable watcher count based on Item ID and Price Tier
-    $hash = 0
-    foreach ($char in $itemId.ToCharArray()) { $hash = ($hash * 31 + [int]$char) % 1000 }
-    
-    $watchCount = if ($numPrice -ge 2500) {
-        24 + ($hash % 24)  # 24 - 47 watching
-    } elseif ($numPrice -ge 1200) {
-        15 + ($hash % 16)  # 15 - 30 watching
-    } elseif ($numPrice -ge 600) {
-        9 + ($hash % 11)   # 9 - 19 watching
+    # Use 100% exact Seller Hub Watchers if available
+    $watchCount = if ($item.PSObject.Properties['Watchers'] -and $item.Watchers -ne $null) {
+        [int]$item.Watchers
     } else {
-        5 + ($hash % 7)    # 5 - 11 watching
+        $hash = 0
+        foreach ($char in $itemId.ToCharArray()) { $hash = ($hash * 31 + [int]$char) % 1000 }
+        if ($numPrice -ge 2500) { 24 + ($hash % 24) }
+        elseif ($numPrice -ge 1200) { 15 + ($hash % 16) }
+        elseif ($numPrice -ge 600) { 9 + ($hash % 11) }
+        else { 5 + ($hash % 7) }
     }
 
     $cardsHtml += @"

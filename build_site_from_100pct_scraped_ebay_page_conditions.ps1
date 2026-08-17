@@ -161,7 +161,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" $couponAttr>
+          <div class="inventory-card" data-item-id="$itemId" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer">
             </div>
@@ -432,8 +432,10 @@ $couponPillHtml
             <div class="sort-select-wrap">
               <label for="inventorySortSelect" style="font-size: 0.875rem; color: var(--text-muted);">Sort:</label>
               <select id="inventorySortSelect" class="inventory-sort-select">
+                <option value="watchers-desc">Most Watchers</option>
                 <option value="price-desc" selected>Price: High to Low</option>
                 <option value="price-asc">Price: Low to High</option>
+                <option value="watchers-asc">Fewest Watchers</option>
               </select>
             </div>
           </div>
@@ -522,9 +524,34 @@ $cardsHtml
         return 0;
       }
 
+      function getCardWatchers(card) {
+        var attr = card.getAttribute('data-watchers');
+        if (attr && !isNaN(parseInt(attr, 10))) {
+          return parseInt(attr, 10);
+        }
+        var watcherCountEl = card.querySelector('.watcher-count');
+        if (watcherCountEl) {
+          var parsed = parseInt(watcherCountEl.textContent.replace(/[^\d]/g, ''), 10);
+          if (!isNaN(parsed)) return parsed;
+        }
+        return 0;
+      }
+
       function sortGrid(mode) {
         var cards = Array.from(grid.querySelectorAll('.inventory-card'));
         cards.sort(function(a, b) {
+          if (mode === 'watchers-desc') {
+            var wA = getCardWatchers(a);
+            var wB = getCardWatchers(b);
+            if (wB !== wA) return wB - wA;
+            return getCardPrice(b) - getCardPrice(a);
+          }
+          if (mode === 'watchers-asc') {
+            var wA = getCardWatchers(a);
+            var wB = getCardWatchers(b);
+            if (wA !== wB) return wA - wB;
+            return getCardPrice(a) - getCardPrice(b);
+          }
           var pA = getCardPrice(a);
           var pB = getCardPrice(b);
           return mode === 'price-asc' ? (pA - pB) : (pB - pA);

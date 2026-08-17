@@ -693,10 +693,35 @@ function setupInventoryPageControls() {
     return 0;
   }
 
+  function getCardWatchers(card) {
+    const attr = card.getAttribute('data-watchers');
+    if (attr && !isNaN(parseInt(attr, 10))) {
+      return parseInt(attr, 10);
+    }
+    const watcherCountEl = card.querySelector('.watcher-count');
+    if (watcherCountEl) {
+      const parsed = parseInt(watcherCountEl.textContent.replace(/[^\d]/g, ''), 10);
+      if (!isNaN(parsed)) return parsed;
+    }
+    return 0;
+  }
+
   function applySorting(mode) {
     const cardsArray = Array.from(grid.querySelectorAll('.inventory-card'));
 
     cardsArray.sort((a, b) => {
+      if (mode === 'watchers-desc') {
+        const wA = getCardWatchers(a);
+        const wB = getCardWatchers(b);
+        if (wB !== wA) return wB - wA;
+        return getCardPrice(b) - getCardPrice(a);
+      }
+      if (mode === 'watchers-asc') {
+        const wA = getCardWatchers(a);
+        const wB = getCardWatchers(b);
+        if (wA !== wB) return wA - wB;
+        return getCardPrice(a) - getCardPrice(b);
+      }
       const pA = getCardPrice(a);
       const pB = getCardPrice(b);
       return mode === 'price-asc' ? (pA - pB) : (pB - pA);

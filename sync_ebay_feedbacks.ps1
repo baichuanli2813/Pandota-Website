@@ -31,7 +31,14 @@ if (Test-Path $tempFileProfile) {
         }
         if ($htmlProfile -match '(?i)>([^<]+)</span>(?:<!--[^>]*-->|\s)*items\s*sold') {
             $rawSold = $matches[1].Trim()
-            $itemsSold = if ($rawSold -match '\+') { $rawSold } else { "$rawSold+" }
+            if ($rawSold -match '^(\d+)(?:\.(\d+))?K\+?$') {
+                $whole = [int]$matches[1]
+                $dec = if ($matches[2]) { [double]("0." + $matches[2]) } else { 0.0 }
+                $num = [int](($whole + $dec) * 1000)
+                $itemsSold = "{0:N0}+" -f $num
+            } else {
+                $itemsSold = if ($rawSold -match '\+') { $rawSold } else { "$rawSold+" }
+            }
         }
         if ($htmlProfile -match '(?i)>([^<]+)</span>(?:<!--[^>]*-->|\s)*followers') {
             $rawFollowers = $matches[1].Trim()

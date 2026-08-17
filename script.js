@@ -411,6 +411,18 @@ function makeAllCardsVisible() {
 
 // Live Fetch eBay Feedback, Items Sold, and Followers
 async function fetchEbayLiveStats() {
+  function formatSold(val) {
+    if (!val) return '11,000+';
+    const match = val.match(/^(\d+)(?:\.(\d+))?K\+?$/i);
+    if (match) {
+      const whole = parseInt(match[1], 10);
+      const dec = match[2] ? parseFloat('0.' + match[2]) : 0;
+      const num = Math.round((whole + dec) * 1000);
+      return num.toLocaleString() + '+';
+    }
+    return val.includes('+') ? val : `${val}+`;
+  }
+
   // 1. Try instantaneous load from auto-synced dataset
   try {
     const localRes = await fetch('live_store_stats.json?v=' + Date.now());
@@ -422,7 +434,7 @@ async function fetchEbayLiveStats() {
         const followersEl = document.getElementById('stat-followers');
 
         if (feedbackEl && stats.positive_feedback) feedbackEl.textContent = stats.positive_feedback;
-        if (itemsEl && stats.items_sold) itemsEl.textContent = stats.items_sold;
+        if (itemsEl && stats.items_sold) itemsEl.textContent = formatSold(stats.items_sold);
         if (followersEl && stats.followers) followersEl.textContent = stats.followers;
         return;
       }
@@ -458,8 +470,7 @@ async function fetchEbayLiveStats() {
     if (itemsSoldMatch && itemsSoldMatch[1]) {
       const itemsEl = document.getElementById('stat-items-sold');
       if (itemsEl) {
-        const val = itemsSoldMatch[1];
-        itemsEl.textContent = val.includes('+') ? val : `${val}+`;
+        itemsEl.textContent = formatSold(itemsSoldMatch[1]);
       }
     }
 

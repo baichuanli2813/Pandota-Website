@@ -209,13 +209,18 @@ Write-Host "Finished fetching exact conditions for all $($allInStockItems.Count)
 
 # Fetch live view counts from eBay Analytics API
 $oauthToken = $env:EBAY_OAUTH_TOKEN
+if ($oauthToken) {
+    $oauthToken = $oauthToken.Trim()
+    if ($oauthToken -match '^Bearer\s+(.*)$') { $oauthToken = $matches[1] }
+}
 if (-not $oauthToken -and $creds -and $creds.OAuthUserToken) {
-    $oauthToken = $creds.OAuthUserToken
+    $oauthToken = $creds.OAuthUserToken.Trim()
 }
 
 $viewsLookup = @{}
-if ($oauthToken) {
+if ($oauthToken -and $oauthToken.Length -gt 20) {
     Write-Host "`nFetching official live views from eBay Seller Analytics API..."
+    Write-Host "OAuth token detected (length: $($oauthToken.Length))"
     try {
         $now = [DateTime]::UtcNow
         $startDate = $now.AddDays(-28).ToString("yyyyMMdd")
@@ -238,11 +243,31 @@ if ($oauthToken) {
     } catch {
         Write-Host "Analytics view fetch note: $($_.Exception.Message)"
     }
+} else {
+    Write-Host "`nNotice: EBAY_OAUTH_TOKEN not provided or invalid. Using previous live view dataset as persistent fallback."
+}
+
+# Load existing views map as fallback so views never drop to 0
+$existingViewsMap = @{}
+if (Test-Path "all_82_with_exact_scraped_prices.json") {
+    try {
+        $prevItems = Get-Content "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
+        foreach ($pi in $prevItems) {
+            if ($pi.Views -and [int]$pi.Views -gt 0) {
+                $existingViewsMap[$pi.ItemId] = [int]$pi.Views
+            }
+        }
+    } catch {}
 }
 
 foreach ($it in $allInStockItems) {
     $id = $it.ItemId
-    $v = if ($viewsLookup.ContainsKey($id)) { $viewsLookup[$id] } else { 0 }
+    $v = 0
+    if ($viewsLookup.ContainsKey($id) -and $viewsLookup[$id] -gt 0) {
+        $v = $viewsLookup[$id]
+    } elseif ($existingViewsMap.ContainsKey($id) -and $existingViewsMap[$id] -gt 0) {
+        $v = $existingViewsMap[$id]
+    }
     $it | Add-Member -MemberType NoteProperty -Name "Views" -Value $v -Force
 }
 

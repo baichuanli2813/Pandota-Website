@@ -8,6 +8,16 @@
   <meta name="keywords" content="sell laptop, sell PC, sell gaming laptop, sell Lenovo Legion, sell Alienware, sell ASUS ROG, laptop liquidation UK, bulk laptop buyer, sell MacBook Pro, Pandota trade-in">
   <link rel="canonical" href="https://pandota.co.uk/sell.html">
 
+  <!-- Google tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJXRYQ5DQT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SJXRYQ5DQT');
+  </script>
+
   <!-- OpenGraph Brand Identity -->
   <meta property="og:site_name" content="Pandota">
   <meta property="og:title" content="Sell Your Laptop, PC or Liquidate Bulk Stock - Pandota Ltd">
@@ -642,6 +652,18 @@
     })
     .then(function(res) { return res.json(); })
     .then(function(data) {
+      // Send GA4 Event
+      try {
+        if (typeof gtag === 'function') {
+          gtag('event', 'submit_valuation_request', {
+            'seller_type': sellerType,
+            'brand': brand,
+            'model': model,
+            'condition': condition
+          });
+        }
+      } catch(err) {}
+
       // Success: render confirmation card
       var successHtml = '' +
         '<div class="valuation-success-card" id="valuationSuccessCard">' +

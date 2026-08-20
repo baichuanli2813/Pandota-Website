@@ -51,6 +51,19 @@
         window.applyPandotaTheme(next);
       };
 
+      window.togglePandotaMobileMenu = function() {
+        var navLinks = document.getElementById('navLinks');
+        var btn = document.getElementById('mobileToggle');
+        if (!navLinks) return;
+        var isOpen = navLinks.classList.toggle('active');
+        if (btn) {
+          var icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+          }
+        }
+      };
+
       // 2. Cookie Consent Engine
       window.showCookieBanner = function() {
         var banner = document.getElementById('cookieConsentBanner');
@@ -172,26 +185,30 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <!-- Header Navigation -->
+  <!-- Header & Navigation -->
   <header class="header">
-    <div class="header-inner">
+    <div class="container header-container">
       <a href="/" class="logo-brand" aria-label="Pandota Home">
-        <img src="/images/panda_logo.png" alt="Pandota Logo" class="brand-panda-img">
+        <img src="/images/panda_logo.png" alt="Pandota Panda Logo" class="brand-panda-img">
         <span>PANDOTA</span>
       </a>
 
-      <nav class="nav-links">
-        <a href="/"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="/inventory"><i class="fa-solid fa-laptop"></i> All Inventory</a>
-        <a href="/sell" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a>
-        <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener" class="nav-ebay-link">
-          <i class="fa-brands fa-ebay"></i> eBay Store
-        </a>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="/#about">About Pandota</a></li>
+          <li><a href="/#features">What We Do</a></li>
+          <li><a href="/inventory">All Inventory</a></li>
+          <li><a href="/sell" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a></li>
+          <li><a href="/#contact">Contact Us</a></li>
+        </ul>
       </nav>
 
-      <div class="header-actions">
-        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="togglePandotaTheme()" aria-label="Toggle theme" title="Switch between Dark and Light mode">
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="togglePandotaTheme()" aria-label="Toggle Light/Dark Theme" title="Toggle Light/Dark Theme">
           <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="mobile-toggle" id="mobileToggle" onclick="togglePandotaMobileMenu()" aria-label="Toggle mobile menu">
+          <i class="fa-solid fa-bars"></i>
         </button>
       </div>
     </div>

@@ -140,9 +140,17 @@ foreach ($it in $items) {
     $itemId = $it.ItemId
     $titleRaw = $it.Title
     $title = [System.Net.WebUtility]::HtmlEncode($titleRaw)
-    $price = $it.Price
-    $numPrice = ($price -replace '[^\d.]', '').Trim()
-    if (-not $numPrice) { $numPrice = "0" }
+    
+    # Robust price formatting from numeric value
+    $numVal = 0.0
+    if ($it.PSObject.Properties['NumPrice'] -and $it.NumPrice -ne $null -and [double]$it.NumPrice -gt 0) {
+        $numVal = [double]$it.NumPrice
+    } else {
+        $cleanedStr = ($it.Price -replace '[^\d.]', '').Trim()
+        [double]::TryParse($cleanedStr, [ref]$numVal) | Out-Null
+    }
+    $numPrice = $numVal.ToString("F2", [System.Globalization.CultureInfo]::InvariantCulture)
+    $price = "&pound;" + $numVal.ToString("N2", [System.Globalization.CultureInfo]::GetCultureInfo("en-GB"))
     $url = $it.Url
     $img = $it.Img
 

@@ -755,6 +755,7 @@ $cardsHtml
           <ul class="footer-company-details">
             <li><i class="fa-solid fa-building"></i> <span><strong>Pandota Ltd</strong> (Registered in England &amp; Wales)</span></li>
             <li><i class="fa-solid fa-hashtag"></i> <span>Company Number: <strong>14961273</strong></span></li>
+            <li><i class="fa-solid fa-receipt"></i> <span>VAT: <strong>446298658</strong> (GB 446 2986 58)</span></li>
             <li><i class="fa-solid fa-location-dot"></i> <span>Registered Address: <strong>24 Groveley Lane, Birmingham, England, B31 4QH</strong></span></li>
           </ul>
         </div>
@@ -774,7 +775,7 @@ $cardsHtml
 
       <div class="footer-bottom">
         <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="/privacy" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
-        <p>Official eBay Store: <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">geoffscuriosities</a> &bull; VAT Reg: GB 444 3804 05</p>
+        <p>Official eBay Store: <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">geoffscuriosities</a> &bull; VAT: 446298658</p>
       </div>
     </div>
   </footer>

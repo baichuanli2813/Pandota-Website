@@ -296,6 +296,7 @@ if (Test-Path $targetDir) {
     Copy-Item -Path ".\index.html" -Destination "$targetDir\index.html" -Force
     Copy-Item -Path ".\inventory.html" -Destination "$targetDir\inventory.html" -Force
     Copy-Item -Path ".\sell.html" -Destination "$targetDir\sell.html" -Force
+    Copy-Item -Path ".\privacy.html" -Destination "$targetDir\privacy.html" -Force
     Copy-Item -Path ".\script.js" -Destination "$targetDir\script.js" -Force
     Copy-Item -Path ".\sitemap.xml" -Destination "$targetDir\sitemap.xml" -Force
     Copy-Item -Path ".\robots.txt" -Destination "$targetDir\robots.txt" -Force
@@ -308,6 +309,9 @@ if (Test-Path $targetDir) {
     Copy-Item -Path ".\official_scraped_ebay_conditions.json" -Destination "$targetDir\official_scraped_ebay_conditions.json" -Force
     Copy-Item -Path ".\all_82_with_exact_scraped_prices.json" -Destination "$targetDir\all_82_with_exact_scraped_prices.json" -Force
     Copy-Item -Path ".\all_store_listings.json" -Destination "$targetDir\all_store_listings.json" -Force
+    Copy-Item -Path ".\inventory" -Destination "$targetDir\inventory" -Recurse -Force
+    Copy-Item -Path ".\sell" -Destination "$targetDir\sell" -Recurse -Force
+    Copy-Item -Path ".\privacy" -Destination "$targetDir\privacy" -Recurse -Force
     Write-Host "`nSuccessfully synchronized all files to Pandota Website repository!"
 }
 

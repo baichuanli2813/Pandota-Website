@@ -385,13 +385,22 @@ $fullHtml = @"
   <meta name="keywords" content="Pandota inventory, Pandota laptops, Pandota eBay listings, Lenovo Legion, Alienware, ASUS ROG, HP Omen, eBay UK seller">
   <link rel="canonical" href="https://pandota.co.uk/inventory.html">
 
-  <!-- Google tag (gtag.js) - Google Analytics -->
+  <!-- Google Consent Mode v2 & Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJXRYQ5DQT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
+    // Initialize Google Consent Mode default
+    var savedConsent = localStorage.getItem('pandota_cookie_consent');
+    gtag('consent', 'default', {
+      'analytics_storage': savedConsent === 'granted' ? 'granted' : 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+
+    gtag('js', new Date());
     gtag('config', 'G-SJXRYQ5DQT');
   </script>
 
@@ -673,6 +682,7 @@ $cardsHtml
             <li><a href="index.html">Home</a></li>
             <li><a href="inventory.html">All Inventory</a></li>
             <li><a href="sell.html">Sell to Us</a></li>
+            <li><a href="privacy.html">Privacy &amp; Cookie Policy</a></li>
             <li><a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">eBay Store</a></li>
             <li><a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener">Contact via eBay</a></li>
           </ul>
@@ -680,11 +690,28 @@ $cardsHtml
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved.</p>
+        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="privacy.html" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
         <p>Official eBay Store: <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">geoffscuriosities</a> &bull; VAT Reg: GB 444 3804 05</p>
       </div>
     </div>
   </footer>
+
+  <!-- Cookie Consent Banner Component -->
+  <div class="cookie-consent-banner" id="cookieConsentBanner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+    <div class="cookie-banner-header">
+      <i class="fa-solid fa-cookie-bite"></i>
+      <h4>We Value Your Privacy</h4>
+    </div>
+    <p class="cookie-banner-text">
+      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="privacy.html">Privacy &amp; Cookie Policy</a>.
+    </p>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn-cookie-accept" onclick="acceptAllCookies()">Accept All</button>
+      <button type="button" class="btn-cookie-decline" onclick="declineNonEssentialCookies()">Essential Only</button>
+    </div>
+  </div>
+
+  <script src="script.js?v=3.5"></script>
 
   <!-- Instant Filtering, Real-Time Dynamic Filter Sync & Sorting Logic -->
   <script>

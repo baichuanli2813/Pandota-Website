@@ -8,13 +8,22 @@
   <meta name="keywords" content="Pandota, Pandota Ltd, Pandota eBay, geoffscuriosities, geoff_lee367, high performance laptops, gaming laptops, Lenovo Legion, Dell Alienware, DPD Next-Day Delivery, UK laptop seller">
   <link rel="canonical" href="https://pandota.co.uk/">
 
-  <!-- Google tag (gtag.js) - Google Analytics -->
+  <!-- Google Consent Mode v2 & Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJXRYQ5DQT"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
+    // Initialize Google Consent Mode default
+    var savedConsent = localStorage.getItem('pandota_cookie_consent');
+    gtag('consent', 'default', {
+      'analytics_storage': savedConsent === 'granted' ? 'granted' : 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+
+    gtag('js', new Date());
     gtag('config', 'G-SJXRYQ5DQT');
   </script>
 
@@ -507,7 +516,7 @@
               <i class="fa-solid fa-star" style="color: #f59e0b; font-size: 1.1rem;"></i>
               <span style="font-size: 0.88rem; color: var(--text-sub); font-weight: 500;">Total Feedback Score:</span>
               <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER" target="_blank" rel="noopener" class="fb-stat-link" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.3px; padding: 2px 8px;" title="View all received seller feedback on eBay">
-                <span id="fb-total-score">6,273</span>
+                <span id="fb-total-score">6,266</span>
               </a>
             </div>
 
@@ -538,7 +547,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">1 Month</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:ONE_MONTH" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 1-Month Positive Feedbacks on eBay">
-                        <span id="fb-1m-pos">347</span>
+                        <span id="fb-1m-pos">345</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">
@@ -556,7 +565,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">6 Months</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:SIX_MONTHS" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 6-Month Positive Feedbacks on eBay">
-                        <span id="fb-6m-pos">1,372</span>
+                        <span id="fb-6m-pos">1,367</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">
@@ -574,7 +583,7 @@
                     <td style="padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text-main);">12 Months</td>
                     <td style="padding: 10px 14px;">
                       <a href="https://www.ebay.co.uk/fdbk/feedback_profile/geoff_lee367?filter=feedback_page:RECEIVED_AS_SELLER,overall_rating:POSITIVE,period:TWELVE_MONTHS" target="_blank" rel="noopener" class="fb-stat-link fb-pos-link" title="View 12-Month Positive Feedbacks on eBay">
-                        <span id="fb-12m-pos">2,149</span>
+                        <span id="fb-12m-pos">2,143</span>
                       </a>
                     </td>
                     <td style="padding: 10px 14px;">
@@ -1225,6 +1234,7 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="inventory.html">All Inventory</a></li>
             <li><a href="sell.html">Sell to Us</a></li>
+            <li><a href="privacy.html">Privacy &amp; Cookie Policy</a></li>
             <li><a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">eBay Store</a></li>
             <li><a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener">Contact via eBay</a></li>
           </ul>
@@ -1232,12 +1242,27 @@
       </div>
 
       <div class="footer-bottom" style="justify-content: center; text-align: center;">
-        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved.</p>
+        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="privacy.html" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
       </div>
     </div>
   </footer>
 
-  <script src="script.js?v=3.0"></script>
+  <!-- Cookie Consent Banner Component -->
+  <div class="cookie-consent-banner" id="cookieConsentBanner" role="dialog" aria-live="polite" aria-label="Cookie consent banner">
+    <div class="cookie-banner-header">
+      <i class="fa-solid fa-cookie-bite"></i>
+      <h4>We Value Your Privacy</h4>
+    </div>
+    <p class="cookie-banner-text">
+      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="privacy.html">Privacy &amp; Cookie Policy</a>.
+    </p>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn-cookie-accept" onclick="acceptAllCookies()">Accept All</button>
+      <button type="button" class="btn-cookie-decline" onclick="declineNonEssentialCookies()">Essential Only</button>
+    </div>
+  </div>
+
+  <script src="script.js?v=3.5"></script>
 
   <!-- Self-Contained Hero Showcase Controller -->
   <script>

@@ -1220,4 +1220,68 @@ function setupEmailSpecsHandler() {
 
 document.addEventListener('DOMContentLoaded', () => {
   setupEmailSpecsHandler();
+  initCookieConsent();
 });
+
+// ==============================================================================
+// 10. Cookie Consent & UK Privacy Compliance Engine
+// ==============================================================================
+window.acceptAllCookies = function() {
+  try {
+    localStorage.setItem('pandota_cookie_consent', 'granted');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+  } catch(e) {}
+  hideCookieBanner();
+};
+
+window.declineNonEssentialCookies = function() {
+  try {
+    localStorage.setItem('pandota_cookie_consent', 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'denied'
+      });
+    }
+  } catch(e) {}
+  hideCookieBanner();
+};
+
+window.resetCookiePreferences = function() {
+  try {
+    localStorage.removeItem('pandota_cookie_consent');
+  } catch(e) {}
+  showCookieBanner();
+};
+
+function showCookieBanner() {
+  const banner = document.getElementById('cookieConsentBanner');
+  if (banner) {
+    banner.classList.add('show');
+  }
+}
+
+function hideCookieBanner() {
+  const banner = document.getElementById('cookieConsentBanner');
+  if (banner) {
+    banner.classList.remove('show');
+  }
+}
+
+function initCookieConsent() {
+  try {
+    const consent = localStorage.getItem('pandota_cookie_consent');
+    if (!consent) {
+      setTimeout(() => {
+        showCookieBanner();
+      }, 800);
+    } else if (consent === 'granted' && typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+  } catch(e) {}
+}

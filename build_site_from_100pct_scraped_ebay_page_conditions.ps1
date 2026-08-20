@@ -383,7 +383,7 @@ $fullHtml = @"
   <title>All Active Inventory ($totalCount Listings) - Pandota Ltd Official eBay Store</title>
   <meta name="description" content="Browse all $totalCount active listings live from Pandota's official eBay store (geoffscuriosities). High-performance laptops, gaming rigs, workstations, and electronics.">
   <meta name="keywords" content="Pandota inventory, Pandota laptops, Pandota eBay listings, Lenovo Legion, Alienware, ASUS ROG, HP Omen, eBay UK seller">
-  <link rel="canonical" href="https://pandota.co.uk/inventory.html">
+  <link rel="canonical" href="https://pandota.co.uk/inventory">
 
   <!-- Google Consent Mode v2 & Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJXRYQ5DQT"></script>
@@ -408,7 +408,7 @@ $fullHtml = @"
   <meta property="og:site_name" content="Pandota">
   <meta property="og:title" content="All Active Inventory ($totalCount Listings) - Pandota Ltd">
   <meta property="og:description" content="Browse active gaming laptops, ultrabooks, and workstations from Pandota Ltd.">
-  <meta property="og:url" content="https://pandota.co.uk/inventory.html">
+  <meta property="og:url" content="https://pandota.co.uk/inventory">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://pandota.co.uk/images/panda_logo.png">
 
@@ -442,8 +442,8 @@ $fullHtml = @"
       },
       {
         "@type": "CollectionPage",
-        "@id": "https://pandota.co.uk/inventory.html#webpage",
-        "url": "https://pandota.co.uk/inventory.html",
+        "@id": "https://pandota.co.uk/inventory#webpage",
+        "url": "https://pandota.co.uk/inventory",
         "name": "Complete Store Inventory - Pandota Ltd",
         "isPartOf": { "@id": "https://pandota.co.uk/#website" },
         "about": { "@id": "https://pandota.co.uk/#organization" }
@@ -553,25 +553,25 @@ $fullHtml = @"
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
   <!-- Header & Navigation -->
   <header class="header">
     <div class="container header-container">
-      <a href="index.html" class="logo-brand" aria-label="Pandota Home">
-        <img src="images/panda_logo.png" alt="Pandota Panda Logo" class="brand-panda-img">
+      <a href="/" class="logo-brand" aria-label="Pandota Home">
+        <img src="/images/panda_logo.png" alt="Pandota Panda Logo" class="brand-panda-img">
         <span>PANDOTA</span>
       </a>
 
       <nav>
         <ul class="nav-links" id="navLinks">
-          <li><a href="index.html#about">About Pandota</a></li>
-          <li><a href="index.html#features">What We Do</a></li>
-          <li><a href="inventory.html" class="active-nav">All Inventory</a></li>
-          <li><a href="sell.html" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a></li>
-          <li><a href="index.html#contact">Contact Us</a></li>
+          <li><a href="/#about">About Pandota</a></li>
+          <li><a href="/#features">What We Do</a></li>
+          <li><a href="/inventory" class="active-nav">All Inventory</a></li>
+          <li><a href="/sell" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a></li>
+          <li><a href="/#contact">Contact Us</a></li>
         </ul>
       </nav>
 
@@ -679,10 +679,10 @@ $cardsHtml
         <div class="footer-nav-col">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="inventory.html">All Inventory</a></li>
-            <li><a href="sell.html">Sell to Us</a></li>
-            <li><a href="privacy.html">Privacy &amp; Cookie Policy</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/inventory">All Inventory</a></li>
+            <li><a href="/sell">Sell to Us</a></li>
+            <li><a href="/privacy">Privacy &amp; Cookie Policy</a></li>
             <li><a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">eBay Store</a></li>
             <li><a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener">Contact via eBay</a></li>
           </ul>
@@ -690,7 +690,7 @@ $cardsHtml
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="privacy.html" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
+        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="/privacy" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
         <p>Official eBay Store: <a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">geoffscuriosities</a> &bull; VAT Reg: GB 444 3804 05</p>
       </div>
     </div>
@@ -703,7 +703,7 @@ $cardsHtml
       <h4>We Value Your Privacy</h4>
     </div>
     <p class="cookie-banner-text">
-      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="privacy.html">Privacy &amp; Cookie Policy</a>.
+      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="/privacy">Privacy &amp; Cookie Policy</a>.
     </p>
     <div class="cookie-banner-actions">
       <button type="button" class="btn-cookie-accept" onclick="acceptAllCookies()">Accept All</button>
@@ -711,7 +711,7 @@ $cardsHtml
     </div>
   </div>
 
-  <script src="script.js?v=3.5"></script>
+  <script src="/script.js?v=3.6"></script>
 
   <!-- Instant Filtering, Real-Time Dynamic Filter Sync & Sorting Logic -->
   <script>
@@ -1027,4 +1027,20 @@ if (Test-Path "index.html") {
     [System.IO.File]::WriteAllText("$pwd\index.html", $indexHtml, [System.Text.Encoding]::UTF8)
 }
 
-Write-Host "Successfully built inventory.html and updated index.html with exactly $totalCount active live listings and dynamic threshold-based categories!"
+# Create clean URL directories (inventory/, sell/, privacy/) for GitHub Pages
+$dirs = @("inventory", "sell", "privacy")
+foreach ($d in $dirs) {
+    if (-not (Test-Path "$pwd\$d")) {
+        New-Item -ItemType Directory -Path "$pwd\$d" -Force | Out-Null
+    }
+}
+
+Copy-Item -Path "$pwd\inventory.html" -Destination "$pwd\inventory\index.html" -Force
+if (Test-Path "$pwd\sell.html") {
+    Copy-Item -Path "$pwd\sell.html" -Destination "$pwd\sell\index.html" -Force
+}
+if (Test-Path "$pwd\privacy.html") {
+    Copy-Item -Path "$pwd\privacy.html" -Destination "$pwd\privacy\index.html" -Force
+}
+
+Write-Host "Successfully built inventory.html and mirrored clean directories (inventory/, sell/, privacy/) with $totalCount listings!"

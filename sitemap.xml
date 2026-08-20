@@ -7,19 +7,19 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pandota.co.uk/inventory.html</loc>
+    <loc>https://pandota.co.uk/inventory</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>hourly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pandota.co.uk/sell.html</loc>
+    <loc>https://pandota.co.uk/sell</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://pandota.co.uk/privacy.html</loc>
+    <loc>https://pandota.co.uk/privacy</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

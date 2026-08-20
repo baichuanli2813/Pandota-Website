@@ -116,9 +116,9 @@
         var input = document.getElementById('ebaySearchInput');
         var query = input ? input.value.trim() : '';
         if (query) {
-          window.location.href = 'inventory.html?q=' + encodeURIComponent(query);
+          window.location.href = '/inventory?q=' + encodeURIComponent(query);
         } else {
-          window.location.href = 'inventory.html';
+          window.location.href = '/inventory';
         }
         return false;
       };
@@ -184,15 +184,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
   <!-- Header & Navigation -->
   <header class="header">
     <div class="container header-container">
-      <a href="index.html" class="logo-brand" aria-label="Pandota Home">
-        <img src="images/panda_logo.png" alt="Pandota Panda Logo" class="brand-panda-img">
+      <a href="/" class="logo-brand" aria-label="Pandota Home">
+        <img src="/images/panda_logo.png" alt="Pandota Panda Logo" class="brand-panda-img">
         <span>PANDOTA</span>
       </a>
 
@@ -200,8 +200,8 @@
         <ul class="nav-links" id="navLinks">
           <li><a href="#about">About Pandota</a></li>
           <li><a href="#features">What We Do</a></li>
-          <li><a href="inventory.html">All Inventory</a></li>
-          <li><a href="sell.html" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a></li>
+          <li><a href="/inventory">All Inventory</a></li>
+          <li><a href="/sell" class="nav-sell-highlight"><i class="fa-solid fa-money-bill-wave"></i> Sell to Us</a></li>
           <li><a href="#contact">Contact Us</a></li>
         </ul>
       </nav>
@@ -232,7 +232,7 @@
 
           <!-- Prominent Search Bar in Hero -->
           <div class="hero-search-wrap" id="search">
-            <form class="hero-search-form" id="ebaySearchForm" action="inventory.html" method="GET" onsubmit="return handleHeroSearch(event)">
+            <form class="hero-search-form" id="ebaySearchForm" action="/inventory" method="GET" onsubmit="return handleHeroSearch(event)">
               <div class="hero-search-inner">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" class="search-input" id="ebaySearchInput" name="q" placeholder="e.g. Legion Go 2, RTX 5080, Alienware, Omen..." aria-label="Search Pandota laptop inventory">
@@ -245,7 +245,7 @@
           </div>
 
           <div class="hero-actions">
-            <a href="inventory.html" class="btn btn-primary">
+            <a href="/inventory" class="btn btn-primary">
               <i class="fa-solid fa-boxes-stacked"></i>
               <span>View Full Inventory Page</span>
             </a>
@@ -294,7 +294,7 @@
               <button type="button" class="hero-nav-arrow" id="heroNextBtn" aria-label="Next laptop item" onclick="if(typeof window.heroNextItem === 'function') window.heroNextItem();"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
-            <a href="inventory.html" class="hero-inv-view-all">View All (117) &rarr;</a>
+            <a href="/inventory" class="hero-inv-view-all">View All (117) &rarr;</a>
           </div>
 
           <!-- Dynamic Hero Stock Card Showcase -->
@@ -1231,10 +1231,10 @@
         <div class="footer-nav-col">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="inventory.html">All Inventory</a></li>
-            <li><a href="sell.html">Sell to Us</a></li>
-            <li><a href="privacy.html">Privacy &amp; Cookie Policy</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/inventory">All Inventory</a></li>
+            <li><a href="/sell">Sell to Us</a></li>
+            <li><a href="/privacy">Privacy &amp; Cookie Policy</a></li>
             <li><a href="https://www.ebay.co.uk/str/geoffscuriosities" target="_blank" rel="noopener">eBay Store</a></li>
             <li><a href="https://www.ebay.co.uk/cnt/InterMessageWithSeller?requested=geoff_lee367" target="_blank" rel="noopener">Contact via eBay</a></li>
           </ul>
@@ -1242,7 +1242,7 @@
       </div>
 
       <div class="footer-bottom" style="justify-content: center; text-align: center;">
-        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="privacy.html" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
+        <p>&copy; <span id="currentYear">2026</span> Pandota Ltd. All rights reserved. &bull; <a href="/privacy" style="color: var(--text-muted); text-decoration: underline;">Privacy &amp; Cookies</a></p>
       </div>
     </div>
   </footer>
@@ -1254,7 +1254,7 @@
       <h4>We Value Your Privacy</h4>
     </div>
     <p class="cookie-banner-text">
-      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="privacy.html">Privacy &amp; Cookie Policy</a>.
+      We use cookies and Google Analytics to analyze site traffic and enhance your browsing experience. Read our <a href="/privacy">Privacy &amp; Cookie Policy</a>.
     </p>
     <div class="cookie-banner-actions">
       <button type="button" class="btn-cookie-accept" onclick="acceptAllCookies()">Accept All</button>
@@ -1262,7 +1262,7 @@
     </div>
   </div>
 
-  <script src="script.js?v=3.5"></script>
+  <script src="/script.js?v=3.6"></script>
 
   <!-- Self-Contained Hero Showcase Controller -->
   <script>

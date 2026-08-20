@@ -26,6 +26,132 @@
     gtag('config', 'G-SJXRYQ5DQT');
   </script>
 
+  <!-- Immediate Theme & Cookie Consent Engine -->
+  <script>
+    (function() {
+      // 1. Theme Engine
+      window.applyPandotaTheme = function(theme) {
+        if (theme === 'dark') {
+          document.documentElement.removeAttribute('data-theme');
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        try { localStorage.setItem('pandota_theme', theme); } catch(e) {}
+        
+        var btns = document.querySelectorAll('#themeToggleBtn, .theme-toggle-btn');
+        btns.forEach(function(btn) {
+          btn.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+      };
+
+      window.togglePandotaTheme = function() {
+        var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+        var next = current === 'dark' ? 'light' : 'dark';
+        window.applyPandotaTheme(next);
+      };
+
+      // 2. Cookie Consent Engine
+      window.showCookieBanner = function() {
+        var banner = document.getElementById('cookieConsentBanner');
+        if (banner) {
+          banner.style.display = 'flex';
+          setTimeout(function() {
+            banner.classList.add('show');
+          }, 20);
+        }
+      };
+
+      window.hideCookieBanner = function() {
+        var banner = document.getElementById('cookieConsentBanner');
+        if (banner) {
+          banner.classList.remove('show');
+          setTimeout(function() {
+            banner.style.display = 'none';
+          }, 300);
+        }
+      };
+
+      window.acceptAllCookies = function() {
+        try {
+          localStorage.setItem('pandota_cookie_consent', 'granted');
+          if (typeof gtag === 'function') {
+            gtag('consent', 'update', {
+              'analytics_storage': 'granted'
+            });
+          }
+        } catch(e) {}
+        window.hideCookieBanner();
+      };
+
+      window.declineNonEssentialCookies = function() {
+        try {
+          localStorage.setItem('pandota_cookie_consent', 'denied');
+          if (typeof gtag === 'function') {
+            gtag('consent', 'update', {
+              'analytics_storage': 'denied'
+            });
+          }
+        } catch(e) {}
+        window.hideCookieBanner();
+      };
+
+      window.resetCookiePreferences = function() {
+        try {
+          localStorage.removeItem('pandota_cookie_consent');
+        } catch(e) {}
+        window.showCookieBanner();
+        
+        var btn = document.querySelector('.btn-cookie-reset');
+        if (btn) {
+          var origText = btn.innerHTML;
+          btn.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span>Preferences Reset - Banner Opened Below!</span>';
+          btn.style.borderColor = '#10b981';
+          setTimeout(function() {
+            btn.innerHTML = origText;
+            btn.style.borderColor = '';
+          }, 3500);
+        }
+      };
+
+      window.initCookieConsent = function() {
+        try {
+          var consent = localStorage.getItem('pandota_cookie_consent');
+          var banner = document.getElementById('cookieConsentBanner');
+          if (!consent) {
+            if (banner) {
+              banner.style.display = 'flex';
+              setTimeout(function() {
+                banner.classList.add('show');
+              }, 400);
+            }
+          } else {
+            if (banner) {
+              banner.classList.remove('show');
+              banner.style.display = 'none';
+            }
+            if (consent === 'granted' && typeof gtag === 'function') {
+              gtag('consent', 'update', {
+                'analytics_storage': 'granted'
+              });
+            }
+          }
+        } catch(e) {}
+      };
+
+      // Run theme and check consent
+      var saved = 'light';
+      try { saved = localStorage.getItem('pandota_theme') || 'light'; } catch(e) {}
+      window.applyPandotaTheme(saved);
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', window.initCookieConsent);
+      } else {
+        window.initCookieConsent();
+      }
+    })();
+  </script>
+
   <!-- OpenGraph Brand Identity -->
   <meta property="og:site_name" content="Pandota">
   <meta property="og:title" content="Privacy &amp; Cookie Policy - Pandota Ltd">
@@ -64,7 +190,7 @@
       </nav>
 
       <div class="header-actions">
-        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle theme" title="Switch between Dark and Light mode">
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="togglePandotaTheme()" aria-label="Toggle theme" title="Switch between Dark and Light mode">
           <i class="fa-solid fa-moon"></i>
         </button>
       </div>

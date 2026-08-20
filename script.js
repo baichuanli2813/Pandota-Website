@@ -41,6 +41,105 @@ function setupThemeToggle() {
   } catch(e) {}
 }
 
+// ==============================================================================
+// 2. Cookie Consent & UK Privacy Compliance Engine (Top-Level & Fail-Proof)
+// ==============================================================================
+window.showCookieBanner = function() {
+  var banner = document.getElementById('cookieConsentBanner');
+  if (banner) {
+    banner.style.display = 'flex';
+    setTimeout(function() {
+      banner.classList.add('show');
+    }, 20);
+  }
+};
+
+window.hideCookieBanner = function() {
+  var banner = document.getElementById('cookieConsentBanner');
+  if (banner) {
+    banner.classList.remove('show');
+    setTimeout(function() {
+      banner.style.display = 'none';
+    }, 300);
+  }
+};
+
+window.acceptAllCookies = function() {
+  try {
+    localStorage.setItem('pandota_cookie_consent', 'granted');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'granted'
+      });
+    }
+  } catch(e) {}
+  window.hideCookieBanner();
+};
+
+window.declineNonEssentialCookies = function() {
+  try {
+    localStorage.setItem('pandota_cookie_consent', 'denied');
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': 'denied'
+      });
+    }
+  } catch(e) {}
+  window.hideCookieBanner();
+};
+
+window.resetCookiePreferences = function() {
+  try {
+    localStorage.removeItem('pandota_cookie_consent');
+  } catch(e) {}
+  window.showCookieBanner();
+  
+  var btn = document.querySelector('.btn-cookie-reset');
+  if (btn) {
+    var origText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <span>Preferences Reset - Banner Opened Below!</span>';
+    btn.style.borderColor = '#10b981';
+    setTimeout(function() {
+      btn.innerHTML = origText;
+      btn.style.borderColor = '';
+    }, 3500);
+  }
+};
+
+window.initCookieConsent = function() {
+  try {
+    var consent = localStorage.getItem('pandota_cookie_consent');
+    var banner = document.getElementById('cookieConsentBanner');
+    if (!consent) {
+      if (banner) {
+        banner.style.display = 'flex';
+        setTimeout(function() {
+          banner.classList.add('show');
+        }, 500);
+      }
+    } else {
+      if (banner) {
+        banner.classList.remove('show');
+        banner.style.display = 'none';
+      }
+      if (consent === 'granted' && typeof gtag === 'function') {
+        gtag('consent', 'update', {
+          'analytics_storage': 'granted'
+        });
+      }
+    }
+  } catch(e) {}
+};
+
+// Immediate early check for banner
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    window.initCookieConsent();
+  });
+} else {
+  window.initCookieConsent();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Theme Toggle Buttons
   try { setupThemeToggle(); } catch(e) { console.error('Theme toggle error:', e); }
@@ -1220,68 +1319,4 @@ function setupEmailSpecsHandler() {
 
 document.addEventListener('DOMContentLoaded', () => {
   setupEmailSpecsHandler();
-  initCookieConsent();
 });
-
-// ==============================================================================
-// 10. Cookie Consent & UK Privacy Compliance Engine
-// ==============================================================================
-window.acceptAllCookies = function() {
-  try {
-    localStorage.setItem('pandota_cookie_consent', 'granted');
-    if (typeof gtag === 'function') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'granted'
-      });
-    }
-  } catch(e) {}
-  hideCookieBanner();
-};
-
-window.declineNonEssentialCookies = function() {
-  try {
-    localStorage.setItem('pandota_cookie_consent', 'denied');
-    if (typeof gtag === 'function') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'denied'
-      });
-    }
-  } catch(e) {}
-  hideCookieBanner();
-};
-
-window.resetCookiePreferences = function() {
-  try {
-    localStorage.removeItem('pandota_cookie_consent');
-  } catch(e) {}
-  showCookieBanner();
-};
-
-function showCookieBanner() {
-  const banner = document.getElementById('cookieConsentBanner');
-  if (banner) {
-    banner.classList.add('show');
-  }
-}
-
-function hideCookieBanner() {
-  const banner = document.getElementById('cookieConsentBanner');
-  if (banner) {
-    banner.classList.remove('show');
-  }
-}
-
-function initCookieConsent() {
-  try {
-    const consent = localStorage.getItem('pandota_cookie_consent');
-    if (!consent) {
-      setTimeout(() => {
-        showCookieBanner();
-      }, 800);
-    } else if (consent === 'granted' && typeof gtag === 'function') {
-      gtag('consent', 'update', {
-        'analytics_storage': 'granted'
-      });
-    }
-  } catch(e) {}
-}

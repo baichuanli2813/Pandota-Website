@@ -4167,23 +4167,24 @@ html, body {
   border: 1px solid var(--border-active);
   border-radius: var(--radius-lg);
   padding: 22px 24px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
-  z-index: 99999;
-  display: flex;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  z-index: 9999999;
+  display: none;
   flex-direction: column;
   gap: 16px;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(24px);
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .cookie-consent-banner.show {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  display: flex !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
 }
 
 .cookie-banner-header {

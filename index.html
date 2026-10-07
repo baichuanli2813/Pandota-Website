@@ -400,9 +400,9 @@
             <div class="hero-stock-info">
               <div class="hero-stock-price-row">
                 <div class="hero-stock-price" id="heroStockPrice">£3,799.00</div>
-                <div class="inv-card-views-prominent-badge new-listing-views-badge" id="heroStockViews">
-                  <i class="fa-solid fa-bolt"></i>
-                  <span id="heroStockViewsText">Just Listed</span>
+                <div class="inv-card-views-prominent-badge" id="heroStockViews" style="display: none;">
+                  <i class="fa-solid fa-eye"></i>
+                  <span id="heroStockViewsText"></span>
                 </div>
               </div>
               <div class="hero-stock-badge"><i class="fa-solid fa-truck-fast"></i> DPD Next-Day Delivery</div>
@@ -1449,16 +1449,28 @@
         }
 
         if (viewsEl && viewsText) {
-          if (item.views > 0) {
-            viewsEl.className = 'inv-card-views-prominent-badge';
-            viewsText.textContent = Number(item.views).toLocaleString() + ' views (24h)';
-            var icon = viewsEl.querySelector('i');
-            if (icon) icon.className = 'fa-solid fa-eye';
-          } else {
+          var vCount = (typeof item.views === 'number') ? item.views : 0;
+          var isJust = !!item.isJustListed;
+          if (!isJust && item.startTime) {
+            var st = new Date(item.startTime).getTime();
+            if (!isNaN(st) && (Date.now() - st) >= 0 && (Date.now() - st) <= 24 * 60 * 60 * 1000) {
+              isJust = true;
+            }
+          }
+          if (isJust) {
+            viewsEl.style.display = 'inline-flex';
             viewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
             viewsText.textContent = 'Just Listed';
             var icon = viewsEl.querySelector('i');
             if (icon) icon.className = 'fa-solid fa-bolt';
+          } else if (vCount > 0) {
+            viewsEl.style.display = 'inline-flex';
+            viewsEl.className = 'inv-card-views-prominent-badge';
+            viewsText.textContent = Number(vCount).toLocaleString() + ' views (24h)';
+            var icon = viewsEl.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-eye';
+          } else {
+            viewsEl.style.display = 'none';
           }
         }
       }
@@ -1517,7 +1529,7 @@
       resetTimer();
 
       try {
-        fetch('all_82_with_exact_scraped_prices.json?v=' + Date.now())
+        fetch('/all_82_with_exact_scraped_prices.json?v=' + Date.now())
           .then(function(r) { return r.json(); })
           .then(function(data) {
             if (Array.isArray(data) && data.length > 0) {
@@ -1528,7 +1540,8 @@
                   img: it.Img || it.img || '',
                   url: it.Url || it.url || '',
                   watchers: parseInt(it.Watchers || it.watchers || 0, 10),
-                  views: parseInt(it.Views || it.views || 0, 10)
+                  views: parseInt(it.Views || it.views || 0, 10),
+                  startTime: it.StartTime || it.startTime || ''
                 };
               });
               showItem(currIdx);

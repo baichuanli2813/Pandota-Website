@@ -115,6 +115,12 @@ do {
                 $img = $img -replace 's-l\d+\.(jpg|webp|png)', 's-l500.jpg'
             }
 
+            # StartTime (Exact ISO 8601 from eBay Seller Hub)
+            $startTime = ""
+            if ($item.ListingDetails -and $item.ListingDetails.StartTime) {
+                $startTime = [string]$item.ListingDetails.StartTime
+            }
+
             $allInStockItems += [PSCustomObject]@{
                 ItemId       = $itemId
                 Title        = $title
@@ -125,6 +131,7 @@ do {
                 Img          = $img
                 Watchers     = $watchers
                 Condition    = "Used" # Default, will fetch exact ConditionID next
+                StartTime    = $startTime
             }
         }
     }
@@ -199,6 +206,15 @@ foreach ($it in $allInStockItems) {
                 $it.Img = $livePic -replace 's-l\d+\.(jpg|webp|png)', 's-l500.jpg'
             }
         }
+
+        # Auto-update StartTime if available from GetItem
+        if (-not $it.StartTime -and $itemObj.ListingDetails -and $itemObj.ListingDetails.StartTime) {
+            $it.StartTime = [string]$itemObj.ListingDetails.StartTime
+        }
+
+        # Check RelistParentID (if present, item was relisted from an older listing and is NOT brand new)
+        $relistParent = if ($itemObj.RelistParentID) { [string]$itemObj.RelistParentID } else { "" }
+        $it | Add-Member -MemberType NoteProperty -Name "RelistParentID" -Value $relistParent -Force
     }
     
     $it.Condition = $cond
@@ -247,14 +263,22 @@ if ($oauthToken -and $oauthToken.Length -gt 20) {
     Write-Host "`nNotice: EBAY_OAUTH_TOKEN not provided or invalid. Using previous live view dataset as persistent fallback."
 }
 
-# Load existing views map as fallback so views never drop to 0
+# Load existing views, StartTime and RelistParentID map as fallback
 $existingViewsMap = @{}
+$existingStartTimeMap = @{}
+$existingRelistMap = @{}
 if (Test-Path "all_82_with_exact_scraped_prices.json") {
     try {
         $prevItems = Get-Content "all_82_with_exact_scraped_prices.json" -Raw | ConvertFrom-Json
         foreach ($pi in $prevItems) {
             if ($pi.Views -and [int]$pi.Views -gt 0) {
                 $existingViewsMap[$pi.ItemId] = [int]$pi.Views
+            }
+            if ($pi.StartTime) {
+                $existingStartTimeMap[$pi.ItemId] = [string]$pi.StartTime
+            }
+            if ($pi.PSObject.Properties['RelistParentID'] -and $pi.RelistParentID) {
+                $existingRelistMap[$pi.ItemId] = [string]$pi.RelistParentID
             }
         }
     } catch {}
@@ -269,6 +293,29 @@ foreach ($it in $allInStockItems) {
         $v = $existingViewsMap[$id]
     }
     $it | Add-Member -MemberType NoteProperty -Name "Views" -Value $v -Force
+
+    if (-not $it.StartTime -and $existingStartTimeMap.ContainsKey($id)) {
+        $it.StartTime = $existingStartTimeMap[$id]
+    }
+
+    $curRelist = if ($it.PSObject.Properties['RelistParentID'] -and $it.RelistParentID) { [string]$it.RelistParentID } else { "" }
+    if (-not $curRelist -and $existingRelistMap.ContainsKey($id)) {
+        $curRelist = $existingRelistMap[$id]
+        $it | Add-Member -MemberType NoteProperty -Name "RelistParentID" -Value $curRelist -Force
+    }
+
+    # Evaluate if legitimately brand new listing (created <= 24h ago AND NOT relisted from older listing)
+    $isJust = $false
+    if (-not $curRelist -and $it.StartTime) {
+        try {
+            $stDate = [DateTime]::Parse($it.StartTime).ToUniversalTime()
+            $hours = ([DateTime]::UtcNow - $stDate).TotalHours
+            if ($hours -ge 0 -and $hours -le 24) {
+                $isJust = $true
+            }
+        } catch {}
+    }
+    $it | Add-Member -MemberType NoteProperty -Name "IsJustListed" -Value $isJust -Force
 }
 
 # Save exact in-stock catalog with exact Watchers, Views and Conditions

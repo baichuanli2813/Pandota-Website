@@ -385,16 +385,27 @@ function setupHeroStockCarousel() {
       const heroViewsTextEl = document.getElementById('heroStockViewsText');
       if (heroViewsEl && heroViewsTextEl) {
         const vCount = typeof item.views === 'number' ? item.views : 0;
-        if (vCount > 0) {
+        let isJust = !!item.isJustListed;
+        if (!isJust && item.startTime) {
+          const st = new Date(item.startTime).getTime();
+          if (!isNaN(st) && (Date.now() - st) >= 0 && (Date.now() - st) <= 24 * 60 * 60 * 1000) {
+            isJust = true;
+          }
+        }
+        if (isJust) {
+          heroViewsEl.style.display = 'inline-flex';
+          heroViewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
+          heroViewsTextEl.textContent = 'Just Listed';
+          const icon = heroViewsEl.querySelector('i');
+          if (icon) icon.className = 'fa-solid fa-bolt';
+        } else if (vCount > 0) {
+          heroViewsEl.style.display = 'inline-flex';
           heroViewsEl.className = 'inv-card-views-prominent-badge';
           heroViewsTextEl.textContent = `${vCount.toLocaleString()} views (24h)`;
           const icon = heroViewsEl.querySelector('i');
           if (icon) icon.className = 'fa-solid fa-eye';
         } else {
-          heroViewsEl.className = 'inv-card-views-prominent-badge new-listing-views-badge';
-          heroViewsTextEl.textContent = 'Just Listed';
-          const icon = heroViewsEl.querySelector('i');
-          if (icon) icon.className = 'fa-solid fa-bolt';
+          heroViewsEl.style.display = 'none';
         }
       }
 
@@ -472,7 +483,7 @@ function setupHeroStockCarousel() {
   // Load fresh items from our in-stock JSON dataset
   async function loadFreshStoreListings() {
     try {
-      const response = await fetch('all_82_with_exact_scraped_prices.json?v=' + Date.now());
+      const response = await fetch('/all_82_with_exact_scraped_prices.json?v=' + Date.now());
       if (!response.ok) return;
       const data = await response.json();
       if (Array.isArray(data) && data.length > 0) {
@@ -483,7 +494,8 @@ function setupHeroStockCarousel() {
           url: item.Url || item.url || '',
           watchers: parseInt(item.Watchers || item.watchers || 0, 10),
           views: parseInt(item.Views || item.views || 0, 10),
-          coupon: item.Coupon || item.coupon || ''
+          coupon: item.Coupon || item.coupon || '',
+          startTime: item.StartTime || item.startTime || ''
         }));
         if (counterEl) counterEl.textContent = `${currentIndex + 1} / ${liveListings.length}`;
         renderHeroItem(currentIndex);

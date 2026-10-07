@@ -12,5 +12,9 @@
     "negative_1m":  "0",
     "negative_6m":  "0",
     "negative_12m":  "0",
+<<<<<<< HEAD
     "last_updated":  "2026-10-07T09:36:29.0838641Z"
+=======
+    "last_updated":  "2026-10-07T09:36:40.8953822Z"
+>>>>>>> 83c5b47 (Fix 'Just Listed' badge: strictly verify listing creation date <= 24h, exclude relisted items, and omit badge on 0 views)
 }

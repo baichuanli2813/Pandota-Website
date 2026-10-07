@@ -271,8 +271,35 @@ foreach ($it in $items) {
 "@
     }
 
-    # 24h Views Badge (Exact eBay Analytics data)
-    $viewsBadgeHtml = if ($viewsCount -gt 0) {
+    # Check if genuinely a brand-new listing (must be created <= 24h ago AND NOT relisted from an older item)
+    $isJustListed = $false
+    $startTimeStr = if ($it.PSObject.Properties['StartTime'] -and $it.StartTime) { [string]$it.StartTime } else { "" }
+    $relistParent = if ($it.PSObject.Properties['RelistParentID'] -and $it.RelistParentID) { [string]$it.RelistParentID } else { "" }
+
+    if (-not $relistParent) {
+        if ($it.PSObject.Properties['IsJustListed'] -and $it.IsJustListed -ne $null) {
+            $isJustListed = [bool]$it.IsJustListed
+        } elseif ($startTimeStr) {
+            try {
+                $stDate = [DateTime]::Parse($startTimeStr).ToUniversalTime()
+                $hoursSinceListed = ([DateTime]::UtcNow - $stDate).TotalHours
+                if ($hoursSinceListed -ge 0 -and $hoursSinceListed -le 24) {
+                    $isJustListed = $true
+                }
+            } catch {}
+        }
+    }
+
+    # 24h Views / Just Listed Badge
+    # Strictly verified: Only display "Just Listed" if listed within the last 24 hours. Never assume 0 views means "Just Listed".
+    $viewsBadgeHtml = if ($isJustListed) {
+        @"
+                <div class="inv-card-views-prominent-badge new-listing-views-badge" title="Listed on eBay within the last 24 hours">
+                  <i class="fa-solid fa-bolt"></i>
+                  <span class="views-count">Just Listed</span>
+                </div>
+"@
+    } elseif ($viewsCount -gt 0) {
         @"
                 <div class="inv-card-views-prominent-badge" title="$viewsCount views in the last 24 hours on eBay">
                   <i class="fa-solid fa-eye"></i>
@@ -280,12 +307,7 @@ foreach ($it in $items) {
                 </div>
 "@
     } else {
-        @"
-                <div class="inv-card-views-prominent-badge new-listing-views-badge" title="Brand new listing on eBay">
-                  <i class="fa-solid fa-bolt"></i>
-                  <span class="views-count">Just Listed</span>
-                </div>
-"@
+        ""
     }
 
     # Watchers Badge (Top right overlay on photo)
@@ -313,7 +335,7 @@ foreach ($it in $items) {
 
     $cardsHtml += @"
           <!-- Item $itemId -->
-          <div class="inventory-card" data-item-id="$itemId" data-brand="$detectedBrand" data-category="$assignedCategory" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" $couponAttr>
+          <div class="inventory-card" data-item-id="$itemId" data-brand="$detectedBrand" data-category="$assignedCategory" data-price="$numPrice" data-condition="$cond" data-watchers="$watchCount" data-views="$viewsCount" data-start-time="$startTimeStr" data-just-listed="$($isJustListed.ToString().ToLower())" $couponAttr>
             <div class="inv-card-img-wrap">
               <img src="$cdnImg" alt="$title" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.triedJpg && this.src.indexOf('.webp')!==-1){this.dataset.triedJpg='1';this.src=this.src.replace('.webp','.jpg');}else if(!this.dataset.triedBackup){this.dataset.triedBackup='1';this.src='/images/ebay_item_$itemId.jpg';}">
 $watchOverlayHtml

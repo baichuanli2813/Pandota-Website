@@ -306,12 +306,16 @@ if (Test-Path $targetDir) {
     Copy-Item -Path ".\SYNC_PANDOTA_STORE.bat" -Destination "$targetDir\SYNC_PANDOTA_STORE.bat" -Force
     Copy-Item -Path ".\sync_ebay_feedbacks.ps1" -Destination "$targetDir\sync_ebay_feedbacks.ps1" -Force
     Copy-Item -Path ".\fix_both_encodings.ps1" -Destination "$targetDir\fix_both_encodings.ps1" -Force
+    Copy-Item -Path ".\live_store_stats.json" -Destination "$targetDir\live_store_stats.json" -Force
     Copy-Item -Path ".\official_scraped_ebay_conditions.json" -Destination "$targetDir\official_scraped_ebay_conditions.json" -Force
     Copy-Item -Path ".\all_82_with_exact_scraped_prices.json" -Destination "$targetDir\all_82_with_exact_scraped_prices.json" -Force
     Copy-Item -Path ".\all_store_listings.json" -Destination "$targetDir\all_store_listings.json" -Force
-    Copy-Item -Path ".\inventory" -Destination "$targetDir\inventory" -Recurse -Force
-    Copy-Item -Path ".\sell" -Destination "$targetDir\sell" -Recurse -Force
-    Copy-Item -Path ".\privacy" -Destination "$targetDir\privacy" -Recurse -Force
+    if (-not (Test-Path "$targetDir\inventory")) { New-Item -ItemType Directory -Path "$targetDir\inventory" -Force | Out-Null }
+    if (-not (Test-Path "$targetDir\sell")) { New-Item -ItemType Directory -Path "$targetDir\sell" -Force | Out-Null }
+    if (-not (Test-Path "$targetDir\privacy")) { New-Item -ItemType Directory -Path "$targetDir\privacy" -Force | Out-Null }
+    Copy-Item -Path ".\inventory\*" -Destination "$targetDir\inventory" -Recurse -Force
+    Copy-Item -Path ".\sell\*" -Destination "$targetDir\sell" -Recurse -Force
+    Copy-Item -Path ".\privacy\*" -Destination "$targetDir\privacy" -Recurse -Force
     Write-Host "`nSuccessfully synchronized all files to Pandota Website repository!"
 }
 

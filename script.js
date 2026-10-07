@@ -511,7 +511,7 @@ function makeAllCardsVisible() {
 // Live Fetch eBay Feedback, Items Sold, and Followers
 async function fetchEbayLiveStats() {
   function formatSold(val) {
-    if (!val) return '11,000+';
+    if (!val) return '12,000+';
     const match = val.match(/^(\d+)(?:\.(\d+))?K\+?$/i);
     if (match) {
       const whole = parseInt(match[1], 10);
@@ -522,26 +522,46 @@ async function fetchEbayLiveStats() {
     return val.includes('+') ? val : `${val}+`;
   }
 
+  function applyStats(stats) {
+    if (!stats) return;
+    const feedbackEl = document.getElementById('stat-feedback');
+    const itemsEl = document.getElementById('stat-items-sold');
+    const followersEl = document.getElementById('stat-followers');
+    const heroSoldEl = document.getElementById('hero-items-sold-text');
+    const heroFeedbackEl = document.getElementById('hero-feedback-text');
+
+    if (feedbackEl && stats.positive_feedback) feedbackEl.textContent = stats.positive_feedback;
+    if (itemsEl && stats.items_sold) itemsEl.textContent = formatSold(stats.items_sold);
+    if (followersEl && stats.followers) followersEl.textContent = stats.followers.includes('+') ? stats.followers : `${stats.followers}+`;
+    if (heroSoldEl && stats.items_sold) heroSoldEl.textContent = `${formatSold(stats.items_sold)} items sold`;
+    if (heroFeedbackEl && stats.positive_feedback) heroFeedbackEl.textContent = `${stats.positive_feedback} positive feedback record`;
+
+    // Detailed feedback table
+    const fbScoreEl = document.getElementById('fb-total-score');
+    const fb1mEl = document.getElementById('fb-1m-pos');
+    const fb6mEl = document.getElementById('fb-6m-pos');
+    const fb12mEl = document.getElementById('fb-12m-pos');
+
+    if (fbScoreEl && stats.feedback_score) fbScoreEl.textContent = stats.feedback_score;
+    if (fb1mEl && stats.positive_1m) fb1mEl.textContent = stats.positive_1m;
+    if (fb6mEl && stats.positive_6m) fb6mEl.textContent = stats.positive_6m;
+    if (fb12mEl && stats.positive_12m) fb12mEl.textContent = stats.positive_12m;
+  }
+
   // 1. Try instantaneous load from auto-synced dataset
   try {
-    const localRes = await fetch('live_store_stats.json?v=' + Date.now());
+    const localRes = await fetch('/live_store_stats.json?v=' + Date.now());
     if (localRes.ok) {
       const stats = await localRes.json();
       if (stats) {
-        const feedbackEl = document.getElementById('stat-feedback');
-        const itemsEl = document.getElementById('stat-items-sold');
-        const followersEl = document.getElementById('stat-followers');
-
-        if (feedbackEl && stats.positive_feedback) feedbackEl.textContent = stats.positive_feedback;
-        if (itemsEl && stats.items_sold) itemsEl.textContent = formatSold(stats.items_sold);
-        if (followersEl && stats.followers) followersEl.textContent = stats.followers;
+        applyStats(stats);
         return;
       }
     }
   } catch(e) {}
 
-  // 2. Direct fallback proxy to live eBay profile
-  const storeUrl = 'https://www.ebay.co.uk/usr/geoff_lee367';
+  // 2. Direct fallback proxy to official live eBay store
+  const storeUrl = 'https://www.ebay.co.uk/str/geoffscuriosities';
   const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(storeUrl)}`;
 
   try {
@@ -553,35 +573,18 @@ async function fetchEbayLiveStats() {
 
     const parser = new DOMParser();
     const doc = parser.parseFromString(data.contents, 'text/html');
+    const text = doc.body ? doc.body.textContent : '';
 
-    const statsContainer = doc.querySelector('.str-seller-card__store-stats-content') || doc.body;
-    const statsText = statsContainer.textContent || doc.body.textContent;
+    const feedbackMatch = text.match(/(\d+(?:\.\d+)?%)\s*positive\s*Feedback/i);
+    const itemsSoldMatch = text.match(/(\d+(?:,\d+)*(?:\.\d+)?[KkM]?\+?)\s*items\s*sold/i);
+    const followersMatch = text.match(/(\d+(?:\.\d+)?[KkM]?\+?)\s*followers/i);
 
-    // Extract Feedback %
-    const feedbackMatch = statsText.match(/(\d+(?:\.\d+)?%)\s*positive/i);
-    if (feedbackMatch && feedbackMatch[1]) {
-      const feedbackEl = document.getElementById('stat-feedback');
-      if (feedbackEl) feedbackEl.textContent = feedbackMatch[1];
-    }
+    const scrapedStats = {};
+    if (feedbackMatch && feedbackMatch[1]) scrapedStats.positive_feedback = feedbackMatch[1];
+    if (itemsSoldMatch && itemsSoldMatch[1]) scrapedStats.items_sold = itemsSoldMatch[1];
+    if (followersMatch && followersMatch[1]) scrapedStats.followers = followersMatch[1];
 
-    // Extract Items Sold
-    const itemsSoldMatch = statsText.match(/(\d+(?:,\d+)*(?:\.\d+)?[KkM]?\+?)\s*items sold/i);
-    if (itemsSoldMatch && itemsSoldMatch[1]) {
-      const itemsEl = document.getElementById('stat-items-sold');
-      if (itemsEl) {
-        itemsEl.textContent = formatSold(itemsSoldMatch[1]);
-      }
-    }
-
-    // Extract Followers
-    const followersMatch = statsText.match(/(\d+(?:\.\d+)?[KkM]?\+?)\s*followers/i);
-    if (followersMatch && followersMatch[1]) {
-      const followersEl = document.getElementById('stat-followers');
-      if (followersEl) {
-        const val = followersMatch[1];
-        followersEl.textContent = val.includes('+') ? val : `${val}+`;
-      }
-    }
+    applyStats(scrapedStats);
   } catch (err) {
     console.log('Using cached stats from eBay store:', err);
   }
